@@ -19,10 +19,9 @@ class AppConfigs {
   static const dateAPIFormat = 'dd/MM/yyyy';
 }
 
-class MovieAPIConfig {
-  static final baseUrl = dotenv.env['MOVIE_URL'].toString();
-  static final apiKey = dotenv.env['MOVIE_API_KEY'].toString();
-  static final imageUrl = dotenv.env['MOVIE_IMAGE_URL'].toString();
+class SupabaseAPIConfig {
+  static final supabaseUrl = dotenv.env['SUPABASE_URL'].toString();
+  static final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'].toString();
 }
 
 class NavigationConfig {

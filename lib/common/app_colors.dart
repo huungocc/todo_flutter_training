@@ -7,6 +7,7 @@ class AppColors {
   static const Color primary = Color(0xFF173d7e);
   static const Color secondary = Color(0xFF1E8AE7);
   static const Color error = Color(0xFFEE3134);
+  static const Color subError = Color(0xFFFF8080);
 
   ///Background
   static const Color background = Color(0xFFFFFFFF);

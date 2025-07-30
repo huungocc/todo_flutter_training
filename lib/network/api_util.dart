@@ -1,41 +1,25 @@
-import 'package:dio/dio.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
-import 'api_client.dart';
-import 'api_interceptors.dart';
 
 class ApiUtil {
-  static Dio? _dio;
-  static ApiClient? _apiClient;
+  static SupabaseClient? _client;
 
-  static Dio getDio() {
-    if (_dio == null) {
-      _dio = Dio();
-      _dio!.options.baseUrl = MovieAPIConfig.baseUrl;
-      _dio!.options.connectTimeout = const Duration(milliseconds: 30000);
-      _dio!.options.receiveTimeout = const Duration(milliseconds: 30000);
+  static Future<void> initialize() async {
+    if (_client == null) {
+      await Supabase.initialize(
+        url: SupabaseAPIConfig.supabaseUrl,
+        anonKey: SupabaseAPIConfig.supabaseAnonKey,
+      );
 
-      // Thêm interceptors
-      _dio!.interceptors.add(ApiInterceptors());
-      _dio!.interceptors.add(PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseBody: true,
-        compact: false,
-      ));
+      _client = Supabase.instance.client;
+
     }
-    return _dio!;
   }
 
-  static ApiClient get apiClient {
-    _apiClient ??= ApiClient(getDio(), baseUrl: MovieAPIConfig.baseUrl);
-    return _apiClient!;
-  }
-
-  // Reset dio instance nếu cần
-  static void resetDio() {
-    _dio = null;
-    _apiClient = null;
+  static SupabaseClient get client {
+    if (_client == null) {
+      throw Exception('Supabase chưa được khởi tạo. Gọi SupabaseUtil.initialize() trước.');
+    }
+    return _client!;
   }
 }
