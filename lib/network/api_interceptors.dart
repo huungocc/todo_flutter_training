@@ -1,31 +1,45 @@
-import 'package:dio/dio.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_flutter_training/utils/exception_handler.dart';
 import 'package:todo_flutter_training/utils/logger.dart';
 
-class ApiInterceptors extends QueuedInterceptorsWrapper {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    options.headers['Content-Type'] = 'application/json';
-    super.onRequest(options, handler);
+class ApiInterceptors {
+
+  static Future<T> executeWithLogging<T>(
+      String operation,
+      Future<T> Function() function,
+      ) async {
+    try {
+      logger.i('🔄 SUPABASE[$operation] => STARTING');
+
+      final result = await function();
+
+      logger.i('✅ SUPABASE[$operation] => SUCCESS');
+      return result;
+
+    } catch (error, stackTrace) {
+      logger.e('⚠️ SUPABASE[$operation] => ERROR: $error', stackTrace: stackTrace);
+
+      final errorMessage = _handleSupabaseError(error);
+      ExceptionHandler.showErrorSnackBar(errorMessage);
+
+      rethrow;
+    }
   }
 
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    logger.i("✅ SUCCESS[${response.statusCode}] => PATH: ${response.requestOptions.path}");
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
-    final statusCode = err.response?.statusCode;
-    final path = err.requestOptions.path;
-
-    logger.e("⚠️ ERROR[$statusCode] => PATH: $path\nResponse: ${err.response?.data}");
-
-    final errorMessage = ExceptionHandler.handleDioError(err);
-
-    ExceptionHandler.showErrorSnackBar(errorMessage);
-
-    handler.next(err);
+  static String _handleSupabaseError(dynamic error) {
+    if (error is PostgrestException) {
+      switch (error.code) {
+        case '23505':
+          return 'Dữ liệu đã tồn tại';
+        case '23503':
+          return 'Vi phạm ràng buộc dữ liệu';
+        default:
+          return error.message;
+      }
+    } else if (error is AuthException) {
+      return 'Lỗi xác thực: ${error.message}';
+    } else {
+      return 'Lỗi kết nối: ${error.toString()}';
+    }
   }
 }

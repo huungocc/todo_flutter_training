@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
         },
         child: BlocBuilder<AppSettingCubit, AppSettingState>(
           buildWhen: (prev, current) {
-            return prev.language != prev.language;
+            return prev.language != current.language;
           },
           builder: (context, state) {
             return GestureDetector(
