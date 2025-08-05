@@ -5,6 +5,6 @@ class SplashNavigator extends AppNavigator {
   SplashNavigator({required super.context});
 
   void openListTodo() {
-    //navigateSplash(AppRouter.listMovie);
+    navigateSplash(AppRouter.listTodo);
   }
 }
