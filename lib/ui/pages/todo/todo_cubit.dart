@@ -6,22 +6,21 @@ import 'package:todo_flutter_training/ui/pages/todo/todo_state.dart';
 import 'package:todo_flutter_training/utils/exception_handler.dart';
 
 class TodoCubit extends Cubit<TodoState> {
-  final TodoRepositoryImpl todoRepository;
+  final TodoRepository todoRepository;
 
   TodoCubit({required this.todoRepository}) : super(const TodoState());
 
-  Future<void> loadTodos() async {
+  Future<void> loadTodos({required bool isCompleted}) async {
     emit(state.copyWith(status: TodoStatus.loading));
 
     try {
-      final todos = await todoRepository.fetchTodos(completed: false);
-      final completed = await todoRepository.fetchTodos(completed: true);
+      final todos = await todoRepository.fetchTodos(completed: isCompleted);
 
-      emit(state.copyWith(
-        status: TodoStatus.loaded,
-        todos: todos,
-        completed: completed,
-      ));
+      emit(
+        isCompleted
+            ? state.copyWith(status: TodoStatus.loaded, completed: todos)
+            : state.copyWith(status: TodoStatus.loaded, todos: todos),
+      );
     } catch (e) {
       emit(state.copyWith(
         status: TodoStatus.error,

@@ -26,11 +26,7 @@ class AddTodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => TodoCubit(
-        todoRepository: TodoRepositoryImpl(
-          apiClient: ApiClient(ApiUtil.client),
-        ),
-      ),
+      create: (_) => TodoCubit(todoRepository: context.read<TodoRepository>()),
       child: _AddTodoBody(arg),
     );
   }
@@ -65,6 +61,86 @@ class _AddTodoBodyState extends State<_AddTodoBody> {
       _keyDate.text = AppFormat.formatDateToDDMMYYYY(widget.arg!.date!);
       _keyTime.text = AppFormat.convertTime24to12(widget.arg!.time!);
       _keyNotes.text = widget.arg!.notes!;
+    }
+  }
+
+  void _pickDate() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.todoPurple,
+              onPrimary: AppColors.textWhite,
+              onSurface: AppColors.textBlack,
+              surface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedDate != null) {
+      _keyDate.text = AppFormat.formatDateToDDMMYYYY(
+        pickedDate,
+      );
+    }
+  }
+
+  void _pickTime() async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.todoPurple,
+              onPrimary: AppColors.textWhite,
+              onSurface: AppColors.textBlack,
+              surface: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedTime != null) {
+      _keyTime.text = AppFormat.formatPickedTimeTo12h(
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+    }
+  }
+
+  bool _validateTextField() {
+    return _keyTaskTitle.text.isNotEmpty &&
+        _keyDate.text.isNotEmpty &&
+        _keyTime.text.isNotEmpty &&
+        _keyNotes.text.isNotEmpty;
+  }
+
+  void _onAddTodo() {
+    if (_validateTextField()) {
+      entity.taskTitle = _keyTaskTitle.text;
+      entity.date = AppFormat.parseDateFromDDMMYYYY(_keyDate.text);
+      entity.time = AppFormat.convertTime12hTo24hWithSeconds(_keyTime.text);
+      entity.notes = _keyNotes.text;
+      entity.category ??= TodoItemType.list.name;
+
+      if (isUpdate) {
+        context.read<TodoCubit>().updateTodo(entity);
+      } else {
+        context.read<TodoCubit>().addTodo(entity);
+      }
+    } else {
+      ExceptionHandler.showErrorSnackBar(
+        S.of(context).please_fill_in_all_fields,
+      );
     }
   }
 
@@ -103,108 +179,74 @@ class _AddTodoBodyState extends State<_AddTodoBody> {
                 }
               },
               builder: (context, state) {
-                return Stack(
+                return Column(
                   children: [
-                    Column(
+                    Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            const CustomTodoBackground(height: 90),
-                            Positioned(
-                              left: 16,
-                              top: 12,
-                              child: IconButton(
-                                onPressed: () => Navigator.pop(context),
-                                icon: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.textWhite,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: AppColors.textBlack,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 35,
-                              child: BaseTextLabel(
-                                isUpdate
-                                    ? S.of(context).edit_task
-                                    : S.of(context).add_new_task,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
+                        const CustomTodoBackground(height: 90),
+                        Positioned(
+                          left: 16,
+                          top: 12,
+                          child: IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
                                 color: AppColors.textWhite,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.close,
+                                color: AppColors.textBlack,
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                        _buildInput(context, type),
-                        SafeArea(
-                          child: BaseButton(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            backgroundColor: AppColors.todoPurple,
-                            borderRadius: 50,
-                            height: 55,
-                            // Disable button while loading
-                            onTap: state.isLoading
-                                ? null
-                                : () {
-                                    if (_keyTaskTitle.text.isNotEmpty &&
-                                        _keyDate.text.isNotEmpty &&
-                                        _keyTime.text.isNotEmpty &&
-                                        _keyNotes.text.isNotEmpty) {
-                                      entity.taskTitle = _keyTaskTitle.text;
-                                      entity.date =
-                                          AppFormat.parseDateFromDDMMYYYY(
-                                            _keyDate.text,
-                                          );
-                                      entity.time =
-                                          AppFormat.convertTime12hTo24hWithSeconds(
-                                            _keyTime.text,
-                                          );
-                                      entity.notes = _keyNotes.text;
-                                      entity.category ??=
-                                          TodoItemType.list.name;
-
-                                      if (isUpdate) {
-                                        context.read<TodoCubit>().updateTodo(
-                                          entity,
-                                        );
-                                      } else {
-                                        context.read<TodoCubit>().addTodo(
-                                          entity,
-                                        );
-                                      }
-                                    } else {
-                                      ExceptionHandler.showErrorSnackBar(
-                                        S.of(context).please_fill_in_all_fields,
-                                      );
-                                    }
-                                  },
-                            child: state.isLoading
-                                ? BaseLoading(
-                                    size: 30,
-                                    backgroundColor: AppColors.textBlack,
-                                    valueColor: AppColors.textWhite,
-                                  )
-                                : BaseTextLabel(
-                                    S.of(context).save,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    color: AppColors.textWhite,
-                                    textAlign: TextAlign.center,
-                                  ),
+                        Positioned(
+                          top: 35,
+                          child: BaseTextLabel(
+                            isUpdate
+                                ? S.of(context).edit_task
+                                : S.of(context).add_new_task,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: AppColors.textWhite,
                           ),
                         ),
                       ],
+                    ),
+                    _buildInput(context, type),
+                    SafeArea(
+                      child: BaseButton(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        backgroundColor: AppColors.todoPurple,
+                        borderRadius: 50,
+                        height: 55,
+                        // Disable button while loading
+                        onTap: state.isLoading
+                            ? null
+                            : () {
+                                _onAddTodo();
+                              },
+                        child: state.isLoading
+                            ? BaseLoading(
+                                size: 30,
+                                backgroundColor: AppColors.textBlack,
+                                valueColor: AppColors.textWhite,
+                              )
+                            : BaseTextLabel(
+                                S.of(context).save,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: AppColors.textWhite,
+                                textAlign: TextAlign.center,
+                              ),
+                      ),
                     ),
                   ],
                 );
@@ -291,31 +333,8 @@ class _AddTodoBodyState extends State<_AddTodoBody> {
                         Icons.date_range,
                         color: AppColors.todoPurple,
                       ),
-                      onTapSuffixIcon: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2100),
-                          builder: (BuildContext context, Widget? child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                colorScheme: ColorScheme.light(
-                                  primary: AppColors.todoPurple,
-                                  onPrimary: AppColors.textWhite,
-                                  onSurface: AppColors.textBlack,
-                                  surface: Colors.white,
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
-                        );
-                        if (pickedDate != null) {
-                          _keyDate.text = AppFormat.formatDateToDDMMYYYY(
-                            pickedDate,
-                          );
-                        }
+                      onTapSuffixIcon: () {
+                        _pickDate();
                       },
                     ),
                   ),
@@ -345,30 +364,8 @@ class _AddTodoBodyState extends State<_AddTodoBody> {
                         Icons.access_time_rounded,
                         color: AppColors.todoPurple,
                       ),
-                      onTapSuffixIcon: () async {
-                        TimeOfDay? pickedTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                          builder: (BuildContext context, Widget? child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                colorScheme: ColorScheme.light(
-                                  primary: AppColors.todoPurple,
-                                  onPrimary: AppColors.textWhite,
-                                  onSurface: AppColors.textBlack,
-                                  surface: Colors.white,
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
-                        );
-                        if (pickedTime != null) {
-                          _keyTime.text = AppFormat.formatPickedTimeTo12h(
-                            pickedTime.hour,
-                            pickedTime.minute,
-                          );
-                        }
+                      onTapSuffixIcon: () {
+                        _pickTime();
                       },
                     ),
                   ),

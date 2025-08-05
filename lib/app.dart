@@ -6,6 +6,9 @@ import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
+import 'package:todo_flutter_training/network/api_client.dart';
+import 'package:todo_flutter_training/network/api_util.dart';
+import 'package:todo_flutter_training/repository/todo_repository.dart';
 import 'package:todo_flutter_training/router/router_config.dart';
 
 class MyApp extends StatefulWidget {
@@ -18,34 +21,49 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late ApiClient _apiClient;
+
+  @override
+  void initState() {
+    _apiClient = ApiUtil.apiClient;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
 
-    return BlocProvider(
-      create: (_) => AppSettingCubit()..getInitialSetting(),
-      child: GestureDetector(
-        onTap: () {
-          _hideKeyboard(context);
-        },
-        child: BlocBuilder<AppSettingCubit, AppSettingState>(
-          buildWhen: (prev, current) {
-            return prev.language != current.language;
-          },
-          builder: (context, state) {
-            return GestureDetector(
-              onTap: () {
-                _hideKeyboard(context);
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<TodoRepository>(create: (context) {
+          return TodoRepositoryImpl(apiClient: _apiClient);
+        }),
+      ],
+      child: BlocProvider(
+          create: (_) => AppSettingCubit()..getInitialSetting(),
+          child: GestureDetector(
+            onTap: () {
+              _hideKeyboard(context);
+            },
+            child: BlocBuilder<AppSettingCubit, AppSettingState>(
+              buildWhen: (prev, current) {
+                return prev.language != current.language;
               },
-              child: _buildMaterialApp(
-                locale: state.language.local,
-              ),
-            );
-          },
-        ),
-      )
+              builder: (context, state) {
+                return GestureDetector(
+                  onTap: () {
+                    _hideKeyboard(context);
+                  },
+                  child: _buildMaterialApp(
+                    locale: state.language.local,
+                  ),
+                );
+              },
+            ),
+          )
+      ),
     );
   }
 

@@ -6,8 +6,6 @@ import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
-import 'package:todo_flutter_training/network/api_client.dart';
-import 'package:todo_flutter_training/network/api_util.dart';
 import 'package:todo_flutter_training/repository/todo_repository.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add_todo_page.dart';
 import 'package:todo_flutter_training/ui/pages/todo/todo_cubit.dart';
@@ -27,11 +25,9 @@ class ListTodoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => TodoCubit(
-        todoRepository: TodoRepositoryImpl(
-          apiClient: ApiClient(ApiUtil.client),
-        ),
+        todoRepository: context.read<TodoRepository>(),
       ),
-      child: _TodoBody(),
+      child: const _TodoBody(),
     );
   }
 }
@@ -47,14 +43,16 @@ class _TodoBodyState extends State<_TodoBody> {
   @override
   void initState() {
     super.initState();
-    getData();
+    _getData();
   }
 
-  void getData() {
-    context.read<TodoCubit>().loadTodos();
+  void _getData() {
+    final cubit = context.read<TodoCubit>();
+    cubit.loadTodos(isCompleted: false);
+    cubit.loadTodos(isCompleted: true);
   }
 
-  void doneTask(TodoEntity todo) {
+  void _doneTask(TodoEntity todo) {
     BaseDialog.showNotifyDialog(
       message: S.of(context).complete_task,
       onConfirm: () {
@@ -63,13 +61,26 @@ class _TodoBodyState extends State<_TodoBody> {
     );
   }
 
-  void undoneTask(TodoEntity todo) {
+  void _undoneTask(TodoEntity todo) {
     BaseDialog.showNotifyDialog(
       message: S.of(context).cancel_complete_task,
       onConfirm: () {
         context.read<TodoCubit>().updateTodoStatus(todo, false);
       },
     );
+  }
+
+  void _openAddTodo({TodoEntity? todo}) async {
+    final isSuccess = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => AddTodoPage(arg: todo,),
+    );
+    if (!context.mounted) return;
+    if (isSuccess == true) {
+      context.read<TodoCubit>().loadTodos(isCompleted: false);
+    }
   }
 
   @override
@@ -96,17 +107,13 @@ class _TodoBodyState extends State<_TodoBody> {
                   BlocBuilder<AppSettingCubit, AppSettingState>(
                     builder: (context, state) {
                       final language = state.language;
-
                       return IconButton(
                         onPressed: () {
                           context.read<AppSettingCubit>().changeLanguage(
                             language: language.toggle,
                           );
                         },
-                        icon: BaseTextLabel(
-                          language.flag,
-                          fontSize: 24,
-                        ),
+                        icon: BaseTextLabel(language.flag, fontSize: 24),
                       );
                     },
                   ),
@@ -118,7 +125,68 @@ class _TodoBodyState extends State<_TodoBody> {
                     fontSize: 32,
                   ),
                   const SizedBox(height: 30),
-                  _buildContent(),
+                  Expanded(
+                    child: ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Colors.transparent, Colors.black],
+                          stops: [0.0, 0.96, 1.0],
+                        ).createShader(bounds);
+                      },
+                      blendMode: BlendMode.dstOut,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BlocBuilder<TodoCubit, TodoState>(
+                              buildWhen: (prev, curr) =>
+                              prev.todos != curr.todos || prev.status != curr.status,
+                              builder: (context, state) {
+                                if (state.isLoading) {
+                                  return BaseLoading(
+                                    size: 30,
+                                    backgroundColor: AppColors.textWhite,
+                                    valueColor: AppColors.textBlack,
+                                  );
+                                }
+                                return _buildActiveTodos(state.todos, context);
+                              },
+                            ),
+                            const SizedBox(height: 30),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                spacing: 30,
+                                children: [
+                                  BaseTextLabel(
+                                    S.of(context).completed,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                  BlocBuilder<TodoCubit, TodoState>(
+                                    buildWhen: (prev, curr) => prev.completed != curr.completed,
+                                    builder: (context, state) {
+                                      if (state.isLoading) {
+                                        return BaseLoading(
+                                          size: 30,
+                                          backgroundColor: AppColors.textWhite,
+                                          valueColor: AppColors.textBlack,
+                                        );
+                                      }
+                                      return _buildCompletedTodos(state.completed, context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -131,201 +199,93 @@ class _TodoBodyState extends State<_TodoBody> {
           title: S.of(context).add_new_task,
           backgroundColor: AppColors.todoPurple,
           borderRadius: 50,
-          onTap: () async {
-            final isSuccess = await showModalBottomSheet<bool>(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (BuildContext context) {
-                return AddTodoPage();
-              },
-            );
-            if (!context.mounted) return;
-
-            if (isSuccess == true) {
-              getData();
-            }
+          onTap: () {
+            _openAddTodo();
           },
         ),
       ),
     );
   }
 
-  Expanded _buildContent() {
-    return Expanded(
-      child: BlocBuilder<TodoCubit, TodoState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return BaseLoading(
-              size: 50,
-              backgroundColor: AppColors.textWhite,
-              valueColor: AppColors.textBlack,
-            );
-          }
-
-          if (state.isLoaded || state.hasData) {
-            final todos = state.todos;
-            final completed = state.completed;
-
-            return ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.black,
-                  ],
-                  stops: const [0.0, 0.96, 1.0],
-                ).createShader(bounds);
+  Padding _buildActiveTodos(List<TodoEntity> todos, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: todos.isNotEmpty
+          ? ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: todos.length,
+          separatorBuilder: (_, __) =>
+              Container(color: AppColors.todoBackground, height: 1),
+          itemBuilder: (context, index) {
+            final todo = todos[index];
+            final isExpired = AppFormat.isDateTimeExpired(todo.date!, todo.time!);
+            return Dismissible(
+              key: Key(todo.id!),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                color: AppColors.error,
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: const Icon(Icons.delete, color: Colors.white),
+              ),
+              onDismissed: (_) {
+                context.read<TodoCubit>().deleteTodo(todo);
               },
-              blendMode: BlendMode.dstOut,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildActiveTodos(todos, context),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 30,
-                        horizontal: 20,
-                      ),
-                      child: BaseTextLabel(
-                        S.of(context).completed,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    _buildCompletedTodos(completed, context),
-                  ],
-                ),
+              child: TodoInfoCard(
+                title: todo.taskTitle,
+                type: todo.category,
+                time: AppFormat.convertTime24to12(todo.time!),
+                isExpired: isExpired,
+                onTap: () async {
+                  _openAddTodo(todo: todo);
+                },
+                onCheck: () {
+                  _doneTask(todo);
+                },
               ),
             );
-          }
-          return SizedBox.shrink();
-        },
+          },
+        ),
+      )
+          : TodoInfoCard(
+        borderRadius: 20,
+        title: S.of(context).no_data_yet,
+        time: 'N/A',
       ),
     );
   }
 
-  Padding _buildCompletedTodos(
-    List<TodoEntity> completed,
-    BuildContext context,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: (completed.isNotEmpty)
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: completed.length,
-                separatorBuilder: (context, index) =>
-                    Container(color: AppColors.todoBackground, height: 1),
-                itemBuilder: (context, index) {
-                  final complete = completed[index];
-                  return TodoInfoCard(
-                    title: complete.taskTitle,
-                    time: AppFormat.convertTime24to12(complete.time!),
-                    type: complete.category,
-                    isCompleted: true,
-                    onCheck: () {
-                      BaseDialog.showNotifyDialog(
-                        message: S.of(context).cancel_complete_task,
-                        onConfirm: () {
-                          context.read<TodoCubit>().updateTodoStatus(
-                            complete,
-                            false,
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-            )
-          : TodoInfoCard(
-              borderRadius: 20,
-              title: S.of(context).no_data_yet,
-              time: 'N/A',
-              isCompleted: true,
-            ),
-    );
-  }
-
-  Padding _buildActiveTodos(List<TodoEntity> todos, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: (todos.isNotEmpty)
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: todos.length,
-                separatorBuilder: (context, index) =>
-                    Container(color: AppColors.todoBackground, height: 1),
-                itemBuilder: (context, index) {
-                  final todo = todos[index];
-                  final isExpired = AppFormat.isDateTimeExpired(
-                    todo.date!,
-                    todo.time!,
-                  );
-                  return Dismissible(
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      color: AppColors.error,
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Icon(Icons.delete, color: Colors.white),
-                    ),
-                    onDismissed: (direction) {
-                      context.read<TodoCubit>().deleteTodo(todo);
-                    },
-                    key: Key(todo.id!),
-                    child: TodoInfoCard(
-                      title: todo.taskTitle,
-                      type: todo.category,
-                      time: AppFormat.convertTime24to12(todo.time!),
-                      isExpired: isExpired,
-                      onTap: () async {
-                        final isSuccess = await showModalBottomSheet<bool>(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (BuildContext context) {
-                            return AddTodoPage(arg: todo);
-                          },
-                        );
-                        if (!context.mounted) return;
-
-                        if (isSuccess == true) {
-                          context.read<TodoCubit>().loadTodos();
-                        }
-                      },
-                      onCheck: () {
-                        BaseDialog.showNotifyDialog(
-                          message: S.of(context).complete_task,
-                          onConfirm: () {
-                            context.read<TodoCubit>().updateTodoStatus(
-                              todo,
-                              true,
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            )
-          : TodoInfoCard(
-              borderRadius: 20,
-              title: S.of(context).no_data_yet,
-              time: 'N/A',
-            ),
+  Widget _buildCompletedTodos(List<TodoEntity> completed, BuildContext context) {
+    return (completed.isNotEmpty)
+        ? ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: completed.length,
+        separatorBuilder: (_, __) =>
+            Container(color: AppColors.todoBackground, height: 1),
+        itemBuilder: (context, index) {
+          final complete = completed[index];
+          return TodoInfoCard(
+            title: complete.taskTitle,
+            time: AppFormat.convertTime24to12(complete.time!),
+            type: complete.category,
+            isCompleted: true,
+            onCheck: () => _undoneTask(complete),
+          );
+        },
+      ),
+    )
+        : TodoInfoCard(
+      borderRadius: 20,
+      title: S.of(context).no_data_yet,
+      time: 'N/A',
+      isCompleted: true,
     );
   }
 }
+

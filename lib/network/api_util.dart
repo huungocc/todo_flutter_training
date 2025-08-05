@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
+import 'package:todo_flutter_training/network/api_client.dart';
 
 class ApiUtil {
   static SupabaseClient? _client;
@@ -14,6 +15,10 @@ class ApiUtil {
       _client = Supabase.instance.client;
 
     }
+  }
+
+  static ApiClient get apiClient {
+    return ApiClient(client);
   }
 
   static SupabaseClient get client {
