@@ -6,7 +6,7 @@ import 'package:todo_flutter_training/ui/pages/todo/todo_state.dart';
 import 'package:todo_flutter_training/utils/exception_handler.dart';
 
 class TodoCubit extends Cubit<TodoState> {
-  final TodoRepositoryImpl todoRepository;
+  final TodoRepository todoRepository;
 
   TodoCubit({required this.todoRepository}) : super(const TodoState());
 

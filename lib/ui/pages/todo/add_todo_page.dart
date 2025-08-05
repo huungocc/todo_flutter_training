@@ -27,9 +27,7 @@ class AddTodoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => TodoCubit(
-        todoRepository: TodoRepositoryImpl(
-          apiClient: ApiClient(ApiUtil.client),
-        ),
+        todoRepository: context.read<TodoRepository>(),
       ),
       child: _AddTodoBody(arg),
     );
