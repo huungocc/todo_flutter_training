@@ -43,21 +43,29 @@ class AppFormat {
     return DateFormat('hh:mm a').format(dateTime);
   }
 
-  static bool isDateTimeExpired(DateTime date, String time) {
+  static bool isDateTimeExpired(DateTime? date, String? time) {
+    if (date == null || time == null || time.isEmpty) return false;
+
     final parts = time.split(':');
-    final hour = int.parse(parts[0]);
-    final minute = int.parse(parts[1]);
-    final second = int.parse(parts[2]);
+    if (parts.length != 3) return false;
 
-    final targetDateTime = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      hour,
-      minute,
-      second,
-    );
+    try {
+      final hour = int.parse(parts[0]);
+      final minute = int.parse(parts[1]);
+      final second = int.parse(parts[2]);
 
-    return DateTime.now().isAfter(targetDateTime);
+      final targetDateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        hour,
+        minute,
+        second,
+      );
+
+      return DateTime.now().isAfter(targetDateTime);
+    } catch (_) {
+      return false;
+    }
   }
 }

@@ -35,8 +35,8 @@ class BaseTextInput extends StatefulWidget {
   final InputBorder? enabledBorder;
   final FocusNode? focusNode;
 
-  BaseTextInput({
-    Key? key,
+  const BaseTextInput({
+    super.key,
     this.title,
     this.cursorColor = AppColors.textBlack,
     this.borderRadius,
@@ -67,7 +67,7 @@ class BaseTextInput extends StatefulWidget {
     this.focusedBorder,
     this.enabledBorder,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -100,7 +100,7 @@ class TextFieldState extends State<BaseTextInput> {
         Container(
           height: heightTextInput,
           width: widget.width ?? double.infinity,
-          margin: widget.margin ?? EdgeInsets.zero,
+          margin: widget.margin ?? EdgeInsets.symmetric(vertical: 10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: widget.colorBgTextField,
@@ -165,18 +165,12 @@ class TextFieldState extends State<BaseTextInput> {
                     disabledBorder: widget.disabledBorder ??
                         UnderlineInputBorder(borderSide: BorderSide(color: AppColors.border)),
                     enabledBorder: widget.enabledBorder ?? OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.textWhite,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(widget.borderRadius ?? 16),
+                      borderSide: BorderSide(color: AppColors.gray1, width: 1),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     focusedBorder: widget.focusedBorder ?? OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.primary,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(widget.borderRadius ?? 16),
+                      borderSide: BorderSide(color: AppColors.todoPurple, width: 1),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     hintStyle: widget.hintStyle ??
                         TextStyle(

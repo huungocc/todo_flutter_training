@@ -1,10 +1,5 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
-import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 
 class ExceptionHandler {
