@@ -56,3 +56,26 @@ class TodoEntity {
   static String? _toJsonDate(DateTime? date) =>
       date?.toIso8601String();
 }
+
+extension TodoEntityCopyWith on TodoEntity {
+  TodoEntity copyWith({
+    String? id,
+    String? taskTitle,
+    String? category,
+    DateTime? date,
+    String? time,
+    String? notes,
+    bool? completed,
+  }) {
+    return TodoEntity(
+      id: id ?? this.id,
+      taskTitle: taskTitle ?? this.taskTitle,
+      category: category ?? this.category,
+      date: date ?? this.date,
+      time: time ?? this.time,
+      notes: notes ?? this.notes,
+      completed: completed ?? this.completed,
+    );
+  }
+}
+
