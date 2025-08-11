@@ -25,6 +25,9 @@
   "syntax_error_unimplemented": "Chức năng chưa được triển khai",
   "syntax_error_assertion": "Lỗi logic: {message}",
 
+  "unknown": "Không xác định",
+  "unsupported_platform": "Nền tảng không hỗ trợ",
+
   "my_todo_list": "Việc cần làm",
   "add_new_task": "Thêm công việc mới",
   "task_title": "Tiêu đề công việc",
@@ -47,5 +50,7 @@
   "complete_task": "Hoàn thành công việc này?",
   "cancel_complete_task": "Huỷ hoàn thành công việc này?",
   "cancel": "Huỷ",
-  "no_data_yet": "Chưa có dữ liệu"
+  "no_data_yet": "Chưa có dữ liệu",
+  "ok": "OK",
+  "n_a": "N/A"
 }

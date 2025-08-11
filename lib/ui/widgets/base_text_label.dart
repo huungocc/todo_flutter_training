@@ -1,81 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
-import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 
 class BaseTextLabel extends StatelessWidget {
   final String? title;
-  final double? fontSize;
-  final FontWeight fontWeight;
-  final FontStyle fontStyle;
-  final TextDecoration? decoration;
-  final Color? decorationColor;
-  final Color color;
+  final TextStyle? style;
   final TextAlign textAlign;
   final int? maxLines;
-  final double? fontHeight;
   final bool isRequired;
 
-  const BaseTextLabel(this.title,
-      {super.key,
-        this.fontSize,
-        this.fontWeight = FontWeight.normal,
-        this.fontStyle = FontStyle.normal,
-        this.decoration,
-        this.decorationColor,
-        this.color = Colors.black,
+  const BaseTextLabel(
+      this.title, {
+        super.key,
+        this.style,
         this.textAlign = TextAlign.start,
         this.maxLines,
-        this.fontHeight,
-        this.isRequired = false});
+        this.isRequired = false,
+      });
 
   @override
   Widget build(BuildContext context) {
-    if (isRequired == true) {
-      return Row(
-        children: [
-          renderContent(),
-          SizedBox(width: 3),
-          Text(
-            "*",
+    final textStyle = style ?? AppTextStyle.blackS16;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 3,
+      children: [
+        Flexible(
+          child: Text(
+            title ?? "",
             textAlign: textAlign,
             overflow: TextOverflow.ellipsis,
             maxLines: maxLines,
-            style: TextStyle(
-              height: fontHeight,
-              fontSize: fontSize ?? AppDimens.fontNormal,
-              fontWeight: fontWeight,
-              color: AppColors.error,
-              fontStyle: fontStyle,
-              decoration: decoration,
-              decorationColor: decorationColor,
-            ),
-          )
-        ],
-      );
-    }
-
-    return renderContent();
-  }
-
-  Widget renderContent() {
-    final textWidget = Text(
-        title?.toString() ?? "",
-        textAlign: textAlign,
-        overflow: TextOverflow.ellipsis,
-        maxLines: maxLines,
-        style: TextStyle(
-          height: fontHeight ?? 22.27 / 19,
-          fontSize: fontSize ?? AppDimens.fontNormal,
-          fontWeight: fontWeight,
-          fontStyle: fontStyle,
-          decoration: decoration,
-          decorationColor: decorationColor,
-          color: color,
+            softWrap: true,
+            style: textStyle,
+          ),
         ),
-      softWrap: true,
+        if (isRequired) ...[
+          Text(
+            "*",
+            style: textStyle.copyWith(color: AppColors.error),
+          ),
+        ],
+      ],
     );
-
-    return textWidget;
   }
 }

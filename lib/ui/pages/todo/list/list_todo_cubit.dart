@@ -16,26 +16,12 @@ class ListTodoCubit extends Cubit<ListTodoState> {
     try {
       emit(state.copyWith(loadStatus: LoadStatus.loading));
 
-      final todos = await todoRepository.fetchTodos(
-        completed: todoType.completedStatus,
-      );
-
       if (todoType == TodoType.all) {
-        emit(state.copyWith(
-          loadStatus: LoadStatus.success,
-          activeTodos: _filterTodos(todos, false),
-          completedTodos: _filterTodos(todos, true),
-        ));
+        await _fetchAllTodos();
       } else if (todoType == TodoType.active) {
-        emit(state.copyWith(
-          loadStatus: LoadStatus.success,
-          activeTodos: todos,
-        ));
+        await _fetchActiveTodos();
       } else if (todoType == TodoType.completed) {
-        emit(state.copyWith(
-          loadStatus: LoadStatus.success,
-          completedTodos: todos,
-        ));
+        await _fetchCompletedTodos();
       }
     } catch (e) {
       emit(state.copyWith(
@@ -44,6 +30,34 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       ));
       ExceptionHandler.showErrorSnackBar('$e');
     }
+  }
+
+  Future<void> _fetchAllTodos() async {
+    final todos = await todoRepository.fetchTodos();
+
+    emit(state.copyWith(
+      loadStatus: LoadStatus.success,
+      activeTodos: _filterTodos(todos, false),
+      completedTodos: _filterTodos(todos, true),
+    ));
+  }
+
+  Future<void> _fetchActiveTodos() async {
+    final todos = await todoRepository.fetchTodos(completed: false);
+
+    emit(state.copyWith(
+      loadStatus: LoadStatus.success,
+      activeTodos: todos,
+    ));
+  }
+
+  Future<void> _fetchCompletedTodos() async {
+    final todos = await todoRepository.fetchTodos(completed: true);
+
+    emit(state.copyWith(
+      loadStatus: LoadStatus.success,
+      completedTodos: todos,
+    ));
   }
 
   /// Update Status (Active <=> Completed)

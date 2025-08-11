@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 
 class BaseScreen extends StatelessWidget {
@@ -78,14 +79,12 @@ class BaseScreen extends StatelessWidget {
     Widget widgetTitle = BaseTextLabel(
         title?.toString(),
         maxLines: 2,
-        fontWeight: FontWeight.w700,
-        fontSize: 16,
+        style: AppTextStyle.blackS16W600,
         textAlign: TextAlign.center,
-        color: colorTitle,
       );
     return AppBar(
       elevation: 0,
-      toolbarHeight: toolbarHeight ?? 50,
+      toolbarHeight: toolbarHeight ?? AppDimens.appBarNormal,
       backgroundColor: colorAppBar,
       title: widgetTitle,
       systemOverlayStyle: SystemUiOverlayStyle(

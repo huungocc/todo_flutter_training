@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/operation_status.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_cubit.dart';
@@ -21,15 +23,15 @@ class _AddTodoHeaderState extends State<AddTodoHeader> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        const CustomTodoBackground(height: 90),
+        const CustomTodoBackground(height: AppDimens.appBarLarge),
         Positioned(
           left: 16,
           top: 12,
           child: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: Container(
-              height: 50,
-              width: 50,
+              height: AppDimens.iconSizeLarge,
+              width: AppDimens.iconSizeLarge,
               decoration: BoxDecoration(
                 color: AppColors.textWhite,
                 shape: BoxShape.circle,
@@ -47,9 +49,7 @@ class _AddTodoHeaderState extends State<AddTodoHeader> {
                 state.operation.isAdd
                     ? S.of(context).add_new_task
                     : S.of(context).edit_task,
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                color: AppColors.textWhite,
+                style: AppTextStyle.whiteS18W400,
               );
             },
           ),

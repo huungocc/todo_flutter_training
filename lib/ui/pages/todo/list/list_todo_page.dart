@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/repository/todo_repository.dart';
@@ -67,7 +68,7 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
       colorBackground: AppColors.todoBackground,
       body: Stack(
         children: [
-          const CustomTodoBackground(height: 250),
+          const CustomTodoBackground(height: AppDimens.appBarExtra),
           SafeArea(
             child: Column(
               spacing: 10,
@@ -84,7 +85,6 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
         child: BaseButton(
           title: S.of(context).add_new_task,
           backgroundColor: AppColors.todoPurple,
-          borderRadius: 50,
           onTap: () {
             _onAddTodo();
           },

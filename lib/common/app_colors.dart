@@ -58,7 +58,7 @@ class AppColors {
   ///Shadow
   static const Color boxShadowColor = Color(0x3D40BFFF);
 
-  ///Todo
+  ///Todos
   static const Color todoPurple = Color(0xff4a3780);
   static const Color todoLightPurple = Color(0xff5c4a8c);
   static const Color todoBackground = Color(0xffe5e9ed);

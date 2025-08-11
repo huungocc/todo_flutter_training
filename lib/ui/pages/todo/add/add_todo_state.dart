@@ -51,8 +51,8 @@ class AddTodoState extends Equatable {
     return AddTodoState(
       todo: todo ?? this.todo,
       status: status ?? this.status,
-      errorMessage: errorMessage,
-      successMessage: successMessage,
+      errorMessage: errorMessage ?? this.errorMessage,
+      successMessage: successMessage ?? this.successMessage,
       operation: operation ?? this.operation,
       taskTitleController: taskTitleController ?? this.taskTitleController,
       timeController: timeController ?? this.timeController,

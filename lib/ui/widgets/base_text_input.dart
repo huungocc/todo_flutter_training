@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 
 class BaseTextInput extends StatefulWidget {
@@ -9,196 +11,129 @@ class BaseTextInput extends StatefulWidget {
   final int minLines;
   final String hintText;
   final EdgeInsets? margin;
-  final EdgeInsets? padding;
-  final double? width;
-  final double? fontSize;
-  final TextEditingController? textController;
   final double? borderRadius;
-
-  final Color? cursorColor;
-  final FontWeight? fontWeight;
-  final TextAlign? align;
   final bool enabled;
-  final Color colorBgTextField;
-  final Color colorBgTextFieldDisable;
-  final Color colorText;
   final int maxLength;
   final Widget? suffixIcon;
-  final double? suffixIconMargin;
   final Widget? prefixIcon;
-  final bool isPasswordTF;
   final bool isRequired;
   final VoidCallback? onTapSuffixIcon;
   final TextStyle? hintStyle;
-  final InputBorder? disabledBorder;
-  final InputBorder? focusedBorder;
-  final InputBorder? enabledBorder;
-  final FocusNode? focusNode;
-  final ValueChanged<String>? onChanged;
   final VoidCallback? onTap;
   final bool readOnly;
+  final TextEditingController? textController;
+  final TextStyle? textStyle;
 
   const BaseTextInput({
     super.key,
     this.title,
-    this.cursorColor = AppColors.textBlack,
-    this.borderRadius,
+    this.borderRadius = 16,
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
     this.minLines = 1,
     this.hintText = "",
-    this.margin,
-    this.padding,
-    this.width,
+    this.margin = const EdgeInsets.symmetric(vertical: 10),
     this.textController,
-    this.fontWeight,
-    this.align,
     this.enabled = true,
-    this.colorText = Colors.black,
     this.maxLength = TextField.noMaxLength,
     this.suffixIcon,
-    this.suffixIconMargin,
     this.prefixIcon,
-    this.isPasswordTF = false,
     this.isRequired = false,
-    this.colorBgTextField = AppColors.textWhite,
-    this.colorBgTextFieldDisable = AppColors.gray1,
     this.onTapSuffixIcon,
-    this.fontSize,
     this.hintStyle,
-    this.disabledBorder,
-    this.focusedBorder,
-    this.enabledBorder,
-    this.focusNode,
-    this.onChanged,
     this.onTap,
     this.readOnly = false,
+    this.textStyle,
   });
 
   @override
-  State<StatefulWidget> createState() {
-    return TextFieldState();
-  }
+  State<BaseTextInput> createState() => _BaseTextInputState();
 }
 
-class TextFieldState extends State<BaseTextInput> {
-  bool _showText = true;
-  late TextEditingController textController;
+class _BaseTextInputState extends State<BaseTextInput> {
+  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
-    textController = widget.textController ?? TextEditingController();
+    _controller = widget.textController ?? TextEditingController();
+  }
+
+  InputDecoration _buildDecoration() {
+    return InputDecoration(
+      counterText: "",
+      suffixIcon: widget.suffixIcon != null
+          ? Padding(
+        padding: EdgeInsets.only(right: AppDimens.marginSmall),
+        child: InkWell(
+          onTap: widget.onTapSuffixIcon,
+          child: widget.suffixIcon,
+        ),
+      )
+          : null,
+      prefixIcon: widget.prefixIcon != null
+          ? Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppDimens.marginSmall),
+        child: widget.prefixIcon,
+      )
+          : null,
+      focusColor: Colors.white,
+      disabledBorder: const UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.border),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: AppColors.gray1, width: 1),
+        borderRadius: BorderRadius.circular(widget.borderRadius ?? AppDimens.textInputCornerRadius),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: AppColors.todoPurple, width: 1),
+        borderRadius: BorderRadius.circular(widget.borderRadius ?? AppDimens.textInputCornerRadius),
+      ),
+      hintStyle: widget.hintStyle ??
+          AppTextStyle.blackS16.copyWith(
+            color: !widget.enabled ? AppColors.textBlack : AppColors.gray2,
+            fontWeight: FontWeight.w400,
+          ),
+      hintText: widget.hintText,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    double heightTextInput = 56;
-    if (widget.maxLines == widget.minLines && widget.maxLines > 1) {
-      heightTextInput = 64.0 * (widget.maxLines / 2 ) - 16;
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.title != null)
-          BaseTextLabel(widget.title, isRequired: widget.isRequired, fontSize: 16, fontWeight: FontWeight.w500,),
+          BaseTextLabel(
+            widget.title,
+            isRequired: widget.isRequired,
+            style: AppTextStyle.blackS16W500,
+          ),
         Container(
-            height: heightTextInput,
-            width: widget.width ?? double.infinity,
-            margin: widget.margin ?? EdgeInsets.symmetric(vertical: 10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: widget.colorBgTextField,
-                borderRadius: BorderRadius.circular(widget.borderRadius ?? 16)),
-            child: Stack(
-              children: [
-                if (widget.isRequired && widget.title == null)
-                  Container(
-                    padding: const EdgeInsets.only(left: 10, top: 3),
-                    child: const BaseTextLabel(
-                      "*",
-                      color: AppColors.error,
-                    ),
-                  ),
-                TextField(
-                  keyboardType: widget.keyboardType,
-                  focusNode: widget.focusNode,
-                  maxLength: widget.maxLength,
-                  cursorColor: widget.cursorColor,
-                  enabled: widget.enabled,
-                  readOnly: widget.readOnly,
-                  textAlign: widget.align ?? TextAlign.start,
-                  textAlignVertical: TextAlignVertical.center,
-                  onChanged: widget.onChanged,
-                  onTap: widget.onTap,
-                  style: TextStyle(
-                      color: widget.colorText,
-                      fontSize: widget.fontSize ?? 16,
-                      fontWeight: widget.fontWeight ?? FontWeight.w400),
-                  decoration: InputDecoration(
-                    counterText: "",
-                    suffixIcon: Padding(
-                      padding: EdgeInsets.only(right: widget.suffixIconMargin ?? 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (widget.isPasswordTF == true)
-                            IconButton(
-                              icon: Icon(!_showText ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                              onPressed: () {
-                                setState(() {
-                                  _showText = !_showText;
-                                });
-                              },
-                            ),
-                          if (widget.suffixIcon != null)
-                            Padding(
-                              padding: EdgeInsets.only(left: 0, right: 5),
-                              child: InkWell(
-                                onTap: widget.onTapSuffixIcon,
-                                child: widget.suffixIcon,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: widget.prefixIcon,
-                    ),
-                    focusColor: Colors.white,
-                    border: InputBorder.none,
-                    suffixIconConstraints: BoxConstraints(maxHeight: 35),
-                    prefixIconConstraints: BoxConstraints(maxHeight: 35),
-                    disabledBorder: widget.disabledBorder ??
-                        UnderlineInputBorder(borderSide: BorderSide(color: AppColors.border)),
-                    enabledBorder: widget.enabledBorder ?? OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.gray1, width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: widget.focusedBorder ?? OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.todoPurple, width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    hintStyle: widget.hintStyle ??
-                        TextStyle(
-                            color: !widget.enabled ? AppColors.textBlack : AppColors.gray2,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16),
-                    hintText: widget.hintText,
-                  ),
-                  controller: textController,
-                  maxLines: widget.maxLines,
-                  minLines: widget.minLines,
-                  obscureText: widget.isPasswordTF ? _showText : false,
-                ),
-              ],
-            )
+          width: double.infinity,
+          margin: widget.margin,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: AppColors.textWhite,
+            borderRadius: BorderRadius.circular(widget.borderRadius ?? AppDimens.textInputCornerRadius),
+          ),
+          child: TextField(
+            controller: _controller,
+            keyboardType: widget.keyboardType,
+            maxLength: widget.maxLength,
+            enabled: widget.enabled,
+            readOnly: widget.readOnly,
+            textAlign: TextAlign.start,
+            textAlignVertical: TextAlignVertical.center,
+            onTap: widget.onTap,
+            style: widget.textStyle ?? AppTextStyle.blackS16,
+            maxLines: widget.maxLines,
+            minLines: widget.minLines,
+            cursorColor: AppColors.todoPurple,
+            decoration: _buildDecoration(),
+          ),
         ),
       ],
     );
   }
-
-  String get value => textController.text.trim();
 }

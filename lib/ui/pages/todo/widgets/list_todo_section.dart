@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_format.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
@@ -58,7 +60,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +74,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                 builder: (context, state) {
                   if (state.loadStatus.isLoading) {
                     return BaseLoading(
-                      size: 30,
+                      size: AppDimens.iconSizeNormal,
                       backgroundColor: AppColors.textWhite,
                       valueColor: AppColors.textBlack,
                     );
@@ -83,8 +85,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
 
               BaseTextLabel(
                 S.of(context).completed,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
+                style: AppTextStyle.blackS16W600,
               ),
 
               /// Build Completed todos
@@ -95,7 +96,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                 builder: (context, state) {
                   if (state.loadStatus.isLoading) {
                     return BaseLoading(
-                      size: 30,
+                      size: AppDimens.iconSizeNormal,
                       backgroundColor: AppColors.textWhite,
                       valueColor: AppColors.textBlack,
                     );
@@ -113,7 +114,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   Widget _buildActiveTodos(List<TodoEntity> activeTodos, BuildContext context) {
     return activeTodos.isNotEmpty
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppDimens.cardCornerRadius),
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -143,9 +144,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
             ),
           )
         : TodoInfoCard(
-            borderRadius: 20,
+            borderRadius: AppDimens.cardCornerRadius,
             title: S.of(context).no_data_yet,
-            time: 'N/A',
+            time: S.of(context).n_a,
           );
   }
 
@@ -155,7 +156,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   ) {
     return completedTodos.isNotEmpty
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppDimens.cardCornerRadius),
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -180,9 +181,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
             ),
           )
         : TodoInfoCard(
-            borderRadius: 20,
+            borderRadius: AppDimens.cardCornerRadius,
             title: S.of(context).no_data_yet,
-            time: 'N/A',
+            time: S.of(context).n_a,
             isCompleted: true,
           );
   }

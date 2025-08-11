@@ -25,6 +25,9 @@
   "syntax_error_unimplemented": "Feature not implemented",
   "syntax_error_assertion": "Logic error: {message}",
 
+  "unknown": "Unknown",
+  "unsupported_platform": "Unsupported Platform",
+
   "my_todo_list": "My Todo List",
   "add_new_task": "Add New Task",
   "task_title": "Task Title",
@@ -47,5 +50,7 @@
   "complete_task": "Complete this task?",
   "cancel_complete_task": "Cancel complete this task?",
   "cancel": "Cancel",
-  "no_data_yet": "No data yet"
+  "no_data_yet": "No data yet",
+  "ok": "OK",
+  "n_a": "N/A"
 }
