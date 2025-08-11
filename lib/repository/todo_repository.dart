@@ -4,7 +4,7 @@ import 'package:todo_flutter_training/network/api_client.dart';
 abstract class TodoRepository {
   Future<void> addTodo({required TodoEntity todo});
 
-  Future<List<TodoEntity>> fetchTodos({required bool completed});
+  Future<List<TodoEntity>> fetchTodos({bool? completed});
 
   Future<void> updateTodo({required TodoEntity todo});
 
@@ -24,8 +24,8 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   @override
-  Future<List<TodoEntity>> fetchTodos({required bool completed}) async {
-    return apiClient.getTodos(completed: completed);
+  Future<List<TodoEntity>> fetchTodos({bool? completed}) async {
+    return apiClient.fetchTodos(completed: completed);
   }
 
   @override

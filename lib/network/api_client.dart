@@ -33,18 +33,22 @@ class ApiClient {
     );
   }
 
-  Future<List<TodoEntity>> getTodos({required bool completed}) async {
+  Future<List<TodoEntity>> fetchTodos({bool? completed}) async {
     return ApiInterceptors.executeWithLogging(
       'GET_TODOS',
           () async {
         final deviceId = await _getDeviceId();
 
-        final response = await _client
+        var query = _client
             .from('todos')
             .select()
-            .eq('device_id', deviceId)
-            .eq('completed', completed)
-            .order('created_at', ascending: false);
+            .eq('device_id', deviceId);
+
+        if (completed != null) {
+          query = query.eq('completed', completed);
+        }
+
+        final response = await query.order('created_at', ascending: false);
 
         return (response as List)
             .map((json) => TodoEntity.fromJson(json))
