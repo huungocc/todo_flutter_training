@@ -4,7 +4,7 @@ enum TodoType {
   completed,
 }
 
-extension TodoTypeState on TodoType {
+extension TodoTypeX on TodoType {
   bool? get completedStatus {
     switch (this) {
       case TodoType.all:
@@ -20,5 +20,20 @@ extension TodoTypeState on TodoType {
 enum TodoItemType {
   list,
   calendar,
-  trophy
+  trophy,
+}
+
+extension TodoItemTypeX on String? {
+  TodoItemType toTodoItemType() {
+    switch (this) {
+      case 'calendar':
+        return TodoItemType.calendar;
+      case 'trophy':
+        return TodoItemType.trophy;
+      case 'list':
+        return TodoItemType.list;
+      default:
+        return TodoItemType.list;
+    }
+  }
 }

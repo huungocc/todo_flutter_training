@@ -34,6 +34,9 @@ class BaseTextInput extends StatefulWidget {
   final InputBorder? focusedBorder;
   final InputBorder? enabledBorder;
   final FocusNode? focusNode;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onTap;
+  final bool readOnly;
 
   const BaseTextInput({
     super.key,
@@ -67,6 +70,9 @@ class BaseTextInput extends StatefulWidget {
     this.focusedBorder,
     this.enabledBorder,
     this.focusNode,
+    this.onChanged,
+    this.onTap,
+    this.readOnly = false,
   });
 
   @override
@@ -98,36 +104,39 @@ class TextFieldState extends State<BaseTextInput> {
         if (widget.title != null)
           BaseTextLabel(widget.title, isRequired: widget.isRequired, fontSize: 16, fontWeight: FontWeight.w500,),
         Container(
-          height: heightTextInput,
-          width: widget.width ?? double.infinity,
-          margin: widget.margin ?? EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: widget.colorBgTextField,
-              borderRadius: BorderRadius.circular(widget.borderRadius ?? 16)),
-          child: Stack(
-            children: [
-              if (widget.isRequired && widget.title == null)
-                Container(
-                  padding: const EdgeInsets.only(left: 10, top: 3),
-                  child: const BaseTextLabel(
-                    "*",
-                    color: AppColors.error,
+            height: heightTextInput,
+            width: widget.width ?? double.infinity,
+            margin: widget.margin ?? EdgeInsets.symmetric(vertical: 10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: widget.colorBgTextField,
+                borderRadius: BorderRadius.circular(widget.borderRadius ?? 16)),
+            child: Stack(
+              children: [
+                if (widget.isRequired && widget.title == null)
+                  Container(
+                    padding: const EdgeInsets.only(left: 10, top: 3),
+                    child: const BaseTextLabel(
+                      "*",
+                      color: AppColors.error,
+                    ),
                   ),
-                ),
-              TextField(
-                keyboardType: widget.keyboardType,
-                focusNode: widget.focusNode,
-                maxLength: widget.maxLength,
-                cursorColor: widget.cursorColor,
-                enabled: widget.enabled,
-                textAlign: widget.align ?? TextAlign.start,
-                textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(
-                    color: widget.colorText,
-                    fontSize: widget.fontSize ?? 16,
-                    fontWeight: widget.fontWeight ?? FontWeight.w400),
-                decoration: InputDecoration(
+                TextField(
+                  keyboardType: widget.keyboardType,
+                  focusNode: widget.focusNode,
+                  maxLength: widget.maxLength,
+                  cursorColor: widget.cursorColor,
+                  enabled: widget.enabled,
+                  readOnly: widget.readOnly,
+                  textAlign: widget.align ?? TextAlign.start,
+                  textAlignVertical: TextAlignVertical.center,
+                  onChanged: widget.onChanged,
+                  onTap: widget.onTap,
+                  style: TextStyle(
+                      color: widget.colorText,
+                      fontSize: widget.fontSize ?? 16,
+                      fontWeight: widget.fontWeight ?? FontWeight.w400),
+                  decoration: InputDecoration(
                     counterText: "",
                     suffixIcon: Padding(
                       padding: EdgeInsets.only(right: widget.suffixIconMargin ?? 10),
@@ -178,14 +187,14 @@ class TextFieldState extends State<BaseTextInput> {
                             fontWeight: FontWeight.w400,
                             fontSize: 16),
                     hintText: widget.hintText,
+                  ),
+                  controller: textController,
+                  maxLines: widget.maxLines,
+                  minLines: widget.minLines,
+                  obscureText: widget.isPasswordTF ? _showText : false,
                 ),
-                controller: textController,
-                maxLines: widget.maxLines,
-                minLines: widget.minLines,
-                obscureText: widget.isPasswordTF ? _showText : false,
-              ),
-            ],
-          )
+              ],
+            )
         ),
       ],
     );

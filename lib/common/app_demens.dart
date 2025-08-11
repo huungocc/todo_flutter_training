@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppDimens {
   AppDimens._();
 
@@ -20,4 +22,21 @@ class AppDimens {
   static const double marginNormal = 16;
   static const double marginLarge = 32;
   static const double marginSmall = 8;
+}
+
+class ScreenSize {
+  static final ScreenSize _instance = ScreenSize._internal();
+
+  late double width;
+  late double height;
+
+  static ScreenSize get instance => _instance;
+
+  ScreenSize._internal();
+
+  void init(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    width = size.width;
+    height = size.height;
+  }
 }

@@ -16,13 +16,6 @@ class ListTodoState extends Equatable {
   final List<TodoEntity> completedTodos;
   final String? errorMessage;
 
-  // Getters State
-  bool get isInitial => loadStatus == LoadStatus.initial;
-  bool get isLoading => loadStatus == LoadStatus.loading;
-  bool get isLoaded => loadStatus == LoadStatus.success;
-  bool get isError => loadStatus == LoadStatus.failure;
-  bool get hasData => activeTodos.isNotEmpty;
-
   ListTodoState copyWith({
     LoadStatus? loadStatus,
     OperationStatus? operationStatus,

@@ -4,6 +4,7 @@ import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_format.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
+import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_page.dart';
@@ -69,7 +70,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                     prev.activeTodos != curr.activeTodos ||
                     prev.loadStatus != curr.loadStatus,
                 builder: (context, state) {
-                  if (state.isLoading) {
+                  if (state.loadStatus.isLoading) {
                     return BaseLoading(
                       size: 30,
                       backgroundColor: AppColors.textWhite,
@@ -92,7 +93,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                     prev.completedTodos != curr.completedTodos ||
                     prev.loadStatus != curr.loadStatus,
                 builder: (context, state) {
-                  if (state.isLoading) {
+                  if (state.loadStatus.isLoading) {
                     return BaseLoading(
                       size: 30,
                       backgroundColor: AppColors.textWhite,

@@ -67,7 +67,7 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
       colorBackground: AppColors.todoBackground,
       body: Stack(
         children: [
-          CustomTodoBackground(height: 250),
+          const CustomTodoBackground(height: 250),
           SafeArea(
             child: Column(
               spacing: 10,

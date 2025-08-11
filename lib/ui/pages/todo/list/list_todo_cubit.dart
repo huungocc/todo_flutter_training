@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
-import 'package:todo_flutter_training/models/enums/operation_status.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/repository/todo_repository.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_state.dart';
@@ -63,7 +62,6 @@ class ListTodoCubit extends Cubit<ListTodoState> {
 
       emit(state.copyWith(
         loadStatus: LoadStatus.success,
-        operationStatus: OperationStatus.updateStatus,
       ));
     } catch (e) {
       // Reset Data when Error
@@ -89,7 +87,6 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       emit(
         state.copyWith(
           loadStatus: LoadStatus.success,
-          operationStatus: OperationStatus.delete,
         ),
       );
 

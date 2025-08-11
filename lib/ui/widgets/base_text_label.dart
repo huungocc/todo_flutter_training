@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 
 class BaseTextLabel extends StatelessWidget {
-  final dynamic title;
+  final String? title;
   final double? fontSize;
   final FontWeight fontWeight;
   final FontStyle fontStyle;
@@ -11,7 +12,7 @@ class BaseTextLabel extends StatelessWidget {
   final Color? decorationColor;
   final Color color;
   final TextAlign textAlign;
-  final int maxLines;
+  final int? maxLines;
   final double? fontHeight;
   final bool isRequired;
 
@@ -24,7 +25,7 @@ class BaseTextLabel extends StatelessWidget {
         this.decorationColor,
         this.color = Colors.black,
         this.textAlign = TextAlign.start,
-        this.maxLines = 50,
+        this.maxLines,
         this.fontHeight,
         this.isRequired = false});
 
