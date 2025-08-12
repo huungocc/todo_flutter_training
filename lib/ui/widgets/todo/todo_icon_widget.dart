@@ -33,7 +33,9 @@ class TodoIconWidget extends StatelessWidget {
         color = AppColors.bgCalendarIcon;
         break;
       case TodoItemType.trophy:
-        icon = Assets.vectors.icTodoTrophy.svg(height: AppDimens.iconSizeNormal);
+        icon = Assets.vectors.icTodoTrophy.svg(
+          height: AppDimens.iconSizeNormal,
+        );
         color = AppColors.bgTrophyIcon;
         break;
     }

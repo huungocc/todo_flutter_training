@@ -72,10 +72,7 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
           SafeArea(
             child: Column(
               spacing: 10,
-              children: [
-                const ListTodoHeader(),
-                const ListTodoSection()
-              ],
+              children: [const ListTodoHeader(), const ListTodoSection()],
             ),
           ),
         ],

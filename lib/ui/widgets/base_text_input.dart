@@ -64,18 +64,20 @@ class _BaseTextInputState extends State<BaseTextInput> {
       counterText: "",
       suffixIcon: widget.suffixIcon != null
           ? Padding(
-        padding: EdgeInsets.only(right: AppDimens.marginSmall),
-        child: InkWell(
-          onTap: widget.onTapSuffixIcon,
-          child: widget.suffixIcon,
-        ),
-      )
+              padding: EdgeInsets.only(right: AppDimens.marginSmall),
+              child: InkWell(
+                onTap: widget.onTapSuffixIcon,
+                child: widget.suffixIcon,
+              ),
+            )
           : null,
       prefixIcon: widget.prefixIcon != null
           ? Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimens.marginSmall),
-        child: widget.prefixIcon,
-      )
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimens.marginSmall,
+              ),
+              child: widget.prefixIcon,
+            )
           : null,
       focusColor: Colors.white,
       disabledBorder: const UnderlineInputBorder(
@@ -83,15 +85,20 @@ class _BaseTextInputState extends State<BaseTextInput> {
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(color: AppColors.gray1, width: 1),
-        borderRadius: BorderRadius.circular(widget.borderRadius ?? AppDimens.textInputCornerRadius),
+        borderRadius: BorderRadius.circular(
+          widget.borderRadius ?? AppDimens.textInputCornerRadius,
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: const BorderSide(color: AppColors.todoPurple, width: 1),
-        borderRadius: BorderRadius.circular(widget.borderRadius ?? AppDimens.textInputCornerRadius),
+        borderRadius: BorderRadius.circular(
+          widget.borderRadius ?? AppDimens.textInputCornerRadius,
+        ),
       ),
-      hintStyle: widget.hintStyle ??
+      hintStyle:
+          widget.hintStyle ??
           AppTextStyle.blackS16.copyWith(
-            color: !widget.enabled ? AppColors.textBlack : AppColors.gray2,
+            color: !widget.enabled ? AppColors.textBlack : AppColors.textFieldHint,
             fontWeight: FontWeight.w400,
           ),
       hintText: widget.hintText,
@@ -115,7 +122,9 @@ class _BaseTextInputState extends State<BaseTextInput> {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: AppColors.textWhite,
-            borderRadius: BorderRadius.circular(widget.borderRadius ?? AppDimens.textInputCornerRadius),
+            borderRadius: BorderRadius.circular(
+              widget.borderRadius ?? AppDimens.textInputCornerRadius,
+            ),
           ),
           child: TextField(
             controller: _controller,

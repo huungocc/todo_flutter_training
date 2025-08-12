@@ -25,9 +25,6 @@
   "syntax_error_unimplemented": "Chức năng chưa được triển khai",
   "syntax_error_assertion": "Lỗi logic: {message}",
 
-  "unknown": "Không xác định",
-  "unsupported_platform": "Nền tảng không hỗ trợ",
-
   "my_todo_list": "Việc cần làm",
   "add_new_task": "Thêm công việc mới",
   "task_title": "Tiêu đề công việc",
@@ -52,5 +49,14 @@
   "cancel": "Huỷ",
   "no_data_yet": "Chưa có dữ liệu",
   "ok": "OK",
-  "n_a": "N/A"
+  "n_a": "N/A",
+
+  "unknown": "Không xác định",
+  "unsupported_platform": "Nền tảng không hỗ trợ",
+
+  "error_duplicate_data": "Dữ liệu đã tồn tại",
+  "error_foreign_key_violation": "Vi phạm ràng buộc dữ liệu",
+  "error_authentication": "Lỗi xác thực: {message}",
+  "error_connection": "Lỗi kết nối: {message}",
+  "supabase_not_initialized": "Supabase chưa được khởi tạo. Gọi SupabaseUtil.initialize() trước."
 }

@@ -33,43 +33,30 @@ class _MyAppState extends State<MyApp> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    ScreenSize.instance.init(context);
+    ScreenSize.instance().init(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<TodoRepository>(create: (context) {
-          return TodoRepositoryImpl(apiClient: _apiClient);
-        }),
-      ],
+    return RepositoryProvider<TodoRepository>(
+      create: (context) {
+        return TodoRepositoryImpl(apiClient: _apiClient);
+      },
       child: BlocProvider(
-          create: (_) => AppSettingCubit()..getInitialSetting(),
-          child: GestureDetector(
-            onTap: () {
-              _hideKeyboard(context);
-            },
-            child: BlocBuilder<AppSettingCubit, AppSettingState>(
-              buildWhen: (prev, current) {
-                return prev.language != current.language;
+        create: (_) => AppSettingCubit()..getInitialSetting(),
+        child: BlocBuilder<AppSettingCubit, AppSettingState>(
+          buildWhen: (prev, current) {
+            return prev.language != current.language;
+          },
+          builder: (context, state) {
+            return GestureDetector(
+              onTap: () {
+                _hideKeyboard(context);
               },
-              builder: (context, state) {
-                return GestureDetector(
-                  onTap: () {
-                    _hideKeyboard(context);
-                  },
-                  child: _buildMaterialApp(
-                    locale: state.language.local,
-                  ),
-                );
-              },
-            ),
-          )
+              child: _buildMaterialApp(locale: state.language.local),
+            );
+          },
+        ),
       ),
     );
   }

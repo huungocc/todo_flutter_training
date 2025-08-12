@@ -24,10 +24,12 @@ class ListTodoCubit extends Cubit<ListTodoState> {
         await _fetchCompletedTodos();
       }
     } catch (e) {
-      emit(state.copyWith(
-        loadStatus: LoadStatus.failure,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          loadStatus: LoadStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
       ExceptionHandler.showErrorSnackBar('$e');
     }
   }
@@ -35,54 +37,48 @@ class ListTodoCubit extends Cubit<ListTodoState> {
   Future<void> _fetchAllTodos() async {
     final todos = await todoRepository.fetchTodos();
 
-    emit(state.copyWith(
-      loadStatus: LoadStatus.success,
-      activeTodos: _filterTodos(todos, false),
-      completedTodos: _filterTodos(todos, true),
-    ));
+    emit(
+      state.copyWith(
+        loadStatus: LoadStatus.success,
+        activeTodos: _filterTodos(todos, false),
+        completedTodos: _filterTodos(todos, true),
+      ),
+    );
   }
 
   Future<void> _fetchActiveTodos() async {
     final todos = await todoRepository.fetchTodos(completed: false);
 
-    emit(state.copyWith(
-      loadStatus: LoadStatus.success,
-      activeTodos: todos,
-    ));
+    emit(state.copyWith(loadStatus: LoadStatus.success, activeTodos: todos));
   }
 
   Future<void> _fetchCompletedTodos() async {
     final todos = await todoRepository.fetchTodos(completed: true);
 
-    emit(state.copyWith(
-      loadStatus: LoadStatus.success,
-      completedTodos: todos,
-    ));
+    emit(state.copyWith(loadStatus: LoadStatus.success, completedTodos: todos));
   }
 
   /// Update Status (Active <=> Completed)
   Future<void> updateTodoStatus(TodoEntity todo) async {
     try {
-      final newStatus = !(todo.completed ?? false);
+      final newStatus = !todo.completed;
 
       // Delete from Local (optimistic update)
       _moveTodoBetweenLists(todo, newStatus);
 
       // Delete from Server
-      await todoRepository.updateTodoStatus(
-        id: todo.id!,
-        completed: newStatus,
-      );
+      await todoRepository.updateTodoStatus(id: todo.id!, completed: newStatus);
 
-      emit(state.copyWith(
-        loadStatus: LoadStatus.success,
-      ));
+      emit(state.copyWith(loadStatus: LoadStatus.success));
     } catch (e) {
       // Reset Data when Error
       fetchTodos(TodoType.all);
 
       emit(
-        state.copyWith(loadStatus: LoadStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          loadStatus: LoadStatus.failure,
+          errorMessage: e.toString(),
+        ),
       );
 
       ExceptionHandler.showErrorSnackBar('$e');
@@ -98,11 +94,7 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       // Delete from Server
       await todoRepository.deleteTodo(id: todo.id!);
 
-      emit(
-        state.copyWith(
-          loadStatus: LoadStatus.success,
-        ),
-      );
+      emit(state.copyWith(loadStatus: LoadStatus.success));
 
       ExceptionHandler.showSuccessSnackBar(S.current.todo_delete_success);
     } catch (e) {
@@ -114,7 +106,10 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       }
 
       emit(
-        state.copyWith(loadStatus: LoadStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          loadStatus: LoadStatus.failure,
+          errorMessage: e.toString(),
+        ),
       );
 
       ExceptionHandler.showErrorSnackBar('$e');
@@ -122,7 +117,7 @@ class ListTodoCubit extends Cubit<ListTodoState> {
   }
 
   void _removeTodoFromLists(TodoEntity todo) {
-    final isCompleted = todo.completed ?? false;
+    final isCompleted = todo.completed;
 
     if (isCompleted) {
       final updatedCompleted = List<TodoEntity>.from(state.completedTodos)
@@ -149,10 +144,12 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       updatedActive.add(todo.copyWith(completed: false));
     }
 
-    emit(state.copyWith(
-      activeTodos: updatedActive,
-      completedTodos: updatedCompleted,
-    ));
+    emit(
+      state.copyWith(
+        activeTodos: updatedActive,
+        completedTodos: updatedCompleted,
+      ),
+    );
   }
 
   List<TodoEntity> _filterTodos(List<TodoEntity> todos, bool completed) {

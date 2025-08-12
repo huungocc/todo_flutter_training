@@ -6,10 +6,10 @@ part of 'array_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ArrayResponse<T> _$ArrayResponseFromJson<T>(
+_ArrayResponse<T> _$ArrayResponseFromJson<T>(
   Map<String, dynamic> json,
   T Function(Object? json) fromJsonT,
-) => ArrayResponse<T>(
+) => _ArrayResponse<T>(
   page: (json['page'] as num?)?.toInt() ?? 1,
   totalPages: (json['total_pages'] as num?)?.toInt() ?? 0,
   totalResults: (json['total_results'] as num?)?.toInt() ?? 0,
@@ -17,7 +17,7 @@ ArrayResponse<T> _$ArrayResponseFromJson<T>(
 );
 
 Map<String, dynamic> _$ArrayResponseToJson<T>(
-  ArrayResponse<T> instance,
+  _ArrayResponse<T> instance,
   Object? Function(T value) toJsonT,
 ) => <String, dynamic>{
   'page': instance.page,

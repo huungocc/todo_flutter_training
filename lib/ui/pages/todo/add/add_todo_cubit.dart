@@ -14,13 +14,19 @@ import 'package:todo_flutter_training/models/enums/operation_status.dart';
 class AddTodoCubit extends Cubit<AddTodoState> {
   final TodoRepository todoRepository;
 
-  AddTodoCubit({
-    required this.todoRepository,
-  }) : super(AddTodoState());
+  AddTodoCubit({required this.todoRepository}) : super(const AddTodoState());
+
+  final TextEditingController taskTitleController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController notesController = TextEditingController();
 
   @override
   Future<void> close() {
-    state.dispose();
+    taskTitleController.dispose();
+    timeController.dispose();
+    dateController.dispose();
+    notesController.dispose();
     return super.close();
   }
 
@@ -40,14 +46,14 @@ class AddTodoCubit extends Cubit<AddTodoState> {
     );
 
     // Khởi tạo dữ liệu cho controller (UI)
-    state.taskTitleController.text = entity.taskTitle ?? '';
-    state.dateController.text = entity.date != null
-        ? AppFormat.formatDateToDDMMYYYY(entity.date!)
+    taskTitleController.text = entity.taskTitle ?? '';
+    dateController.text = entity.date != null
+        ? entity.date!.formatDateToDDMMYYYY()
         : '';
-    state.timeController.text = entity.time != null
-        ? AppFormat.convertTime24to12(entity.time!)
+    timeController.text = entity.time != null
+        ? entity.time!.convertTime24to12()
         : '';
-    state.notesController.text = entity.notes ?? '';
+    notesController.text = entity.notes ?? '';
   }
 
   void updateCategory(TodoItemType type) {
@@ -57,20 +63,21 @@ class AddTodoCubit extends Cubit<AddTodoState> {
   Future<void> pickDate(BuildContext context) async {
     final selectedDate = await AppPicker.pickDate(context: context);
     if (selectedDate != null) {
-      state.dateController.text = selectedDate;
+      dateController.text = selectedDate;
     }
   }
 
   Future<void> pickTime(BuildContext context) async {
     final selectedTime = await AppPicker.pickTime(context: context);
     if (selectedTime != null) {
-      state.timeController.text = selectedTime;
+      timeController.text = selectedTime;
     }
   }
 
   Future<void> addTodo() async {
     try {
       emit(state.copyWith(status: LoadStatus.loading));
+
       _updateEntityData();
 
       await todoRepository.addTodo(todo: state.todo);
@@ -83,7 +90,9 @@ class AddTodoCubit extends Cubit<AddTodoState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: LoadStatus.failure, errorMessage: e.toString()));
+      emit(
+        state.copyWith(status: LoadStatus.failure, errorMessage: e.toString()),
+      );
       ExceptionHandler.showErrorSnackBar('$e');
     }
   }
@@ -103,19 +112,19 @@ class AddTodoCubit extends Cubit<AddTodoState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: LoadStatus.failure, errorMessage: e.toString()));
+      emit(
+        state.copyWith(status: LoadStatus.failure, errorMessage: e.toString()),
+      );
       ExceptionHandler.showErrorSnackBar('$e');
     }
   }
 
   void _updateEntityData() {
     final updatedTodo = state.todo.copyWith(
-      taskTitle: state.taskTitleController.text,
-      date: AppFormat.parseDateFromDDMMYYYY(state.dateController.text),
-      time: AppFormat.convertTime12hTo24hWithSeconds(
-        state.timeController.text,
-      ),
-      notes: state.notesController.text,
+      taskTitle: taskTitleController.text,
+      date: dateController.text.toDateFromDDMMYYYY(),
+      time: timeController.text.convertTime12hTo24hWithSeconds(),
+      notes: notesController.text,
       category: state.selectedType.name,
     );
 

@@ -37,12 +37,14 @@ class AppDimens {
 }
 
 class ScreenSize {
-  static final ScreenSize _instance = ScreenSize._internal();
+   static final ScreenSize _instance = ScreenSize._internal();
 
   late double width;
   late double height;
 
-  static ScreenSize get instance => _instance;
+  factory ScreenSize.instance() {
+    return _instance;
+  }
 
   ScreenSize._internal();
 

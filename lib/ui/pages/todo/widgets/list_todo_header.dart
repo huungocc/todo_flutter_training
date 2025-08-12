@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_format.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
@@ -18,9 +17,7 @@ class ListTodoHeader extends StatefulWidget {
 
 class _ListTodoHeaderState extends State<ListTodoHeader> {
   void _changeLanguage(Language language) {
-    context.read<AppSettingCubit>().changeLanguage(
-      language: language.toggle,
-    );
+    context.read<AppSettingCubit>().changeLanguage(language: language.toggle);
   }
 
   @override
@@ -30,7 +27,7 @@ class _ListTodoHeaderState extends State<ListTodoHeader> {
       child: Column(
         children: [
           BaseTextLabel(
-            AppFormat.formatLongDate(DateTime.now()),
+            DateTime.now().formatLongDate(),
             style: AppTextStyle.whiteS18W400,
           ),
           BlocBuilder<AppSettingCubit, AppSettingState>(
@@ -41,7 +38,10 @@ class _ListTodoHeaderState extends State<ListTodoHeader> {
                 onPressed: () {
                   _changeLanguage(language);
                 },
-                icon: BaseTextLabel(language.flag, style: AppTextStyle.blackS24W400,),
+                icon: BaseTextLabel(
+                  language.flag,
+                  style: AppTextStyle.blackS24W400,
+                ),
               );
             },
           ),

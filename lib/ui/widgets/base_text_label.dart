@@ -10,13 +10,13 @@ class BaseTextLabel extends StatelessWidget {
   final bool isRequired;
 
   const BaseTextLabel(
-      this.title, {
-        super.key,
-        this.style,
-        this.textAlign = TextAlign.start,
-        this.maxLines,
-        this.isRequired = false,
-      });
+    this.title, {
+    super.key,
+    this.style,
+    this.textAlign = TextAlign.start,
+    this.maxLines,
+    this.isRequired = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +37,7 @@ class BaseTextLabel extends StatelessWidget {
           ),
         ),
         if (isRequired) ...[
-          Text(
-            "*",
-            style: textStyle.copyWith(color: AppColors.error),
-          ),
+          Text("*", style: textStyle.copyWith(color: AppColors.error)),
         ],
       ],
     );

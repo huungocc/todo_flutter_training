@@ -1,8 +1,9 @@
 import 'package:intl/intl.dart';
 
-class AppFormat {
-  static DateTime parseTodoTimeToday(String timeString) {
-    final parts = timeString.split(':');
+extension StringDateTimeExtensions on String {
+  /// Parse "HH:mm:ss" thành DateTime của ngày hôm nay
+  DateTime toTodoTimeToday() {
+    final parts = split(':');
     final now = DateTime.now();
 
     return DateTime(
@@ -15,38 +16,32 @@ class AppFormat {
     );
   }
 
-  static String formatLongDate(DateTime date) {
-    return DateFormat('MMMM d, yyyy').format(date);
+  /// Parse "dd/MM/yyyy" thành DateTime
+  DateTime? toDateFromDDMMYYYY() {
+    try {
+      return DateFormat('dd/MM/yyyy').parseStrict(this);
+    } catch (_) {
+      return null;
+    }
   }
 
-  static String convertTime24to12(String time24) {
-    final date = DateFormat('HH:mm:ss').parse(time24);
+  /// Chuyển "HH:mm:ss" sang "hh:mm a"
+  String convertTime24to12() {
+    final date = DateFormat('HH:mm:ss').parse(this);
     return DateFormat('hh:mm a').format(date);
   }
 
-  static String formatDateToDDMMYYYY(DateTime date) {
-    return DateFormat('dd/MM/yyyy').format(date);
-  }
-
-  static DateTime? parseDateFromDDMMYYYY(String dateString) {
-    return DateFormat('dd/MM/yyyy').parseStrict(dateString);
-  }
-
-  static String convertTime12hTo24hWithSeconds(String time12h) {
-    final dateTime = DateFormat('hh:mm a').parse(time12h);
+  /// Chuyển "hh:mm a" sang "HH:mm:ss"
+  String convertTime12hTo24hWithSeconds() {
+    final dateTime = DateFormat('hh:mm a').parse(this);
     return DateFormat('HH:mm:ss').format(dateTime);
   }
 
-  static String formatPickedTimeTo12h(int hour, int minute) {
-    final now = DateTime.now();
-    final dateTime = DateTime(now.year, now.month, now.day, hour, minute);
-    return DateFormat('hh:mm a').format(dateTime);
-  }
+  /// Kiểm tra thời gian đã quá hạn so với ngày date chưa
+  bool isDateTimeExpired(DateTime? date) {
+    if (date == null || isEmpty) return false;
 
-  static bool isDateTimeExpired(DateTime? date, String? time) {
-    if (date == null || time == null || time.isEmpty) return false;
-
-    final parts = time.split(':');
+    final parts = split(':');
     if (parts.length != 3) return false;
 
     try {
@@ -68,4 +63,15 @@ class AppFormat {
       return false;
     }
   }
+}
+
+extension DateTimeFormatExtensions on DateTime {
+  /// Format "MMMM d, yyyy"
+  String formatLongDate() => DateFormat('MMMM d, yyyy').format(this);
+
+  /// Format "dd/MM/yyyy"
+  String formatDateToDDMMYYYY() => DateFormat('dd/MM/yyyy').format(this);
+
+  /// Format giờ theo "hh:mm a"
+  String formatPickedTimeTo12h() => DateFormat('hh:mm a').format(this);
 }

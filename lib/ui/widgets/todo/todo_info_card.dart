@@ -84,10 +84,7 @@ class TodoInfoCard extends StatelessWidget {
                 ],
               ),
             ),
-            Checkbox(
-              value: isCompleted,
-              onChanged: (_) => onCheck?.call(),
-            ),
+            Checkbox(value: isCompleted, onChanged: (_) => onCheck?.call()),
           ],
         ),
       ),

@@ -16,11 +16,11 @@ class AppNavigator {
   }
 
   Future<dynamic> pushNamed(
-      String name, {
-        Map<String, String> pathParameters = const <String, String>{},
-        Map<String, dynamic> queryParameters = const <String, dynamic>{},
-        Object? extra,
-      }) async {
+    String name, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) async {
     return GoRouter.of(context).pushNamed(
       name,
       pathParameters: pathParameters,
@@ -30,11 +30,11 @@ class AppNavigator {
   }
 
   Future<dynamic> pushReplacementNamed(
-      String name, {
-        Map<String, String> pathParameters = const <String, String>{},
-        Map<String, dynamic> queryParameters = const <String, dynamic>{},
-        Object? extra,
-      }) async {
+    String name, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) async {
     return GoRouter.of(context).pushReplacementNamed(
       name,
       pathParameters: pathParameters,
@@ -55,11 +55,7 @@ class AppNavigator {
       message: message,
       flushbarStyle: FlushbarStyle.GROUNDED,
       flushbarPosition: FlushbarPosition.TOP,
-      icon: const Icon(
-        Icons.error_outline,
-        size: 28.0,
-        color: Colors.white,
-      ),
+      icon: const Icon(Icons.error_outline, size: 28.0, color: Colors.white),
       titleColor: Colors.white,
       duration: const Duration(seconds: 3),
       backgroundColor: Colors.redAccent,

@@ -39,6 +39,7 @@ class AppColors {
   static const Color textFieldDisabledBorder = Color(0xFF919191);
   static const Color textFieldCursor = Color(0xFF919191);
   static const Color textFieldErrorBorder = Color(0xFFFB7181);
+  static const Color textFieldHint = Color(0xFFA1A1A1);
 
   ///Button
   static const Color disableButton = Color(0xfff2f3f4);

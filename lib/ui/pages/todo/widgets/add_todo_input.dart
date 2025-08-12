@@ -63,7 +63,10 @@ class _AddTodoInputState extends State<AddTodoInput> {
       padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
       child: SingleChildScrollView(
         child: BlocBuilder<AddTodoCubit, AddTodoState>(
+          buildWhen: (prev, curr) => prev.todo != curr.todo,
           builder: (context, state) {
+            final cubit = context.read<AddTodoCubit>();
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 20,
@@ -72,7 +75,7 @@ class _AddTodoInputState extends State<AddTodoInput> {
 
                 /// Task Title
                 BaseTextInput(
-                  textController: state.taskTitleController,
+                  textController: cubit.taskTitleController,
                   title: S.of(context).task_title,
                   hintText: S.of(context).task_title,
                 ),
@@ -86,7 +89,8 @@ class _AddTodoInputState extends State<AddTodoInput> {
                       style: AppTextStyle.blackS16W500,
                     ),
                     BlocBuilder<AddTodoCubit, AddTodoState>(
-                      buildWhen: (prev, curr) => prev.selectedType != curr.selectedType,
+                      buildWhen: (prev, curr) =>
+                          prev.selectedType != curr.selectedType,
                       builder: (context, state) {
                         return TodoRadioGroup(
                           selected: state.selectedType,
@@ -95,16 +99,16 @@ class _AddTodoInputState extends State<AddTodoInput> {
                           },
                         );
                       },
-                    )
+                    ),
                   ],
                 ),
 
                 /// Date & Time
-                _buildPickerInput(state),
+                _buildPickerInput(cubit),
 
                 /// Notes
                 BaseTextInput(
-                  textController: state.notesController,
+                  textController: cubit.notesController,
                   title: S.of(context).notes,
                   hintText: S.of(context).notes,
                   minLines: 6,
@@ -120,13 +124,13 @@ class _AddTodoInputState extends State<AddTodoInput> {
     );
   }
 
-  Widget _buildPickerInput(AddTodoState state) {
+  Widget _buildPickerInput(AddTodoCubit cubit) {
     return Row(
       spacing: 10,
       children: [
         Expanded(
           child: BaseTextInput(
-            textController: state.dateController,
+            textController: cubit.dateController,
             title: S.of(context).date,
             hintText: S.of(context).date,
             readOnly: true,
@@ -138,7 +142,7 @@ class _AddTodoInputState extends State<AddTodoInput> {
         ),
         Expanded(
           child: BaseTextInput(
-            textController: state.timeController,
+            textController: cubit.timeController,
             title: S.of(context).time,
             hintText: S.of(context).time,
             readOnly: true,
@@ -158,7 +162,7 @@ class _AddTodoInputState extends State<AddTodoInput> {
   Widget _buildSaveButton() {
     return BlocBuilder<AddTodoCubit, AddTodoState>(
       buildWhen: (prev, curr) =>
-      prev.operation != curr.operation ||
+          prev.operation != curr.operation ||
           prev.status.isLoading != curr.status.isLoading,
       builder: (context, state) {
         return BaseButton(
@@ -166,24 +170,24 @@ class _AddTodoInputState extends State<AddTodoInput> {
           onTap: state.status.isLoading
               ? null
               : () {
-            if (state.operation.isAdd) {
-              _onAddTodo();
-            }
-            if (state.operation.isUpdate) {
-              _onUpdateTodo();
-            }
-          },
+                  if (state.operation.isAdd) {
+                    _onAddTodo();
+                  }
+                  if (state.operation.isUpdate) {
+                    _onUpdateTodo();
+                  }
+                },
           child: state.status.isLoading
               ? BaseLoading(
-            size: AppDimens.iconSizeNormal,
-            backgroundColor: AppColors.textBlack,
-            valueColor: AppColors.textWhite,
-          )
+                  size: AppDimens.iconSizeNormal,
+                  backgroundColor: AppColors.textBlack,
+                  valueColor: AppColors.textWhite,
+                )
               : BaseTextLabel(
-            S.of(context).save,
-            style: AppTextStyle.whiteS16W500,
-            textAlign: TextAlign.center,
-          ),
+                  S.of(context).save,
+                  style: AppTextStyle.whiteS16W500,
+                  textAlign: TextAlign.center,
+                ),
         );
       },
     );

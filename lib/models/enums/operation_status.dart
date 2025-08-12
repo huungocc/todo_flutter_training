@@ -1,10 +1,4 @@
-enum OperationStatus {
-  none,
-  add,
-  update,
-  delete,
-  updateStatus
-}
+enum OperationStatus { none, add, update, delete, updateStatus }
 
 extension OperationStatusExtension on OperationStatus {
   bool get isNone => this == OperationStatus.none;

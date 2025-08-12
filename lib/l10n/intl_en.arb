@@ -25,9 +25,6 @@
   "syntax_error_unimplemented": "Feature not implemented",
   "syntax_error_assertion": "Logic error: {message}",
 
-  "unknown": "Unknown",
-  "unsupported_platform": "Unsupported Platform",
-
   "my_todo_list": "My Todo List",
   "add_new_task": "Add New Task",
   "task_title": "Task Title",
@@ -52,5 +49,14 @@
   "cancel": "Cancel",
   "no_data_yet": "No data yet",
   "ok": "OK",
-  "n_a": "N/A"
+  "n_a": "N/A",
+
+  "unknown": "Unknown",
+  "unsupported_platform": "Unsupported Platform",
+
+  "error_duplicate_data": "Data already exists",
+  "error_foreign_key_violation": "Foreign key constraint violation",
+  "error_authentication": "Authentication error: {message}",
+  "error_connection": "Connection error: {message}",
+  "supabase_not_initialized": "Supabase is not initialized. Please call SupabaseUtil.initialize() first."
 }

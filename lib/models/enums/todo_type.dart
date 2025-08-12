@@ -1,8 +1,4 @@
-enum TodoType {
-  all,
-  active,
-  completed,
-}
+enum TodoType { all, active, completed }
 
 extension TodoTypeX on TodoType {
   bool? get completedStatus {
@@ -17,11 +13,7 @@ extension TodoTypeX on TodoType {
   }
 }
 
-enum TodoItemType {
-  list,
-  calendar,
-  trophy,
-}
+enum TodoItemType { list, calendar, trophy }
 
 extension TodoItemTypeX on String? {
   TodoItemType toTodoItemType() {

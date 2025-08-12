@@ -53,19 +53,18 @@ class _AddTodoBodyState extends State<_AddTodoBody> {
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
       child: Container(
-        height: ScreenSize.instance.height - 70,
+        height: ScreenSize.instance().height - 70,
         color: AppColors.todoBackground,
         child: Column(
           children: [
             BlocListener<AddTodoCubit, AddTodoState>(
               listenWhen: (prev, curr) =>
-                  prev.hasSuccess != curr.hasSuccess ||
+                  prev.successMessage != curr.successMessage ||
                   prev.operation != curr.operation,
               listener: (context, state) {
                 // Handle success operations (Add, Update)
-                if (state.hasSuccess &&
-                    (state.operation.isAdd ||
-                        state.operation.isUpdate)) {
+                if (state.successMessage != null &&
+                    (state.operation.isAdd || state.operation.isUpdate)) {
                   Navigator.pop(context, true);
                   ExceptionHandler.showSuccessSnackBar(state.successMessage!);
                 }

@@ -122,10 +122,8 @@ class _ListTodoSectionState extends State<ListTodoSection> {
               separatorBuilder: (_, __) => CommonWidget.buildSeparator(),
               itemBuilder: (context, index) {
                 final activeTodo = activeTodos[index];
-                final isExpired = AppFormat.isDateTimeExpired(
-                  activeTodo.date,
-                  activeTodo.time,
-                );
+                final isExpired = activeTodo.time!.isDateTimeExpired(activeTodo.date);
+
                 return Dismissible(
                   key: Key(activeTodo.id!),
                   direction: DismissDirection.endToStart,
@@ -134,7 +132,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                   child: TodoInfoCard(
                     title: activeTodo.taskTitle,
                     type: activeTodo.category,
-                    time: AppFormat.convertTime24to12(activeTodo.time!),
+                    time: activeTodo.time!.convertTime24to12(),
                     isExpired: isExpired,
                     onTap: () => _onOpenTodo(activeTodo),
                     onCheck: () => _onUpdateTodoStatus(activeTodo),
@@ -171,7 +169,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                   onDismissed: (_) => _onDeleteTodo(completedTodo),
                   child: TodoInfoCard(
                     title: completedTodo.taskTitle,
-                    time: AppFormat.convertTime24to12(completedTodo.time!),
+                    time: completedTodo.time!.convertTime24to12(),
                     type: completedTodo.category,
                     isCompleted: true,
                     onCheck: () => _onUpdateTodoStatus(completedTodo),

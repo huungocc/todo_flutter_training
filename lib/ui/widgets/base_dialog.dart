@@ -16,7 +16,6 @@ class BaseDialog {
     if (context != null) {
       showDialog(
         context: context,
-        barrierDismissible: false,
         builder: (BuildContext context) {
           return Dialog(
             shape: RoundedRectangleBorder(
@@ -71,5 +70,4 @@ class BaseDialog {
       );
     }
   }
-
 }

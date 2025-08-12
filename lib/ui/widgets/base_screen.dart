@@ -77,11 +77,11 @@ class BaseScreen extends StatelessWidget {
 
   baseAppBar(BuildContext context) {
     Widget widgetTitle = BaseTextLabel(
-        title?.toString(),
-        maxLines: 2,
-        style: AppTextStyle.blackS16W600,
-        textAlign: TextAlign.center,
-      );
+      title?.toString(),
+      maxLines: 2,
+      style: AppTextStyle.blackS16W600,
+      textAlign: TextAlign.center,
+    );
     return AppBar(
       elevation: 0,
       toolbarHeight: toolbarHeight ?? AppDimens.appBarNormal,
