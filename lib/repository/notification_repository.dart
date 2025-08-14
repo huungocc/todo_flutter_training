@@ -3,9 +3,15 @@ import 'package:todo_flutter_training/models/entities/notification/notification_
 
 abstract class NotificationRepository {
   Future<void> init();
+
   Future<String?> getToken();
+
   Stream<NotificationEntity> onMessage();
+
   Stream<NotificationEntity> onMessageOpenedApp();
+
+  Future<NotificationEntity?> getInitialMessage();
+
 }
 
 class NotificationRepositoryImpl implements NotificationRepository {
@@ -23,25 +29,23 @@ class NotificationRepositoryImpl implements NotificationRepository {
     return await _messaging.getToken();
   }
 
-  @override
-  Stream<NotificationEntity> onMessage() {
-    return FirebaseMessaging.onMessage.map((message) {
-      return NotificationEntity(
-        title: message.notification?.title,
-        body: message.notification?.body,
-        data: message.data,
-      );
-    });
-  }
+  NotificationEntity _map(RemoteMessage m) => NotificationEntity(
+    title: m.notification?.title,
+    body: m.notification?.body,
+    data: m.data,
+  );
 
   @override
-  Stream<NotificationEntity> onMessageOpenedApp() {
-    return FirebaseMessaging.onMessageOpenedApp.map((message) {
-      return NotificationEntity(
-        title: message.notification?.title,
-        body: message.notification?.body,
-        data: message.data,
-      );
-    });
+  Stream<NotificationEntity> onMessage() =>
+      FirebaseMessaging.onMessage.map(_map);
+
+  @override
+  Stream<NotificationEntity> onMessageOpenedApp() =>
+      FirebaseMessaging.onMessageOpenedApp.map(_map);
+
+  @override
+  Future<NotificationEntity?> getInitialMessage() async {
+    final msg = await _messaging.getInitialMessage();
+    return msg == null ? null : _map(msg);
   }
 }

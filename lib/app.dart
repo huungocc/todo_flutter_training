@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
@@ -56,15 +55,8 @@ class _MyAppState extends State<MyApp> {
           },
         ),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (_) => AppSettingCubit()..getInitialSetting()),
-          BlocProvider(
-            create: (_) =>
-                NotificationCubit(context.read<NotificationRepository>())
-                  ..initialize(),
-          ),
-        ],
+      child: BlocProvider(
+        create: (_) => AppSettingCubit()..getInitialSetting(),
         child: BlocBuilder<AppSettingCubit, AppSettingState>(
           buildWhen: (prev, current) {
             return prev.language != current.language;
