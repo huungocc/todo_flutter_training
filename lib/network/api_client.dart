@@ -20,37 +20,32 @@ class ApiClient {
   }
 
   Future<void> addTodo({required TodoEntity todo}) async {
-    return ApiInterceptors.executeWithLogging(
-      'ADD_TODO',
-          () async {
-        final deviceId = await _getDeviceId();
+    return ApiInterceptors.executeWithLogging('ADD_TODO', () async {
+      final deviceId = await _getDeviceId();
 
-        final data = todo.toJson();
-        data['device_id'] = deviceId;
+      final data = todo.toJson();
+      data['device_id'] = deviceId;
 
-        await _client.from('todos').insert(data);
-      },
-    );
+      await _client.from('todos').insert(data);
+    });
   }
 
-  Future<List<TodoEntity>> getTodos({required bool completed}) async {
-    return ApiInterceptors.executeWithLogging(
-      'GET_TODOS',
-          () async {
-        final deviceId = await _getDeviceId();
+  Future<List<TodoEntity>> fetchTodos({bool? completed}) async {
+    return ApiInterceptors.executeWithLogging('GET_TODOS', () async {
+      final deviceId = await _getDeviceId();
 
-        final response = await _client
-            .from('todos')
-            .select()
-            .eq('device_id', deviceId)
-            .eq('completed', completed)
-            .order('created_at', ascending: false);
+      var query = _client.from('todos').select().eq('device_id', deviceId);
 
-        return (response as List)
-            .map((json) => TodoEntity.fromJson(json))
-            .toList();
-      },
-    );
+      if (completed != null) {
+        query = query.eq('completed', completed);
+      }
+
+      final response = await query.order('created_at', ascending: false);
+
+      return (response as List)
+          .map((json) => TodoEntity.fromJson(json))
+          .toList();
+    });
   }
 
   Future<void> updateTodo({required TodoEntity todo}) async {
@@ -58,40 +53,28 @@ class ApiClient {
       throw ArgumentError('Todo ID không được null');
     }
 
-    return ApiInterceptors.executeWithLogging(
-      'UPDATE_TODO',
-          () async {
-        final updateData = todo.toJson();
+    return ApiInterceptors.executeWithLogging('UPDATE_TODO', () async {
+      final updateData = todo.toJson();
 
-        await _client
-            .from('todos')
-            .update(updateData)
-            .eq('id', todo.id as Object);
-      },
-    );
+      await _client
+          .from('todos')
+          .update(updateData)
+          .eq('id', todo.id as Object);
+    });
   }
 
-  Future<void> updateTodoStatus({required String id, required bool completed}) async {
-    return ApiInterceptors.executeWithLogging(
-      'UPDATE_TODO_STATUS',
-          () async {
-        await _client
-            .from('todos')
-            .update({'completed': completed})
-            .eq('id', id);
-      },
-    );
+  Future<void> updateTodoStatus({
+    required String id,
+    required bool completed,
+  }) async {
+    return ApiInterceptors.executeWithLogging('UPDATE_TODO_STATUS', () async {
+      await _client.from('todos').update({'completed': completed}).eq('id', id);
+    });
   }
 
   Future<void> deleteTodo({required String id}) async {
-    return ApiInterceptors.executeWithLogging(
-      'DELETE_TODO',
-          () async {
-        await _client
-            .from('todos')
-            .delete()
-            .eq('id', id);
-      },
-    );
+    return ApiInterceptors.executeWithLogging('DELETE_TODO', () async {
+      await _client.from('todos').delete().eq('id', id);
+    });
   }
 }

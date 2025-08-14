@@ -1,23 +1,17 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'object_response.freezed.dart';
 part 'object_response.g.dart';
 
-@JsonSerializable(genericArgumentFactories: true)
-class ObjectResponse<T> {
-  @JsonKey(defaultValue: "")
-  final String message;
-  @JsonKey()
-  final T? data;
-
-  ObjectResponse({
-    this.message = "",
-    this.data,
-  });
+@Freezed(genericArgumentFactories: true)
+abstract class ObjectResponse<T> with _$ObjectResponse<T> {
+  const factory ObjectResponse({
+    @Default("") String message,
+    T? data,
+  }) = _ObjectResponse<T>;
 
   factory ObjectResponse.fromJson(
-          Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
-      _$ObjectResponseFromJson(json, fromJsonT);
-
-  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
-      _$ObjectResponseToJson(this, toJsonT);
+      Map<String, dynamic> json,
+      T Function(Object? json) fromJsonT,
+      ) => _$ObjectResponseFromJson(json, fromJsonT);
 }

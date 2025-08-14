@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/todo/todo_icon_widget.dart';
@@ -11,7 +12,7 @@ class TodoInfoCard extends StatelessWidget {
   final String? type;
   final bool isCompleted;
   final bool isExpired;
-  final Function? onCheck;
+  final VoidCallback? onCheck;
   final VoidCallback? onTap;
 
   const TodoInfoCard({
@@ -28,15 +29,6 @@ class TodoInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TodoItemType todoType = TodoItemType.list;
-    switch (type) {
-      case 'list':
-        todoType = TodoItemType.list;
-      case 'calendar':
-        todoType = TodoItemType.calendar;
-      case 'trophy':
-        todoType = TodoItemType.trophy;
-    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -44,63 +36,55 @@ class TodoInfoCard extends StatelessWidget {
           color: AppColors.textWhite,
           borderRadius: BorderRadius.circular(borderRadius ?? 0),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         child: Row(
           children: [
             Expanded(
               child: Stack(
                 children: [
+                  /// Todos Info
                   Row(
-                    spacing: 15,
                     children: [
-                      TodoIconWidget(type: todoType),
+                      TodoIconWidget(type: type.toTodoItemType()),
+                      const SizedBox(width: 15),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          spacing: 4,
                           children: [
                             BaseTextLabel(
                               title,
-                              fontSize: 16,
-                              color: isExpired
-                                  ? AppColors.error
-                                  : AppColors.textBlack,
-                              fontWeight: FontWeight.w600,
+                              style: AppTextStyleExtension.taskTitle(
+                                isExpired: isExpired,
+                                isCompleted: isCompleted,
+                              ),
                               maxLines: 1,
-                              decoration: isCompleted
-                                  ? TextDecoration.lineThrough
-                                  : null,
                             ),
+                            const SizedBox(height: 4),
                             BaseTextLabel(
                               time,
-                              fontSize: 16,
-                              color: isExpired
-                                  ? AppColors.subError
-                                  : AppColors.buttonBGDisabled,
-                              fontWeight: FontWeight.w500,
+                              style: AppTextStyleExtension.taskTime(
+                                isExpired: isExpired,
+                                isCompleted: isCompleted,
+                              ),
                               maxLines: 1,
-                              decoration: isCompleted
-                                  ? TextDecoration.lineThrough
-                                  : null,
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
+
+                  /// White Layer on Completed Todos
                   if (isCompleted)
                     Positioned.fill(
-                      child: Container(color: Colors.white.withOpacity(0.7)),
+                      child: Container(
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
                     ),
                 ],
               ),
             ),
-            Checkbox(
-              value: isCompleted,
-              onChanged: (value) {
-                if (onCheck != null) onCheck!();
-              },
-            ),
+            Checkbox(value: isCompleted, onChanged: (_) => onCheck?.call()),
           ],
         ),
       ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
-import 'package:todo_flutter_training/common/app_format.dart';
-import 'package:todo_flutter_training/common/app_picker.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
-import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
+import 'package:todo_flutter_training/models/enums/load_status.dart';
+import 'package:todo_flutter_training/models/enums/operation_status.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_state.dart';
@@ -23,199 +24,134 @@ class AddTodoInput extends StatefulWidget {
 }
 
 class _AddTodoInputState extends State<AddTodoInput> {
-  TodoItemType type = TodoItemType.list;
-
-  final TextEditingController _keyTaskTitle = TextEditingController();
-  final TextEditingController _keyTime = TextEditingController();
-  final TextEditingController _keyDate = TextEditingController();
-  final TextEditingController _keyNotes = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getData();
-    });
+  void _onPickTime() {
+    context.read<AddTodoCubit>().pickTime(context);
   }
 
-  void _getData() {
-    final state = context.read<AddTodoCubit>().state;
-    final todo = state.todo;
-
-    _keyTaskTitle.text = todo.taskTitle ?? '';
-    _keyDate.text = todo.date != null
-        ? AppFormat.formatDateToDDMMYYYY(todo.date!)
-        : '';
-    _keyTime.text = todo.time != null
-        ? AppFormat.convertTime24to12(todo.time!)
-        : '';
-    _keyNotes.text = todo.notes ?? '';
-
-    type = _mapCategoryToType(todo.category);
+  void _onPickDate() {
+    context.read<AddTodoCubit>().pickDate(context);
   }
 
-  void _pickDate() async {
-    final selectedDate = await AppPicker.pickDate(context: context);
-    if (selectedDate != null) {
-      _keyDate.text = selectedDate;
-    }
-  }
-
-  void _pickTime() async {
-    final selectedTime = await AppPicker.pickTime(context: context);
-    if (selectedTime != null) {
-      _keyTime.text = selectedTime;
-    }
-  }
-
-  void _onAddTodo() {
-    _updateTodoEntity(
-      taskTitle: _keyTaskTitle.text,
-      date: AppFormat.parseDateFromDDMMYYYY(_keyDate.text),
-      time: AppFormat.convertTime12hTo24hWithSeconds(_keyTime.text),
-      notes: _keyNotes.text,
-    );
-    context.read<AddTodoCubit>().addTodo();
+  void _onUpdateCategory(TodoItemType selectedType) {
+    context.read<AddTodoCubit>().updateCategory(selectedType);
   }
 
   void _onUpdateTodo() {
-    _updateTodoEntity(
-      taskTitle: _keyTaskTitle.text,
-      date: AppFormat.parseDateFromDDMMYYYY(_keyDate.text),
-      time: AppFormat.convertTime12hTo24hWithSeconds(_keyTime.text),
-      notes: _keyNotes.text,
-    );
     context.read<AddTodoCubit>().updateTodo();
   }
 
-  void _updateTodoEntity({
-    String? taskTitle,
-    DateTime? date,
-    String? time,
-    String? notes,
-    String? category,
-  }) {
-    final state = context.read<AddTodoCubit>().state;
-    final todo = state.todo.copyWith(
-      taskTitle: taskTitle,
-      date: date,
-      time: time,
-      notes: notes,
-      category: category,
-    );
-    context.read<AddTodoCubit>().setTodoEntity(todo);
-  }
-
-  TodoItemType _mapCategoryToType(String? category) {
-    switch (category) {
-      case 'calendar':
-        return TodoItemType.calendar;
-      case 'trophy':
-        return TodoItemType.trophy;
-      case 'list':
-      default:
-        return TodoItemType.list;
-    }
+  void _onAddTodo() {
+    context.read<AddTodoCubit>().addTodo();
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      body: _buildInput(context, type),
+      body: _buildInputBody(context),
       resizeToAvoidBottomInset: true,
       hideAppBar: true,
       colorBackground: AppColors.todoBackground,
       bottomBar: BottomAppBar(
         color: Colors.transparent,
-        child: _buildSaveButton(context),
+        child: _buildSaveButton(),
       ),
     );
   }
 
-  Widget _buildInput(BuildContext context, TodoItemType type) {
+  Widget _buildInputBody(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 20,
-          children: [
-            const SizedBox.shrink(),
+        child: BlocBuilder<AddTodoCubit, AddTodoState>(
+          buildWhen: (prev, curr) => prev.todo != curr.todo,
+          builder: (context, state) {
+            final cubit = context.read<AddTodoCubit>();
 
-            /// Task Title
-            BaseTextInput(
-              textController: _keyTaskTitle,
-              title: S.of(context).task_title,
-              hintText: S.of(context).task_title,
-              cursorColor: AppColors.todoPurple,
-            ),
-
-            /// Category
-            Row(
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 20,
               children: [
-                BaseTextLabel(
-                  S.of(context).category,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                const SizedBox.shrink(),
+
+                /// Task Title
+                BaseTextInput(
+                  textController: cubit.taskTitleController,
+                  title: S.of(context).task_title,
+                  hintText: S.of(context).task_title,
                 ),
-                TodoRadioGroup(
-                  initialSelected: type,
-                  onSelected: (selectedType) {
-                    _updateTodoEntity(category: selectedType.name.toString());
-                  },
+
+                /// Category
+                Row(
+                  spacing: 20,
+                  children: [
+                    BaseTextLabel(
+                      S.of(context).category,
+                      style: AppTextStyle.blackS16W500,
+                    ),
+                    BlocBuilder<AddTodoCubit, AddTodoState>(
+                      buildWhen: (prev, curr) =>
+                          prev.selectedType != curr.selectedType,
+                      builder: (context, state) {
+                        return TodoRadioGroup(
+                          selected: state.selectedType,
+                          onSelected: (selectedType) {
+                            _onUpdateCategory(selectedType);
+                          },
+                        );
+                      },
+                    ),
+                  ],
                 ),
+
+                /// Date & Time
+                _buildPickerInput(cubit),
+
+                /// Notes
+                BaseTextInput(
+                  textController: cubit.notesController,
+                  title: S.of(context).notes,
+                  hintText: S.of(context).notes,
+                  minLines: 6,
+                  maxLines: 6,
+                ),
+
+                const SizedBox.shrink(),
               ],
-            ),
-
-            /// Date & Time
-            _buildPickerInput(context),
-
-            /// Notes
-            BaseTextInput(
-              textController: _keyNotes,
-              title: S.of(context).notes,
-              hintText: S.of(context).notes,
-              cursorColor: AppColors.todoPurple,
-              minLines: 6,
-              maxLines: 6,
-            ),
-
-            const SizedBox.shrink(),
-          ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildPickerInput(BuildContext context) {
+  Widget _buildPickerInput(AddTodoCubit cubit) {
     return Row(
       spacing: 10,
       children: [
         Expanded(
           child: BaseTextInput(
-            textController: _keyDate,
+            textController: cubit.dateController,
             title: S.of(context).date,
             hintText: S.of(context).date,
-            cursorColor: AppColors.todoPurple,
+            readOnly: true,
             suffixIcon: Icon(Icons.date_range, color: AppColors.todoPurple),
-            onTapSuffixIcon: () {
-              _pickDate();
+            onTap: () {
+              _onPickDate();
             },
           ),
         ),
         Expanded(
           child: BaseTextInput(
-            textController: _keyTime,
+            textController: cubit.timeController,
             title: S.of(context).time,
             hintText: S.of(context).time,
-            cursorColor: AppColors.todoPurple,
+            readOnly: true,
             suffixIcon: Icon(
               Icons.access_time_rounded,
               color: AppColors.todoPurple,
             ),
-            onTapSuffixIcon: () {
-              _pickTime();
+            onTap: () {
+              _onPickTime();
             },
           ),
         ),
@@ -223,37 +159,33 @@ class _AddTodoInputState extends State<AddTodoInput> {
     );
   }
 
-  Widget _buildSaveButton(BuildContext context) {
+  Widget _buildSaveButton() {
     return BlocBuilder<AddTodoCubit, AddTodoState>(
       buildWhen: (prev, curr) =>
-          prev.operation != curr.operation || prev.isLoading != curr.isLoading,
+          prev.operation != curr.operation ||
+          prev.status.isLoading != curr.status.isLoading,
       builder: (context, state) {
         return BaseButton(
           backgroundColor: AppColors.todoPurple,
-          borderRadius: 50,
-          height: 55,
-          // Disable button while loading
-          onTap: state.isLoading
+          onTap: state.status.isLoading
               ? null
               : () {
-                  if (state.isAdd) {
+                  if (state.operation.isAdd) {
                     _onAddTodo();
                   }
-                  if (state.isUpdate) {
+                  if (state.operation.isUpdate) {
                     _onUpdateTodo();
                   }
                 },
-          child: state.isLoading
+          child: state.status.isLoading
               ? BaseLoading(
-                  size: 30,
+                  size: AppDimens.iconSizeNormal,
                   backgroundColor: AppColors.textBlack,
                   valueColor: AppColors.textWhite,
                 )
               : BaseTextLabel(
                   S.of(context).save,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: AppColors.textWhite,
+                  style: AppTextStyle.whiteS16W500,
                   textAlign: TextAlign.center,
                 ),
         );

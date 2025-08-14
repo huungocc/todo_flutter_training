@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:todo_flutter_training/generated/l10n.dart';
 
 class DeviceInfoUtil {
   static Future<String> getDeviceId() async {
@@ -11,9 +12,9 @@ class DeviceInfoUtil {
       return androidInfo.id;
     } else if (Platform.isIOS) {
       final iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor ?? 'unknown';
+      return iosInfo.identifierForVendor ?? S.current.unknown;
     } else {
-      return 'unsupported_platform';
+      return S.current.unsupported_platform;
     }
   }
 }

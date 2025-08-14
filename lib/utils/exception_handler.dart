@@ -10,20 +10,23 @@ class ExceptionHandler {
     if (context != null && !_isShowingSnackBar) {
       _isShowingSnackBar = true;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: BaseTextLabel(message),
-          backgroundColor: Colors.greenAccent,
-          duration: const Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ).closed.then((_) {
-        _isShowingSnackBar = false;
-      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+            SnackBar(
+              content: BaseTextLabel(message),
+              backgroundColor: Colors.greenAccent,
+              duration: const Duration(seconds: 3),
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.all(16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          )
+          .closed
+          .then((_) {
+            _isShowingSnackBar = false;
+          });
     }
   }
 
@@ -32,20 +35,23 @@ class ExceptionHandler {
     if (context != null && !_isShowingSnackBar) {
       _isShowingSnackBar = true;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: BaseTextLabel(message),
-          backgroundColor: Colors.white,
-          duration: const Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ).closed.then((_) {
-        _isShowingSnackBar = false;
-      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+            SnackBar(
+              content: BaseTextLabel(message),
+              backgroundColor: Colors.white,
+              duration: const Duration(seconds: 3),
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.all(16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          )
+          .closed
+          .then((_) {
+            _isShowingSnackBar = false;
+          });
     }
   }
 }

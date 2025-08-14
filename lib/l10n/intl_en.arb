@@ -47,5 +47,16 @@
   "complete_task": "Complete this task?",
   "cancel_complete_task": "Cancel complete this task?",
   "cancel": "Cancel",
-  "no_data_yet": "No data yet"
+  "no_data_yet": "No data yet",
+  "ok": "OK",
+  "n_a": "N/A",
+
+  "unknown": "Unknown",
+  "unsupported_platform": "Unsupported Platform",
+
+  "error_duplicate_data": "Data already exists",
+  "error_foreign_key_violation": "Foreign key constraint violation",
+  "error_authentication": "Authentication error: {message}",
+  "error_connection": "Connection error: {message}",
+  "supabase_not_initialized": "Supabase is not initialized. Please call SupabaseUtil.initialize() first."
 }

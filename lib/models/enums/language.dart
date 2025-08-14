@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Language {
-  english,
-  vietnamese,
-}
+enum Language { english, vietnamese }
 
 extension LanguageExt on Language {
   Locale get local {

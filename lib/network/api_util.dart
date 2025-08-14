@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
+import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/network/api_client.dart';
 
 class ApiUtil {
@@ -13,7 +14,6 @@ class ApiUtil {
       );
 
       _client = Supabase.instance.client;
-
     }
   }
 
@@ -23,7 +23,9 @@ class ApiUtil {
 
   static SupabaseClient get client {
     if (_client == null) {
-      throw Exception('Supabase chưa được khởi tạo. Gọi SupabaseUtil.initialize() trước.');
+      throw Exception(
+        S.current.supabase_not_initialized,
+      );
     }
     return _client!;
   }

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
-import 'package:todo_flutter_training/common/app_format.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
-import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
-import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
-import 'package:todo_flutter_training/models/enums/language.dart';
+import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/repository/todo_repository.dart';
-import 'package:todo_flutter_training/ui/pages/todo/list/active/active_todo_cubit.dart';
-import 'package:todo_flutter_training/ui/pages/todo/list/completed/completed_todo_cubit.dart';
+import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_page.dart';
+import 'package:todo_flutter_training/ui/pages/todo/widgets/list_todo_header.dart';
 import 'package:todo_flutter_training/ui/pages/todo/widgets/list_todo_section.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
-import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/todo/custom_todo_background.dart';
 
 class ListTodoPage extends StatelessWidget {
@@ -21,18 +18,9 @@ class ListTodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ActiveTodoCubit>(
-          create: (_) =>
-              ActiveTodoCubit(todoRepository: context.read<TodoRepository>()),
-        ),
-        BlocProvider<CompletedTodoCubit>(
-          create: (_) => CompletedTodoCubit(
-            todoRepository: context.read<TodoRepository>(),
-          ),
-        ),
-      ],
+    return BlocProvider<ListTodoCubit>(
+      create: (_) =>
+          ListTodoCubit(todoRepository: context.read<TodoRepository>()),
       child: const _ListTodoBody(),
     );
   }
@@ -50,38 +38,26 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getActiveTodos();
-      _getCompletedTodos();
+      _getTodos(TodoType.all);
     });
   }
 
-  void _getActiveTodos() {
-    context.read<ActiveTodoCubit>().loadTodos();
-  }
-
-  void _getCompletedTodos() {
-    context.read<CompletedTodoCubit>().loadTodos();
+  void _getTodos(TodoType todoType) {
+    context.read<ListTodoCubit>().fetchTodos(todoType);
   }
 
   void _onAddTodo() async {
-    final todoEntity = TodoEntity();
     final isSuccess = await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => AddTodoPage(arg: todoEntity,),
+      builder: (_) => const AddTodoPage(),
     );
     if (mounted) {
       if (isSuccess == true) {
-        _getActiveTodos();
+        _getTodos(TodoType.active);
       }
     }
-  }
-
-  void _changeLanguage(Language language) {
-    context.read<AppSettingCubit>().changeLanguage(
-      language: language.toggle,
-    );
   }
 
   @override
@@ -92,14 +68,11 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
       colorBackground: AppColors.todoBackground,
       body: Stack(
         children: [
-          CustomTodoBackground(height: 250),
+          const CustomTodoBackground(height: AppDimens.appBarExtra),
           SafeArea(
             child: Column(
               spacing: 10,
-              children: [
-                _buildHeader(context),
-                ListTodoSection()
-              ],
+              children: [const ListTodoHeader(), const ListTodoSection()],
             ),
           ),
         ],
@@ -109,46 +82,10 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
         child: BaseButton(
           title: S.of(context).add_new_task,
           backgroundColor: AppColors.todoPurple,
-          borderRadius: 50,
           onTap: () {
             _onAddTodo();
           },
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        children: [
-          BaseTextLabel(
-            AppFormat.formatLongDate(DateTime.now()),
-            color: AppColors.textWhite,
-            fontWeight: FontWeight.w500,
-            fontSize: 18,
-          ),
-          BlocBuilder<AppSettingCubit, AppSettingState>(
-            buildWhen: (prev, curr) => prev.language != curr.language,
-            builder: (context, state) {
-              final language = state.language;
-              return IconButton(
-                onPressed: () {
-                  _changeLanguage(language);
-                },
-                icon: BaseTextLabel(language.flag, fontSize: 24),
-              );
-            },
-          ),
-          const SizedBox(height: 10),
-          BaseTextLabel(
-            S.of(context).my_todo_list,
-            color: AppColors.textWhite,
-            fontWeight: FontWeight.bold,
-            fontSize: 32,
-          ),
-        ],
       ),
     );
   }

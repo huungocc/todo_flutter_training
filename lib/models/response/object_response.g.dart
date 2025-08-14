@@ -6,16 +6,16 @@ part of 'object_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ObjectResponse<T> _$ObjectResponseFromJson<T>(
+_ObjectResponse<T> _$ObjectResponseFromJson<T>(
   Map<String, dynamic> json,
   T Function(Object? json) fromJsonT,
-) => ObjectResponse<T>(
-  message: json['message'] as String? ?? '',
+) => _ObjectResponse<T>(
+  message: json['message'] as String? ?? "",
   data: _$nullableGenericFromJson(json['data'], fromJsonT),
 );
 
 Map<String, dynamic> _$ObjectResponseToJson<T>(
-  ObjectResponse<T> instance,
+  _ObjectResponse<T> instance,
   Object? Function(T value) toJsonT,
 ) => <String, dynamic>{
   'message': instance.message,

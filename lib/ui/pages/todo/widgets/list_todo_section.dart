@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_format.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
-import 'package:todo_flutter_training/ui/pages/todo/list/active/active_todo_cubit.dart';
-import 'package:todo_flutter_training/ui/pages/todo/list/active/active_todo_state.dart';
-import 'package:todo_flutter_training/ui/pages/todo/list/completed/completed_todo_cubit.dart';
-import 'package:todo_flutter_training/ui/pages/todo/list/completed/completed_todo_state.dart';
+import 'package:todo_flutter_training/models/enums/load_status.dart';
+import 'package:todo_flutter_training/models/enums/todo_type.dart';
+import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_page.dart';
+import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_state.dart';
 import 'package:todo_flutter_training/ui/widgets/base_dialog.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/common_widget.dart';
@@ -23,35 +25,21 @@ class ListTodoSection extends StatefulWidget {
 }
 
 class _ListTodoSectionState extends State<ListTodoSection> {
-  void _reloadData() {
-    context.read<ActiveTodoCubit>().loadTodos();
-    context.read<CompletedTodoCubit>().loadTodos();
+  void _reloadData(TodoType todoType) {
+    context.read<ListTodoCubit>().fetchTodos(todoType);
   }
 
-  void _onDoneTodo(TodoEntity todo) {
+  void _onUpdateTodoStatus(TodoEntity todo) {
     BaseDialog.showNotifyDialog(
       message: S.of(context).complete_task,
       onConfirm: () {
-        context.read<ActiveTodoCubit>().updateTodoStatus(todo);
+        context.read<ListTodoCubit>().updateTodoStatus(todo);
       },
     );
   }
 
-  void _onUndoneTodo(TodoEntity todo) {
-    BaseDialog.showNotifyDialog(
-      message: S.of(context).cancel_complete_task,
-      onConfirm: () {
-        context.read<CompletedTodoCubit>().updateTodoStatus(todo);
-      },
-    );
-  }
-
-  void _onDeleteActiveTodo(TodoEntity todo) {
-    context.read<ActiveTodoCubit>().deleteActiveTodo(todo);
-  }
-
-  void _onDeleteCompletedTodo(TodoEntity todo) {
-    context.read<CompletedTodoCubit>().deleteCompletedTodo(todo);
+  void _onDeleteTodo(TodoEntity todo) {
+    context.read<ListTodoCubit>().deleteTodo(todo);
   }
 
   void _onOpenTodo(TodoEntity todo) async {
@@ -63,7 +51,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
     );
     if (mounted) {
       if (isSuccess == true) {
-        context.read<ActiveTodoCubit>().loadTodos();
+        _reloadData(TodoType.active);
       }
     }
   }
@@ -72,28 +60,21 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 30,
             children: [
               /// Build Active todos
-              BlocConsumer<ActiveTodoCubit, ActiveTodoState>(
-                listenWhen: (prev, curr) =>
-                    prev.operationStatus != curr.operationStatus,
-                listener: (context, state) {
-                  if (state.isUpdateStatus) {
-                    _reloadData();
-                  }
-                },
+              BlocBuilder<ListTodoCubit, ListTodoState>(
                 buildWhen: (prev, curr) =>
                     prev.activeTodos != curr.activeTodos ||
                     prev.loadStatus != curr.loadStatus,
                 builder: (context, state) {
-                  if (state.isLoading) {
+                  if (state.loadStatus.isLoading) {
                     return BaseLoading(
-                      size: 30,
+                      size: AppDimens.iconSizeNormal,
                       backgroundColor: AppColors.textWhite,
                       valueColor: AppColors.textBlack,
                     );
@@ -104,26 +85,18 @@ class _ListTodoSectionState extends State<ListTodoSection> {
 
               BaseTextLabel(
                 S.of(context).completed,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
+                style: AppTextStyle.blackS16W600,
               ),
 
               /// Build Completed todos
-              BlocConsumer<CompletedTodoCubit, CompletedTodoState>(
-                listenWhen: (prev, curr) =>
-                    prev.operationStatus != curr.operationStatus,
-                listener: (context, state) {
-                  if (state.isUpdateStatus) {
-                    _reloadData();
-                  }
-                },
+              BlocBuilder<ListTodoCubit, ListTodoState>(
                 buildWhen: (prev, curr) =>
                     prev.completedTodos != curr.completedTodos ||
                     prev.loadStatus != curr.loadStatus,
                 builder: (context, state) {
-                  if (state.isLoading) {
+                  if (state.loadStatus.isLoading) {
                     return BaseLoading(
-                      size: 30,
+                      size: AppDimens.iconSizeNormal,
                       backgroundColor: AppColors.textWhite,
                       valueColor: AppColors.textBlack,
                     );
@@ -141,7 +114,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   Widget _buildActiveTodos(List<TodoEntity> activeTodos, BuildContext context) {
     return activeTodos.isNotEmpty
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppDimens.cardCornerRadius),
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -149,31 +122,29 @@ class _ListTodoSectionState extends State<ListTodoSection> {
               separatorBuilder: (_, __) => CommonWidget.buildSeparator(),
               itemBuilder: (context, index) {
                 final activeTodo = activeTodos[index];
-                final isExpired = AppFormat.isDateTimeExpired(
-                  activeTodo.date,
-                  activeTodo.time,
-                );
+                final isExpired = activeTodo.time!.isDateTimeExpired(activeTodo.date);
+
                 return Dismissible(
                   key: Key(activeTodo.id!),
                   direction: DismissDirection.endToStart,
                   background: CommonWidget.buildDeleteBackground(),
-                  onDismissed: (_) => _onDeleteActiveTodo(activeTodo),
+                  onDismissed: (_) => _onDeleteTodo(activeTodo),
                   child: TodoInfoCard(
                     title: activeTodo.taskTitle,
                     type: activeTodo.category,
-                    time: AppFormat.convertTime24to12(activeTodo.time!),
+                    time: activeTodo.time!.convertTime24to12(),
                     isExpired: isExpired,
                     onTap: () => _onOpenTodo(activeTodo),
-                    onCheck: () => _onDoneTodo(activeTodo),
+                    onCheck: () => _onUpdateTodoStatus(activeTodo),
                   ),
                 );
               },
             ),
           )
         : TodoInfoCard(
-            borderRadius: 20,
+            borderRadius: AppDimens.cardCornerRadius,
             title: S.of(context).no_data_yet,
-            time: 'N/A',
+            time: S.of(context).n_a,
           );
   }
 
@@ -183,7 +154,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   ) {
     return completedTodos.isNotEmpty
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppDimens.cardCornerRadius),
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -195,22 +166,22 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                   key: Key(completedTodo.id!),
                   direction: DismissDirection.endToStart,
                   background: CommonWidget.buildDeleteBackground(),
-                  onDismissed: (_) => _onDeleteCompletedTodo(completedTodo),
+                  onDismissed: (_) => _onDeleteTodo(completedTodo),
                   child: TodoInfoCard(
                     title: completedTodo.taskTitle,
-                    time: AppFormat.convertTime24to12(completedTodo.time!),
+                    time: completedTodo.time!.convertTime24to12(),
                     type: completedTodo.category,
                     isCompleted: true,
-                    onCheck: () => _onUndoneTodo(completedTodo),
+                    onCheck: () => _onUpdateTodoStatus(completedTodo),
                   ),
                 );
               },
             ),
           )
         : TodoInfoCard(
-            borderRadius: 20,
+            borderRadius: AppDimens.cardCornerRadius,
             title: S.of(context).no_data_yet,
-            time: 'N/A',
+            time: S.of(context).n_a,
             isCompleted: true,
           );
   }
