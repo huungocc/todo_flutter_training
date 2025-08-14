@@ -47,3 +47,4 @@ app.*.map.json
 .env
 lib/generated/
 lib/gen/
+android/app/google-services.json
