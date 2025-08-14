@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 
 class BaseScreen extends StatelessWidget {
   final double? toolbarHeight;
   final Widget? body;
   final Widget? bottomBar;
-  final dynamic title;
+  final String? title;
   final Widget? customAppBar;
   final Color colorAppBar;
   final Function? onBackPress;
@@ -44,91 +46,79 @@ class BaseScreen extends StatelessWidget {
     this.isLightStatusBar = false,
     this.toolbarHeight,
     this.iconBackColor = AppColors.textBlack,
-    this.resizeToAvoidBottomInset = false
+    this.resizeToAvoidBottomInset = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final scaffold = Scaffold(
-        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-        appBar: hideAppBar ? null : (customAppBar ?? baseAppBar(context)),
-        backgroundColor: Colors.transparent,
-        body: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Stack(
-            children: [
-              Container(alignment: Alignment.topCenter, color: Colors.transparent, child: body),
-            ],
-          ),
-        ),
-        bottomNavigationBar: bottomBar,
-        floatingActionButton: floatingButton);
     return Stack(
       children: [
-        Positioned.fill(
-            child: Container(
-              color: colorBackground,
-            )),
-        if (customBackground != null)
-        Positioned.fill(
-          child: customBackground!,
+        Positioned.fill(child: Container(color: colorBackground)),
+        if (customBackground != null) Positioned.fill(child: customBackground!),
+        Scaffold(
+          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+          appBar: hideAppBar ? null : (customAppBar ?? baseAppBar(context)),
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            children: [
+              Container(
+                alignment: Alignment.topCenter,
+                color: Colors.transparent,
+                child: body,
+              ),
+            ],
+          ),
+          bottomNavigationBar: bottomBar,
+          floatingActionButton: floatingButton,
         ),
-        scaffold
       ],
     );
   }
 
   baseAppBar(BuildContext context) {
-    Widget widgetTitle;
-    if (title is Widget) {
-      widgetTitle = title;
-    } else {
-      widgetTitle = BaseTextLabel(
-        title?.toString(),
-        maxLines: 2,
-        fontWeight: FontWeight.w700,
-        fontSize: 16,
-        textAlign: TextAlign.center,
-        color: colorTitle,
-      );
-    }
+    Widget widgetTitle = BaseTextLabel(
+      title?.toString(),
+      maxLines: 2,
+      style: AppTextStyle.blackS16W600,
+      textAlign: TextAlign.center,
+    );
     return AppBar(
       elevation: 0,
-      toolbarHeight: toolbarHeight ?? 50,
+      toolbarHeight: toolbarHeight ?? AppDimens.appBarNormal,
       backgroundColor: colorAppBar,
       title: widgetTitle,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: isLightStatusBar ? Brightness.light : Brightness.dark, // Android (light)
-        statusBarBrightness: isLightStatusBar ? Brightness.dark : Brightness.light, // iOS (light)
+        statusBarIconBrightness: isLightStatusBar
+            ? Brightness.light
+            : Brightness.dark, // Android (light)
+        statusBarBrightness: isLightStatusBar
+            ? Brightness.dark
+            : Brightness.light, // iOS (light)
       ),
       automaticallyImplyLeading: false,
       leading: hiddenIconBack
           ? null
           : InkWell(
-        splashColor: Colors.transparent,
-        onTap: () {
-          if (onBackPress != null) {
-            onBackPress?.call();
-          } else {
-            Navigator.pop(context);
-          }
-        },
-        child: Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 15),
-          child: Icon(
-            iconBack ?? Icons.arrow_back_rounded,
-            color: iconBackColor,
-          ),
-        ),
-      ),
+              splashColor: Colors.transparent,
+              onTap: () {
+                if (onBackPress != null) {
+                  onBackPress?.call();
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: AppDimens.paddingNormal),
+                child: Icon(
+                  iconBack ?? Icons.arrow_back_rounded,
+                  color: iconBackColor,
+                ),
+              ),
+            ),
       centerTitle: true,
       actions: rightWidgets ?? [],
     );
-
   }
 }

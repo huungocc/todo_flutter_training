@@ -39,6 +39,7 @@ class AppColors {
   static const Color textFieldDisabledBorder = Color(0xFF919191);
   static const Color textFieldCursor = Color(0xFF919191);
   static const Color textFieldErrorBorder = Color(0xFFFB7181);
+  static const Color textFieldHint = Color(0xFFA1A1A1);
 
   ///Button
   static const Color disableButton = Color(0xfff2f3f4);
@@ -58,7 +59,7 @@ class AppColors {
   ///Shadow
   static const Color boxShadowColor = Color(0x3D40BFFF);
 
-  ///Todo
+  ///Todos
   static const Color todoPurple = Color(0xff4a3780);
   static const Color todoLightPurple = Color(0xff5c4a8c);
   static const Color todoBackground = Color(0xffe5e9ed);

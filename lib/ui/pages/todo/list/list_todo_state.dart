@@ -1,48 +1,15 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
-import 'package:todo_flutter_training/models/enums/operation_status.dart';
 
-class ListTodoState extends Equatable {
-  const ListTodoState({
-    this.loadStatus = LoadStatus.initial,
-    this.activeTodos = const [],
-    this.completedTodos = const [],
-    this.errorMessage,
-  });
+part 'list_todo_state.freezed.dart';
 
-  final LoadStatus loadStatus;
-  final List<TodoEntity> activeTodos;
-  final List<TodoEntity> completedTodos;
-  final String? errorMessage;
-
-  // Getters State
-  bool get isInitial => loadStatus == LoadStatus.initial;
-  bool get isLoading => loadStatus == LoadStatus.loading;
-  bool get isLoaded => loadStatus == LoadStatus.success;
-  bool get isError => loadStatus == LoadStatus.failure;
-  bool get hasData => activeTodos.isNotEmpty;
-
-  ListTodoState copyWith({
-    LoadStatus? loadStatus,
-    OperationStatus? operationStatus,
-    List<TodoEntity>? activeTodos,
-    List<TodoEntity>? completedTodos,
+@freezed
+abstract class ListTodoState with _$ListTodoState {
+  const factory ListTodoState({
+    @Default(LoadStatus.initial) LoadStatus loadStatus,
+    @Default([]) List<TodoEntity> activeTodos,
+    @Default([]) List<TodoEntity> completedTodos,
     String? errorMessage,
-  }) {
-    return ListTodoState(
-      loadStatus: loadStatus ?? this.loadStatus,
-      activeTodos: activeTodos ?? this.activeTodos,
-      completedTodos: completedTodos ?? this.completedTodos,
-      errorMessage: errorMessage,
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-    loadStatus,
-    activeTodos,
-    completedTodos,
-    errorMessage,
-  ];
+  }) = _ListTodoState;
 }

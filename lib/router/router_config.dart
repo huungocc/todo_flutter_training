@@ -17,10 +17,7 @@ class AppRouter {
   static const String listTodo = "/listTodo";
 
   static final _routes = <RouteBase>[
-    GoRoute(
-      path: splash,
-      builder: (context, state) => const SplashPage(),
-    ),
+    GoRoute(path: splash, builder: (context, state) => const SplashPage()),
     GoRoute(
       name: listTodo,
       path: listTodo,
@@ -28,4 +25,3 @@ class AppRouter {
     ),
   ];
 }
-

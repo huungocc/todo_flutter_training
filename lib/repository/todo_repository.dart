@@ -34,7 +34,10 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   @override
-  Future<void> updateTodoStatus({required String id, required bool completed}) async {
+  Future<void> updateTodoStatus({
+    required String id,
+    required bool completed,
+  }) async {
     return apiClient.updateTodoStatus(id: id, completed: completed);
   }
 

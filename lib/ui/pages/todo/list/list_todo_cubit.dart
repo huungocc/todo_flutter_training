@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
-import 'package:todo_flutter_training/models/enums/operation_status.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/repository/todo_repository.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_state.dart';
@@ -17,60 +16,69 @@ class ListTodoCubit extends Cubit<ListTodoState> {
     try {
       emit(state.copyWith(loadStatus: LoadStatus.loading));
 
-      final todos = await todoRepository.fetchTodos(
-        completed: todoType.completedStatus,
-      );
-
       if (todoType == TodoType.all) {
-        emit(state.copyWith(
-          loadStatus: LoadStatus.success,
-          activeTodos: _filterTodos(todos, false),
-          completedTodos: _filterTodos(todos, true),
-        ));
+        await _fetchAllTodos();
       } else if (todoType == TodoType.active) {
-        emit(state.copyWith(
-          loadStatus: LoadStatus.success,
-          activeTodos: todos,
-        ));
+        await _fetchActiveTodos();
       } else if (todoType == TodoType.completed) {
-        emit(state.copyWith(
-          loadStatus: LoadStatus.success,
-          completedTodos: todos,
-        ));
+        await _fetchCompletedTodos();
       }
     } catch (e) {
-      emit(state.copyWith(
-        loadStatus: LoadStatus.failure,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          loadStatus: LoadStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
       ExceptionHandler.showErrorSnackBar('$e');
     }
+  }
+
+  Future<void> _fetchAllTodos() async {
+    final todos = await todoRepository.fetchTodos();
+
+    emit(
+      state.copyWith(
+        loadStatus: LoadStatus.success,
+        activeTodos: _filterTodos(todos, false),
+        completedTodos: _filterTodos(todos, true),
+      ),
+    );
+  }
+
+  Future<void> _fetchActiveTodos() async {
+    final todos = await todoRepository.fetchTodos(completed: false);
+
+    emit(state.copyWith(loadStatus: LoadStatus.success, activeTodos: todos));
+  }
+
+  Future<void> _fetchCompletedTodos() async {
+    final todos = await todoRepository.fetchTodos(completed: true);
+
+    emit(state.copyWith(loadStatus: LoadStatus.success, completedTodos: todos));
   }
 
   /// Update Status (Active <=> Completed)
   Future<void> updateTodoStatus(TodoEntity todo) async {
     try {
-      final newStatus = !(todo.completed ?? false);
+      final newStatus = !todo.completed;
 
       // Delete from Local (optimistic update)
       _moveTodoBetweenLists(todo, newStatus);
 
       // Delete from Server
-      await todoRepository.updateTodoStatus(
-        id: todo.id!,
-        completed: newStatus,
-      );
+      await todoRepository.updateTodoStatus(id: todo.id!, completed: newStatus);
 
-      emit(state.copyWith(
-        loadStatus: LoadStatus.success,
-        operationStatus: OperationStatus.updateStatus,
-      ));
+      emit(state.copyWith(loadStatus: LoadStatus.success));
     } catch (e) {
       // Reset Data when Error
       fetchTodos(TodoType.all);
 
       emit(
-        state.copyWith(loadStatus: LoadStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          loadStatus: LoadStatus.failure,
+          errorMessage: e.toString(),
+        ),
       );
 
       ExceptionHandler.showErrorSnackBar('$e');
@@ -86,12 +94,7 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       // Delete from Server
       await todoRepository.deleteTodo(id: todo.id!);
 
-      emit(
-        state.copyWith(
-          loadStatus: LoadStatus.success,
-          operationStatus: OperationStatus.delete,
-        ),
-      );
+      emit(state.copyWith(loadStatus: LoadStatus.success));
 
       ExceptionHandler.showSuccessSnackBar(S.current.todo_delete_success);
     } catch (e) {
@@ -103,7 +106,10 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       }
 
       emit(
-        state.copyWith(loadStatus: LoadStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          loadStatus: LoadStatus.failure,
+          errorMessage: e.toString(),
+        ),
       );
 
       ExceptionHandler.showErrorSnackBar('$e');
@@ -111,7 +117,7 @@ class ListTodoCubit extends Cubit<ListTodoState> {
   }
 
   void _removeTodoFromLists(TodoEntity todo) {
-    final isCompleted = todo.completed ?? false;
+    final isCompleted = todo.completed;
 
     if (isCompleted) {
       final updatedCompleted = List<TodoEntity>.from(state.completedTodos)
@@ -138,10 +144,12 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       updatedActive.add(todo.copyWith(completed: false));
     }
 
-    emit(state.copyWith(
-      activeTodos: updatedActive,
-      completedTodos: updatedCompleted,
-    ));
+    emit(
+      state.copyWith(
+        activeTodos: updatedActive,
+        completedTodos: updatedCompleted,
+      ),
+    );
   }
 
   List<TodoEntity> _filterTodos(List<TodoEntity> todos, bool completed) {

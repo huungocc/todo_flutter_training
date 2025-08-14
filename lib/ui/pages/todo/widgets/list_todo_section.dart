@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_format.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
+import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_page.dart';
@@ -57,7 +60,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingLarge),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,9 +72,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                     prev.activeTodos != curr.activeTodos ||
                     prev.loadStatus != curr.loadStatus,
                 builder: (context, state) {
-                  if (state.isLoading) {
+                  if (state.loadStatus.isLoading) {
                     return BaseLoading(
-                      size: 30,
+                      size: AppDimens.iconSizeNormal,
                       backgroundColor: AppColors.textWhite,
                       valueColor: AppColors.textBlack,
                     );
@@ -82,8 +85,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
 
               BaseTextLabel(
                 S.of(context).completed,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
+                style: AppTextStyle.blackS16W600,
               ),
 
               /// Build Completed todos
@@ -92,9 +94,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                     prev.completedTodos != curr.completedTodos ||
                     prev.loadStatus != curr.loadStatus,
                 builder: (context, state) {
-                  if (state.isLoading) {
+                  if (state.loadStatus.isLoading) {
                     return BaseLoading(
-                      size: 30,
+                      size: AppDimens.iconSizeNormal,
                       backgroundColor: AppColors.textWhite,
                       valueColor: AppColors.textBlack,
                     );
@@ -112,7 +114,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   Widget _buildActiveTodos(List<TodoEntity> activeTodos, BuildContext context) {
     return activeTodos.isNotEmpty
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppDimens.cardCornerRadius),
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -120,10 +122,8 @@ class _ListTodoSectionState extends State<ListTodoSection> {
               separatorBuilder: (_, __) => CommonWidget.buildSeparator(),
               itemBuilder: (context, index) {
                 final activeTodo = activeTodos[index];
-                final isExpired = AppFormat.isDateTimeExpired(
-                  activeTodo.date,
-                  activeTodo.time,
-                );
+                final isExpired = activeTodo.time!.isDateTimeExpired(activeTodo.date);
+
                 return Dismissible(
                   key: Key(activeTodo.id!),
                   direction: DismissDirection.endToStart,
@@ -132,7 +132,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                   child: TodoInfoCard(
                     title: activeTodo.taskTitle,
                     type: activeTodo.category,
-                    time: AppFormat.convertTime24to12(activeTodo.time!),
+                    time: activeTodo.time!.convertTime24to12(),
                     isExpired: isExpired,
                     onTap: () => _onOpenTodo(activeTodo),
                     onCheck: () => _onUpdateTodoStatus(activeTodo),
@@ -142,9 +142,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
             ),
           )
         : TodoInfoCard(
-            borderRadius: 20,
+            borderRadius: AppDimens.cardCornerRadius,
             title: S.of(context).no_data_yet,
-            time: 'N/A',
+            time: S.of(context).n_a,
           );
   }
 
@@ -154,7 +154,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
   ) {
     return completedTodos.isNotEmpty
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppDimens.cardCornerRadius),
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -169,7 +169,7 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                   onDismissed: (_) => _onDeleteTodo(completedTodo),
                   child: TodoInfoCard(
                     title: completedTodo.taskTitle,
-                    time: AppFormat.convertTime24to12(completedTodo.time!),
+                    time: completedTodo.time!.convertTime24to12(),
                     type: completedTodo.category,
                     isCompleted: true,
                     onCheck: () => _onUpdateTodoStatus(completedTodo),
@@ -179,9 +179,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
             ),
           )
         : TodoInfoCard(
-            borderRadius: 20,
+            borderRadius: AppDimens.cardCornerRadius,
             title: S.of(context).no_data_yet,
-            time: 'N/A',
+            time: S.of(context).n_a,
             isCompleted: true,
           );
   }

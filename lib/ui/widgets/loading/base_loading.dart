@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
 
 class BaseLoading extends StatelessWidget {
   final Color valueColor;
@@ -10,7 +11,7 @@ class BaseLoading extends StatelessWidget {
     super.key,
     this.valueColor = AppColors.textBlack,
     this.backgroundColor = AppColors.textWhite,
-    this.size = 24,
+    this.size = AppDimens.iconSizeNormal,
   });
 
   @override

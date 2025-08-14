@@ -29,9 +29,7 @@ class _SplashPageState extends State<SplashPage> {
     return BaseScreen(
       colorBackground: AppColors.background,
       hideAppBar: true,
-      body: Center(
-          child: Assets.images.iconApp.image(scale: 5)
-      ),
+      body: Center(child: Assets.images.iconApp.image(scale: 5)),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
@@ -30,39 +31,32 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    ScreenSize.instance().init(context);
+  }
 
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<TodoRepository>(create: (context) {
-          return TodoRepositoryImpl(apiClient: _apiClient);
-        }),
-      ],
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider<TodoRepository>(
+      create: (context) {
+        return TodoRepositoryImpl(apiClient: _apiClient);
+      },
       child: BlocProvider(
-          create: (_) => AppSettingCubit()..getInitialSetting(),
-          child: GestureDetector(
-            onTap: () {
-              _hideKeyboard(context);
-            },
-            child: BlocBuilder<AppSettingCubit, AppSettingState>(
-              buildWhen: (prev, current) {
-                return prev.language != current.language;
+        create: (_) => AppSettingCubit()..getInitialSetting(),
+        child: BlocBuilder<AppSettingCubit, AppSettingState>(
+          buildWhen: (prev, current) {
+            return prev.language != current.language;
+          },
+          builder: (context, state) {
+            return GestureDetector(
+              onTap: () {
+                _hideKeyboard(context);
               },
-              builder: (context, state) {
-                return GestureDetector(
-                  onTap: () {
-                    _hideKeyboard(context);
-                  },
-                  child: _buildMaterialApp(
-                    locale: state.language.local,
-                  ),
-                );
-              },
-            ),
-          )
+              child: _buildMaterialApp(locale: state.language.local),
+            );
+          },
+        ),
       ),
     );
   }

@@ -21,10 +21,7 @@ class CustomTodoBackground extends StatelessWidget {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.todoLightPurple,
-                  width: 50,
-                ),
+                border: Border.all(color: AppColors.todoLightPurple, width: 50),
               ),
             ),
           ),
@@ -36,10 +33,7 @@ class CustomTodoBackground extends StatelessWidget {
               height: 500,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.todoLightPurple,
-                  width: 50,
-                ),
+                border: Border.all(color: AppColors.todoLightPurple, width: 50),
               ),
             ),
           ),

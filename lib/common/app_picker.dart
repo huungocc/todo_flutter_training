@@ -20,7 +20,7 @@ class AppPicker {
       },
     );
     if (pickedDate != null) {
-      return AppFormat.formatDateToDDMMYYYY(pickedDate);
+      return pickedDate.formatDateToDDMMYYYY();
     }
     return null;
   }
@@ -38,10 +38,9 @@ class AppPicker {
       },
     );
     if (pickedTime != null) {
-      return AppFormat.formatPickedTimeTo12h(
-        pickedTime.hour,
-        pickedTime.minute,
-      );
+      final now = DateTime.now();
+      final dateTime = DateTime(now.year, now.month, now.day, pickedTime.hour, pickedTime.minute);
+      return dateTime.formatPickedTimeTo12h();
     }
     return null;
   }

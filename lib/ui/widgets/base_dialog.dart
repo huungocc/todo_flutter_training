@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
+import 'package:todo_flutter_training/common/app_demens.dart';
+import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
@@ -14,15 +16,14 @@ class BaseDialog {
     if (context != null) {
       showDialog(
         context: context,
-        barrierDismissible: false,
         builder: (BuildContext context) {
           return Dialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppDimens.paddingLarge),
             ),
             backgroundColor: AppColors.textWhite,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(AppDimens.paddingLarge),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,32 +36,27 @@ class BaseDialog {
                   ),
                   BaseTextLabel(
                     message,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    color: AppColors.textBlack,
+                    style: AppTextStyle.blackS18Bold,
                     textAlign: TextAlign.center,
                   ),
                   Row(
+                    spacing: 10,
                     children: [
                       Expanded(
                         child: BaseButton(
                           backgroundColor: AppColors.todoPurple,
-                          title: 'OK',
-                          titleColor: AppColors.textWhite,
-                          borderRadius: 20,
+                          title: S.of(context).ok,
                           onTap: () {
                             Navigator.pop(context);
                             onConfirm();
                           },
                         ),
                       ),
-                      const SizedBox(width: 10),
                       Expanded(
                         child: BaseButton(
-                          backgroundColor: Colors.grey[200],
+                          backgroundColor: AppColors.gray1,
                           title: S.current.cancel,
-                          titleColor: AppColors.textBlack,
-                          borderRadius: 20,
+                          titleStyle: AppTextStyle.blackS16W500,
                           onTap: () => Navigator.pop(context),
                         ),
                       ),
@@ -74,5 +70,4 @@ class BaseDialog {
       );
     }
   }
-
 }
