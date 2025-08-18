@@ -1,29 +1,31 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:todo_flutter_training/global_blocs/local_notification/local_notification_state.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/local_notification_repository.dart';
 
+@injectable
 class LocalNotificationCubit extends Cubit<LocalNotificationState> {
   final LocalNotificationRepository _repository;
 
   LocalNotificationCubit(this._repository) : super(const LocalNotificationState());
 
-  /// Khởi tạo notification plugin
-  Future<void> initNotifications() async {
-    try {
-      emit(state.copyWith(loadStatus: LoadStatus.loading));
-      await _repository.init();
-      emit(state.copyWith(
-        loadStatus: LoadStatus.success,
-        successMessage: 'Notification initialized',
-      ));
-    } catch (e) {
-      emit(state.copyWith(
-        loadStatus: LoadStatus.failure,
-        errorMessage: 'Init failed: $e',
-      ));
-    }
-  }
+  // /// Khởi tạo notification plugin
+  // Future<void> initNotifications() async {
+  //   try {
+  //     emit(state.copyWith(loadStatus: LoadStatus.loading));
+  //     await _repository.init();
+  //     emit(state.copyWith(
+  //       loadStatus: LoadStatus.success,
+  //       successMessage: 'Notification initialized',
+  //     ));
+  //   } catch (e) {
+  //     emit(state.copyWith(
+  //       loadStatus: LoadStatus.failure,
+  //       errorMessage: 'Init failed: $e',
+  //     ));
+  //   }
+  // }
 
   /// Lên lịch thông báo
   Future<void> scheduleNotification({

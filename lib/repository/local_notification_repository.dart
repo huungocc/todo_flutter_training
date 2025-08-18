@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:injectable/injectable.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -18,6 +19,7 @@ abstract class LocalNotificationRepository {
 
 }
 
+@Injectable(as: LocalNotificationRepository)
 class LocalNotificationRepositoryImpl implements LocalNotificationRepository {
   final _notifications = FlutterLocalNotificationsPlugin();
 

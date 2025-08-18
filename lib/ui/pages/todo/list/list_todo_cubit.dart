@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
@@ -7,6 +8,7 @@ import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_state.dart';
 import 'package:todo_flutter_training/utils/exception_handler.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 
+@injectable
 class ListTodoCubit extends Cubit<ListTodoState> {
   final TodoRepository todoRepository;
 

@@ -6,10 +6,8 @@ import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
-import 'package:todo_flutter_training/network/api_client.dart';
-import 'package:todo_flutter_training/network/api_util.dart';
-import 'package:todo_flutter_training/repository/todo_repository.dart';
 import 'package:todo_flutter_training/router/router_config.dart';
+import 'package:todo_flutter_training/utils/injection.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -21,14 +19,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late ApiClient _apiClient;
-
-  @override
-  void initState() {
-    _apiClient = ApiUtil.apiClient;
-    super.initState();
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -37,29 +27,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<TodoRepository>(
-          create: (context) {
-            return TodoRepositoryImpl(apiClient: _apiClient);
-          },
-        ),
-      ],
-      child: BlocProvider(
-        create: (_) => AppSettingCubit()..getInitialSetting(),
-        child: BlocBuilder<AppSettingCubit, AppSettingState>(
-          buildWhen: (prev, current) {
-            return prev.language != current.language;
-          },
-          builder: (context, state) {
-            return GestureDetector(
-              onTap: () {
-                _hideKeyboard(context);
-              },
-              child: _buildMaterialApp(locale: state.language.local),
-            );
-          },
-        ),
+    return BlocProvider(
+      create: (_) => getIt<AppSettingCubit>()..getInitialSetting(),
+      child: BlocBuilder<AppSettingCubit, AppSettingState>(
+        buildWhen: (prev, current) {
+          return prev.language != current.language;
+        },
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () {
+              _hideKeyboard(context);
+            },
+            child: _buildMaterialApp(locale: state.language.local),
+          );
+        },
       ),
     );
   }

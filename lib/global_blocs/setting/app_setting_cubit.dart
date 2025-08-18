@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/database/share_preferences_helper.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
 
 part 'app_setting_state.dart';
 
+@injectable
 class AppSettingCubit extends Cubit<AppSettingState> {
   AppSettingCubit() : super(const AppSettingState());
 
