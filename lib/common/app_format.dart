@@ -32,9 +32,13 @@ extension StringDateTimeExtensions on String {
   }
 
   /// Chuyển "hh:mm a" sang "HH:mm:ss"
-  String convertTime12hTo24hWithSeconds() {
-    final dateTime = DateFormat('hh:mm a').parse(this);
-    return DateFormat('HH:mm:ss').format(dateTime);
+  String? convertTime12hTo24hWithSeconds() {
+    try {
+      final dateTime = DateFormat('hh:mm a').parse(this);
+      return DateFormat('HH:mm:ss').format(dateTime);
+    } catch (e) {
+      return null;
+    }
   }
 
   /// Kiểm tra thời gian đã quá hạn so với ngày date chưa
@@ -74,4 +78,22 @@ extension DateTimeFormatExtensions on DateTime {
 
   /// Format giờ theo "hh:mm a"
   String formatPickedTimeTo12h() => DateFormat('hh:mm a').format(this);
+
+  DateTime withTime(String? time) {
+    if (time == null) return this;
+
+    final parts = time.split(':');
+    final hour = int.tryParse(parts[0]) ?? 0;
+    final minute = parts.length > 1 ? int.tryParse(parts[1]) ?? 0 : 0;
+    final second = parts.length > 2 ? int.tryParse(parts[2]) ?? 0 : 0;
+
+    return DateTime(
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      second,
+    );
+  }
 }

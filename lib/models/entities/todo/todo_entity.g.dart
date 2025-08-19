@@ -14,6 +14,7 @@ _TodoEntity _$TodoEntityFromJson(Map<String, dynamic> json) => _TodoEntity(
   time: json['time'] as String?,
   notes: json['notes'] as String?,
   completed: json['completed'] as bool? ?? false,
+  notificationId: (json['notification_id'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$TodoEntityToJson(_TodoEntity instance) =>
@@ -25,4 +26,5 @@ Map<String, dynamic> _$TodoEntityToJson(_TodoEntity instance) =>
       'time': instance.time,
       'notes': instance.notes,
       'completed': instance.completed,
+      'notification_id': ?instance.notificationId,
     };

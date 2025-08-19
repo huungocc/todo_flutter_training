@@ -58,5 +58,10 @@
   "error_foreign_key_violation": "Vi phạm ràng buộc dữ liệu",
   "error_authentication": "Lỗi xác thực: {message}",
   "error_connection": "Lỗi kết nối: {message}",
-  "supabase_not_initialized": "Supabase chưa được khởi tạo. Gọi SupabaseUtil.initialize() trước."
+  "supabase_not_initialized": "Supabase chưa được khởi tạo. Gọi SupabaseUtil.initialize() trước.",
+
+  "todo_title_empty": "Tiêu đề công việc không được để trống.",
+  "todo_category_empty": "Vui lòng chọn danh mục.",
+  "todo_time_empty": "Vui lòng chọn ngày.",
+  "todo_date_empty": "Vui lòng chọn giờ."
 }

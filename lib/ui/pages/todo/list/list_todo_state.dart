@@ -7,9 +7,9 @@ part 'list_todo_state.freezed.dart';
 @freezed
 abstract class ListTodoState with _$ListTodoState {
   const factory ListTodoState({
-    @Default(LoadStatus.initial) LoadStatus loadStatus,
+    @Default(LoadStatus.initial) LoadStatus activeLoadStatus,
+    @Default(LoadStatus.initial) LoadStatus completedLoadStatus,
     @Default([]) List<TodoEntity> activeTodos,
     @Default([]) List<TodoEntity> completedTodos,
-    String? errorMessage,
   }) = _ListTodoState;
 }

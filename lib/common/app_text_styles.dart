@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppTextStyle {
-  AppTextStyle._();
-
   ///Black
   static const black = TextStyle(
     color: AppColors.textBlack,

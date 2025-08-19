@@ -4,12 +4,11 @@ import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/models/enums/operation_status.dart';
-import 'package:todo_flutter_training/repository/todo_repository.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_state.dart';
 import 'package:todo_flutter_training/ui/pages/todo/widgets/add_todo_header.dart';
 import 'package:todo_flutter_training/ui/pages/todo/widgets/add_todo_input.dart';
-import 'package:todo_flutter_training/utils/exception_handler.dart';
+import 'package:todo_flutter_training/utils/injection.dart';
 
 class AddTodoPage extends StatelessWidget {
   final TodoEntity? arg;
@@ -19,8 +18,7 @@ class AddTodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          AddTodoCubit(todoRepository: context.read<TodoRepository>()),
+      create: (_) => getIt<AddTodoCubit>(),
       child: _AddTodoBody(arg: arg),
     );
   }
@@ -66,7 +64,6 @@ class _AddTodoBodyState extends State<_AddTodoBody> {
                 if (state.successMessage != null &&
                     (state.operation.isAdd || state.operation.isUpdate)) {
                   Navigator.pop(context, true);
-                  ExceptionHandler.showSuccessSnackBar(state.successMessage!);
                 }
               },
               child: const SizedBox.shrink(),

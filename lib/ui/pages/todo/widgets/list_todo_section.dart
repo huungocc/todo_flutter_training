@@ -70,9 +70,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
               BlocBuilder<ListTodoCubit, ListTodoState>(
                 buildWhen: (prev, curr) =>
                     prev.activeTodos != curr.activeTodos ||
-                    prev.loadStatus != curr.loadStatus,
+                    prev.activeLoadStatus != curr.activeLoadStatus,
                 builder: (context, state) {
-                  if (state.loadStatus.isLoading) {
+                  if (state.activeLoadStatus.isLoading) {
                     return BaseLoading(
                       size: AppDimens.iconSizeNormal,
                       backgroundColor: AppColors.textWhite,
@@ -92,9 +92,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
               BlocBuilder<ListTodoCubit, ListTodoState>(
                 buildWhen: (prev, curr) =>
                     prev.completedTodos != curr.completedTodos ||
-                    prev.loadStatus != curr.loadStatus,
+                    prev.completedLoadStatus != curr.completedLoadStatus,
                 builder: (context, state) {
-                  if (state.loadStatus.isLoading) {
+                  if (state.completedLoadStatus.isLoading) {
                     return BaseLoading(
                       size: AppDimens.iconSizeNormal,
                       backgroundColor: AppColors.textWhite,
