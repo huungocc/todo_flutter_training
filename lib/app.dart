@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/global_blocs/local_notification/local_notification_cubit.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
 import 'package:todo_flutter_training/router/router_config.dart';
@@ -27,8 +28,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<AppSettingCubit>()..getInitialSetting(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AppSettingCubit>(
+          create: (_) => getIt<AppSettingCubit>()..getInitialSetting(),
+        ),
+        BlocProvider<LocalNotificationCubit>(
+          create: (_) => getIt<LocalNotificationCubit>(),
+        ),
+      ],
       child: BlocBuilder<AppSettingCubit, AppSettingState>(
         buildWhen: (prev, current) {
           return prev.language != current.language;

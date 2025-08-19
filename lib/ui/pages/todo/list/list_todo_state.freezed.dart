@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ListTodoState {
 
- LoadStatus get loadStatus; List<TodoEntity> get activeTodos; List<TodoEntity> get completedTodos; String? get errorMessage;
+ LoadStatus get activeLoadStatus; LoadStatus get completedLoadStatus; List<TodoEntity> get activeTodos; List<TodoEntity> get completedTodos;
 /// Create a copy of ListTodoState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ListTodoStateCopyWith<ListTodoState> get copyWith => _$ListTodoStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListTodoState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&const DeepCollectionEquality().equals(other.activeTodos, activeTodos)&&const DeepCollectionEquality().equals(other.completedTodos, completedTodos)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListTodoState&&(identical(other.activeLoadStatus, activeLoadStatus) || other.activeLoadStatus == activeLoadStatus)&&(identical(other.completedLoadStatus, completedLoadStatus) || other.completedLoadStatus == completedLoadStatus)&&const DeepCollectionEquality().equals(other.activeTodos, activeTodos)&&const DeepCollectionEquality().equals(other.completedTodos, completedTodos));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,const DeepCollectionEquality().hash(activeTodos),const DeepCollectionEquality().hash(completedTodos),errorMessage);
+int get hashCode => Object.hash(runtimeType,activeLoadStatus,completedLoadStatus,const DeepCollectionEquality().hash(activeTodos),const DeepCollectionEquality().hash(completedTodos));
 
 @override
 String toString() {
-  return 'ListTodoState(loadStatus: $loadStatus, activeTodos: $activeTodos, completedTodos: $completedTodos, errorMessage: $errorMessage)';
+  return 'ListTodoState(activeLoadStatus: $activeLoadStatus, completedLoadStatus: $completedLoadStatus, activeTodos: $activeTodos, completedTodos: $completedTodos)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ListTodoStateCopyWith<$Res>  {
   factory $ListTodoStateCopyWith(ListTodoState value, $Res Function(ListTodoState) _then) = _$ListTodoStateCopyWithImpl;
 @useResult
 $Res call({
- LoadStatus loadStatus, List<TodoEntity> activeTodos, List<TodoEntity> completedTodos, String? errorMessage
+ LoadStatus activeLoadStatus, LoadStatus completedLoadStatus, List<TodoEntity> activeTodos, List<TodoEntity> completedTodos
 });
 
 
@@ -62,13 +62,13 @@ class _$ListTodoStateCopyWithImpl<$Res>
 
 /// Create a copy of ListTodoState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? activeTodos = null,Object? completedTodos = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? activeLoadStatus = null,Object? completedLoadStatus = null,Object? activeTodos = null,Object? completedTodos = null,}) {
   return _then(_self.copyWith(
-loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
+activeLoadStatus: null == activeLoadStatus ? _self.activeLoadStatus : activeLoadStatus // ignore: cast_nullable_to_non_nullable
+as LoadStatus,completedLoadStatus: null == completedLoadStatus ? _self.completedLoadStatus : completedLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,activeTodos: null == activeTodos ? _self.activeTodos : activeTodos // ignore: cast_nullable_to_non_nullable
 as List<TodoEntity>,completedTodos: null == completedTodos ? _self.completedTodos : completedTodos // ignore: cast_nullable_to_non_nullable
-as List<TodoEntity>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as List<TodoEntity>,
   ));
 }
 
@@ -153,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  List<TodoEntity> activeTodos,  List<TodoEntity> completedTodos,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus activeLoadStatus,  LoadStatus completedLoadStatus,  List<TodoEntity> activeTodos,  List<TodoEntity> completedTodos)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ListTodoState() when $default != null:
-return $default(_that.loadStatus,_that.activeTodos,_that.completedTodos,_that.errorMessage);case _:
+return $default(_that.activeLoadStatus,_that.completedLoadStatus,_that.activeTodos,_that.completedTodos);case _:
   return orElse();
 
 }
@@ -174,10 +174,10 @@ return $default(_that.loadStatus,_that.activeTodos,_that.completedTodos,_that.er
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  List<TodoEntity> activeTodos,  List<TodoEntity> completedTodos,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus activeLoadStatus,  LoadStatus completedLoadStatus,  List<TodoEntity> activeTodos,  List<TodoEntity> completedTodos)  $default,) {final _that = this;
 switch (_that) {
 case _ListTodoState():
-return $default(_that.loadStatus,_that.activeTodos,_that.completedTodos,_that.errorMessage);case _:
+return $default(_that.activeLoadStatus,_that.completedLoadStatus,_that.activeTodos,_that.completedTodos);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +194,10 @@ return $default(_that.loadStatus,_that.activeTodos,_that.completedTodos,_that.er
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus loadStatus,  List<TodoEntity> activeTodos,  List<TodoEntity> completedTodos,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus activeLoadStatus,  LoadStatus completedLoadStatus,  List<TodoEntity> activeTodos,  List<TodoEntity> completedTodos)?  $default,) {final _that = this;
 switch (_that) {
 case _ListTodoState() when $default != null:
-return $default(_that.loadStatus,_that.activeTodos,_that.completedTodos,_that.errorMessage);case _:
+return $default(_that.activeLoadStatus,_that.completedLoadStatus,_that.activeTodos,_that.completedTodos);case _:
   return null;
 
 }
@@ -209,10 +209,11 @@ return $default(_that.loadStatus,_that.activeTodos,_that.completedTodos,_that.er
 
 
 class _ListTodoState implements ListTodoState {
-  const _ListTodoState({this.loadStatus = LoadStatus.initial, final  List<TodoEntity> activeTodos = const [], final  List<TodoEntity> completedTodos = const [], this.errorMessage}): _activeTodos = activeTodos,_completedTodos = completedTodos;
+  const _ListTodoState({this.activeLoadStatus = LoadStatus.initial, this.completedLoadStatus = LoadStatus.initial, final  List<TodoEntity> activeTodos = const [], final  List<TodoEntity> completedTodos = const []}): _activeTodos = activeTodos,_completedTodos = completedTodos;
   
 
-@override@JsonKey() final  LoadStatus loadStatus;
+@override@JsonKey() final  LoadStatus activeLoadStatus;
+@override@JsonKey() final  LoadStatus completedLoadStatus;
  final  List<TodoEntity> _activeTodos;
 @override@JsonKey() List<TodoEntity> get activeTodos {
   if (_activeTodos is EqualUnmodifiableListView) return _activeTodos;
@@ -227,7 +228,6 @@ class _ListTodoState implements ListTodoState {
   return EqualUnmodifiableListView(_completedTodos);
 }
 
-@override final  String? errorMessage;
 
 /// Create a copy of ListTodoState
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +239,16 @@ _$ListTodoStateCopyWith<_ListTodoState> get copyWith => __$ListTodoStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListTodoState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&const DeepCollectionEquality().equals(other._activeTodos, _activeTodos)&&const DeepCollectionEquality().equals(other._completedTodos, _completedTodos)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ListTodoState&&(identical(other.activeLoadStatus, activeLoadStatus) || other.activeLoadStatus == activeLoadStatus)&&(identical(other.completedLoadStatus, completedLoadStatus) || other.completedLoadStatus == completedLoadStatus)&&const DeepCollectionEquality().equals(other._activeTodos, _activeTodos)&&const DeepCollectionEquality().equals(other._completedTodos, _completedTodos));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,const DeepCollectionEquality().hash(_activeTodos),const DeepCollectionEquality().hash(_completedTodos),errorMessage);
+int get hashCode => Object.hash(runtimeType,activeLoadStatus,completedLoadStatus,const DeepCollectionEquality().hash(_activeTodos),const DeepCollectionEquality().hash(_completedTodos));
 
 @override
 String toString() {
-  return 'ListTodoState(loadStatus: $loadStatus, activeTodos: $activeTodos, completedTodos: $completedTodos, errorMessage: $errorMessage)';
+  return 'ListTodoState(activeLoadStatus: $activeLoadStatus, completedLoadStatus: $completedLoadStatus, activeTodos: $activeTodos, completedTodos: $completedTodos)';
 }
 
 
@@ -259,7 +259,7 @@ abstract mixin class _$ListTodoStateCopyWith<$Res> implements $ListTodoStateCopy
   factory _$ListTodoStateCopyWith(_ListTodoState value, $Res Function(_ListTodoState) _then) = __$ListTodoStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoadStatus loadStatus, List<TodoEntity> activeTodos, List<TodoEntity> completedTodos, String? errorMessage
+ LoadStatus activeLoadStatus, LoadStatus completedLoadStatus, List<TodoEntity> activeTodos, List<TodoEntity> completedTodos
 });
 
 
@@ -276,13 +276,13 @@ class __$ListTodoStateCopyWithImpl<$Res>
 
 /// Create a copy of ListTodoState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? activeTodos = null,Object? completedTodos = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? activeLoadStatus = null,Object? completedLoadStatus = null,Object? activeTodos = null,Object? completedTodos = null,}) {
   return _then(_ListTodoState(
-loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
+activeLoadStatus: null == activeLoadStatus ? _self.activeLoadStatus : activeLoadStatus // ignore: cast_nullable_to_non_nullable
+as LoadStatus,completedLoadStatus: null == completedLoadStatus ? _self.completedLoadStatus : completedLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,activeTodos: null == activeTodos ? _self._activeTodos : activeTodos // ignore: cast_nullable_to_non_nullable
 as List<TodoEntity>,completedTodos: null == completedTodos ? _self._completedTodos : completedTodos // ignore: cast_nullable_to_non_nullable
-as List<TodoEntity>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as List<TodoEntity>,
   ));
 }
 

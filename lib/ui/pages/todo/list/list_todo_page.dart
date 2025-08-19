@@ -19,15 +19,8 @@ class ListTodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ListTodoCubit>(
-          create: (_) => getIt<ListTodoCubit>(),
-        ),
-        BlocProvider<LocalNotificationCubit>(
-          create: (_) => getIt<LocalNotificationCubit>(),
-        ),
-      ],
+    return BlocProvider<ListTodoCubit>(
+      create: (_) => getIt<ListTodoCubit>(),
       child: const _ListTodoBody(),
     );
   }
@@ -45,6 +38,7 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      //_initLocalNotification();
       _getTodos(TodoType.all);
     });
   }
@@ -65,6 +59,10 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
         _getTodos(TodoType.active);
       }
     }
+  }
+
+  void _initLocalNotification() {
+    context.read<LocalNotificationCubit>().initNotifications();
   }
 
   @override

@@ -13,6 +13,7 @@ abstract class TodoEntity with _$TodoEntity {
     String? time,
     String? notes,
     @Default(false) bool completed,
+    @JsonKey(name: 'notification_id', includeIfNull: false) int? notificationId,
   }) = _TodoEntity;
 
   factory TodoEntity.fromJson(Map<String, dynamic> json) =>

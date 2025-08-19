@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TodoEntity {
 
-@JsonKey(includeIfNull: false) String? get id;@JsonKey(name: 'task_title') String? get taskTitle; String? get category; DateTime? get date; String? get time; String? get notes; bool get completed;
+@JsonKey(includeIfNull: false) String? get id;@JsonKey(name: 'task_title') String? get taskTitle; String? get category; DateTime? get date; String? get time; String? get notes; bool get completed;@JsonKey(name: 'notification_id', includeIfNull: false) int? get notificationId;
 /// Create a copy of TodoEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TodoEntityCopyWith<TodoEntity> get copyWith => _$TodoEntityCopyWithImpl<TodoEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.taskTitle, taskTitle) || other.taskTitle == taskTitle)&&(identical(other.category, category) || other.category == category)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.completed, completed) || other.completed == completed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TodoEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.taskTitle, taskTitle) || other.taskTitle == taskTitle)&&(identical(other.category, category) || other.category == category)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.completed, completed) || other.completed == completed)&&(identical(other.notificationId, notificationId) || other.notificationId == notificationId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,taskTitle,category,date,time,notes,completed);
+int get hashCode => Object.hash(runtimeType,id,taskTitle,category,date,time,notes,completed,notificationId);
 
 @override
 String toString() {
-  return 'TodoEntity(id: $id, taskTitle: $taskTitle, category: $category, date: $date, time: $time, notes: $notes, completed: $completed)';
+  return 'TodoEntity(id: $id, taskTitle: $taskTitle, category: $category, date: $date, time: $time, notes: $notes, completed: $completed, notificationId: $notificationId)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TodoEntityCopyWith<$Res>  {
   factory $TodoEntityCopyWith(TodoEntity value, $Res Function(TodoEntity) _then) = _$TodoEntityCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeIfNull: false) String? id,@JsonKey(name: 'task_title') String? taskTitle, String? category, DateTime? date, String? time, String? notes, bool completed
+@JsonKey(includeIfNull: false) String? id,@JsonKey(name: 'task_title') String? taskTitle, String? category, DateTime? date, String? time, String? notes, bool completed,@JsonKey(name: 'notification_id', includeIfNull: false) int? notificationId
 });
 
 
@@ -65,7 +65,7 @@ class _$TodoEntityCopyWithImpl<$Res>
 
 /// Create a copy of TodoEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? taskTitle = freezed,Object? category = freezed,Object? date = freezed,Object? time = freezed,Object? notes = freezed,Object? completed = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? taskTitle = freezed,Object? category = freezed,Object? date = freezed,Object? time = freezed,Object? notes = freezed,Object? completed = null,Object? notificationId = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,taskTitle: freezed == taskTitle ? _self.taskTitle : taskTitle // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,8 @@ as String?,date: freezed == date ? _self.date : date // ignore: cast_nullable_to
 as DateTime?,time: freezed == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as String?,notes: freezed == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
 as String?,completed: null == completed ? _self.completed : completed // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,notificationId: freezed == notificationId ? _self.notificationId : notificationId // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeIfNull: false)  String? id, @JsonKey(name: 'task_title')  String? taskTitle,  String? category,  DateTime? date,  String? time,  String? notes,  bool completed)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeIfNull: false)  String? id, @JsonKey(name: 'task_title')  String? taskTitle,  String? category,  DateTime? date,  String? time,  String? notes,  bool completed, @JsonKey(name: 'notification_id', includeIfNull: false)  int? notificationId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TodoEntity() when $default != null:
-return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_that.notes,_that.completed);case _:
+return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_that.notes,_that.completed,_that.notificationId);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeIfNull: false)  String? id, @JsonKey(name: 'task_title')  String? taskTitle,  String? category,  DateTime? date,  String? time,  String? notes,  bool completed)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeIfNull: false)  String? id, @JsonKey(name: 'task_title')  String? taskTitle,  String? category,  DateTime? date,  String? time,  String? notes,  bool completed, @JsonKey(name: 'notification_id', includeIfNull: false)  int? notificationId)  $default,) {final _that = this;
 switch (_that) {
 case _TodoEntity():
-return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_that.notes,_that.completed);case _:
+return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_that.notes,_that.completed,_that.notificationId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeIfNull: false)  String? id, @JsonKey(name: 'task_title')  String? taskTitle,  String? category,  DateTime? date,  String? time,  String? notes,  bool completed)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeIfNull: false)  String? id, @JsonKey(name: 'task_title')  String? taskTitle,  String? category,  DateTime? date,  String? time,  String? notes,  bool completed, @JsonKey(name: 'notification_id', includeIfNull: false)  int? notificationId)?  $default,) {final _that = this;
 switch (_that) {
 case _TodoEntity() when $default != null:
-return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_that.notes,_that.completed);case _:
+return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_that.notes,_that.completed,_that.notificationId);case _:
   return null;
 
 }
@@ -215,7 +216,7 @@ return $default(_that.id,_that.taskTitle,_that.category,_that.date,_that.time,_t
 @JsonSerializable()
 
 class _TodoEntity implements TodoEntity {
-  const _TodoEntity({@JsonKey(includeIfNull: false) this.id, @JsonKey(name: 'task_title') this.taskTitle, this.category, this.date, this.time, this.notes, this.completed = false});
+  const _TodoEntity({@JsonKey(includeIfNull: false) this.id, @JsonKey(name: 'task_title') this.taskTitle, this.category, this.date, this.time, this.notes, this.completed = false, @JsonKey(name: 'notification_id', includeIfNull: false) this.notificationId});
   factory _TodoEntity.fromJson(Map<String, dynamic> json) => _$TodoEntityFromJson(json);
 
 @override@JsonKey(includeIfNull: false) final  String? id;
@@ -225,6 +226,7 @@ class _TodoEntity implements TodoEntity {
 @override final  String? time;
 @override final  String? notes;
 @override@JsonKey() final  bool completed;
+@override@JsonKey(name: 'notification_id', includeIfNull: false) final  int? notificationId;
 
 /// Create a copy of TodoEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TodoEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.taskTitle, taskTitle) || other.taskTitle == taskTitle)&&(identical(other.category, category) || other.category == category)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.completed, completed) || other.completed == completed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TodoEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.taskTitle, taskTitle) || other.taskTitle == taskTitle)&&(identical(other.category, category) || other.category == category)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.completed, completed) || other.completed == completed)&&(identical(other.notificationId, notificationId) || other.notificationId == notificationId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,taskTitle,category,date,time,notes,completed);
+int get hashCode => Object.hash(runtimeType,id,taskTitle,category,date,time,notes,completed,notificationId);
 
 @override
 String toString() {
-  return 'TodoEntity(id: $id, taskTitle: $taskTitle, category: $category, date: $date, time: $time, notes: $notes, completed: $completed)';
+  return 'TodoEntity(id: $id, taskTitle: $taskTitle, category: $category, date: $date, time: $time, notes: $notes, completed: $completed, notificationId: $notificationId)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$TodoEntityCopyWith<$Res> implements $TodoEntityCopyWith<$
   factory _$TodoEntityCopyWith(_TodoEntity value, $Res Function(_TodoEntity) _then) = __$TodoEntityCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeIfNull: false) String? id,@JsonKey(name: 'task_title') String? taskTitle, String? category, DateTime? date, String? time, String? notes, bool completed
+@JsonKey(includeIfNull: false) String? id,@JsonKey(name: 'task_title') String? taskTitle, String? category, DateTime? date, String? time, String? notes, bool completed,@JsonKey(name: 'notification_id', includeIfNull: false) int? notificationId
 });
 
 
@@ -276,7 +278,7 @@ class __$TodoEntityCopyWithImpl<$Res>
 
 /// Create a copy of TodoEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? taskTitle = freezed,Object? category = freezed,Object? date = freezed,Object? time = freezed,Object? notes = freezed,Object? completed = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? taskTitle = freezed,Object? category = freezed,Object? date = freezed,Object? time = freezed,Object? notes = freezed,Object? completed = null,Object? notificationId = freezed,}) {
   return _then(_TodoEntity(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,taskTitle: freezed == taskTitle ? _self.taskTitle : taskTitle // ignore: cast_nullable_to_non_nullable
@@ -285,7 +287,8 @@ as String?,date: freezed == date ? _self.date : date // ignore: cast_nullable_to
 as DateTime?,time: freezed == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as String?,notes: freezed == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
 as String?,completed: null == completed ? _self.completed : completed // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,notificationId: freezed == notificationId ? _self.notificationId : notificationId // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

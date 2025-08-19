@@ -58,5 +58,10 @@
   "error_foreign_key_violation": "Foreign key constraint violation",
   "error_authentication": "Authentication error: {message}",
   "error_connection": "Connection error: {message}",
-  "supabase_not_initialized": "Supabase is not initialized. Please call SupabaseUtil.initialize() first."
+  "supabase_not_initialized": "Supabase is not initialized. Please call SupabaseUtil.initialize() first.",
+
+  "todo_title_empty": "Task title cannot be empty.",
+  "todo_category_empty": "Please select a category.",
+  "todo_time_empty": "Please select a date.",
+  "todo_date_empty": "Please select a time."
 }

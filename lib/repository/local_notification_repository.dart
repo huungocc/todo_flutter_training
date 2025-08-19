@@ -25,8 +25,12 @@ class LocalNotificationRepositoryImpl implements LocalNotificationRepository {
 
   @override
   Future<void> init() async {
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosInit = DarwinInitializationSettings();
+    final androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final iosInit = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
     final initSettings = InitializationSettings(
       android: androidInit,
@@ -34,6 +38,11 @@ class LocalNotificationRepositoryImpl implements LocalNotificationRepository {
     );
 
     await _notifications.initialize(initSettings,);
+
+    final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    await androidPlugin?.requestNotificationsPermission();
+    await androidPlugin?.requestExactAlarmsPermission();
 
     tz.initializeTimeZones();
   }
@@ -60,7 +69,6 @@ class LocalNotificationRepositoryImpl implements LocalNotificationRepository {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      matchDateTimeComponents: DateTimeComponents.dateAndTime,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }

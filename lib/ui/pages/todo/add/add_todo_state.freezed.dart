@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AddTodoState {
 
- TodoEntity get todo; String? get errorMessage; String? get successMessage; LoadStatus get status; OperationStatus get operation; TodoItemType get selectedType;
+ TodoEntity get todo; String? get successMessage; LoadStatus get status; OperationStatus get operation; TodoItemType get selectedType;
 /// Create a copy of AddTodoState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AddTodoStateCopyWith<AddTodoState> get copyWith => _$AddTodoStateCopyWithImpl<A
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddTodoState&&(identical(other.todo, todo) || other.todo == todo)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage)&&(identical(other.status, status) || other.status == status)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.selectedType, selectedType) || other.selectedType == selectedType));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddTodoState&&(identical(other.todo, todo) || other.todo == todo)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage)&&(identical(other.status, status) || other.status == status)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.selectedType, selectedType) || other.selectedType == selectedType));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,todo,errorMessage,successMessage,status,operation,selectedType);
+int get hashCode => Object.hash(runtimeType,todo,successMessage,status,operation,selectedType);
 
 @override
 String toString() {
-  return 'AddTodoState(todo: $todo, errorMessage: $errorMessage, successMessage: $successMessage, status: $status, operation: $operation, selectedType: $selectedType)';
+  return 'AddTodoState(todo: $todo, successMessage: $successMessage, status: $status, operation: $operation, selectedType: $selectedType)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AddTodoStateCopyWith<$Res>  {
   factory $AddTodoStateCopyWith(AddTodoState value, $Res Function(AddTodoState) _then) = _$AddTodoStateCopyWithImpl;
 @useResult
 $Res call({
- TodoEntity todo, String? errorMessage, String? successMessage, LoadStatus status, OperationStatus operation, TodoItemType selectedType
+ TodoEntity todo, String? successMessage, LoadStatus status, OperationStatus operation, TodoItemType selectedType
 });
 
 
@@ -62,11 +62,10 @@ class _$AddTodoStateCopyWithImpl<$Res>
 
 /// Create a copy of AddTodoState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? todo = null,Object? errorMessage = freezed,Object? successMessage = freezed,Object? status = null,Object? operation = null,Object? selectedType = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? todo = null,Object? successMessage = freezed,Object? status = null,Object? operation = null,Object? selectedType = null,}) {
   return _then(_self.copyWith(
 todo: null == todo ? _self.todo : todo // ignore: cast_nullable_to_non_nullable
-as TodoEntity,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable
+as TodoEntity,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable
 as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as LoadStatus,operation: null == operation ? _self.operation : operation // ignore: cast_nullable_to_non_nullable
 as OperationStatus,selectedType: null == selectedType ? _self.selectedType : selectedType // ignore: cast_nullable_to_non_nullable
@@ -164,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TodoEntity todo,  String? errorMessage,  String? successMessage,  LoadStatus status,  OperationStatus operation,  TodoItemType selectedType)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TodoEntity todo,  String? successMessage,  LoadStatus status,  OperationStatus operation,  TodoItemType selectedType)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AddTodoState() when $default != null:
-return $default(_that.todo,_that.errorMessage,_that.successMessage,_that.status,_that.operation,_that.selectedType);case _:
+return $default(_that.todo,_that.successMessage,_that.status,_that.operation,_that.selectedType);case _:
   return orElse();
 
 }
@@ -185,10 +184,10 @@ return $default(_that.todo,_that.errorMessage,_that.successMessage,_that.status,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TodoEntity todo,  String? errorMessage,  String? successMessage,  LoadStatus status,  OperationStatus operation,  TodoItemType selectedType)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TodoEntity todo,  String? successMessage,  LoadStatus status,  OperationStatus operation,  TodoItemType selectedType)  $default,) {final _that = this;
 switch (_that) {
 case _AddTodoState():
-return $default(_that.todo,_that.errorMessage,_that.successMessage,_that.status,_that.operation,_that.selectedType);case _:
+return $default(_that.todo,_that.successMessage,_that.status,_that.operation,_that.selectedType);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +204,10 @@ return $default(_that.todo,_that.errorMessage,_that.successMessage,_that.status,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TodoEntity todo,  String? errorMessage,  String? successMessage,  LoadStatus status,  OperationStatus operation,  TodoItemType selectedType)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TodoEntity todo,  String? successMessage,  LoadStatus status,  OperationStatus operation,  TodoItemType selectedType)?  $default,) {final _that = this;
 switch (_that) {
 case _AddTodoState() when $default != null:
-return $default(_that.todo,_that.errorMessage,_that.successMessage,_that.status,_that.operation,_that.selectedType);case _:
+return $default(_that.todo,_that.successMessage,_that.status,_that.operation,_that.selectedType);case _:
   return null;
 
 }
@@ -220,11 +219,10 @@ return $default(_that.todo,_that.errorMessage,_that.successMessage,_that.status,
 
 
 class _AddTodoState implements AddTodoState {
-  const _AddTodoState({this.todo = const TodoEntity(), this.errorMessage, this.successMessage, this.status = LoadStatus.initial, this.operation = OperationStatus.none, this.selectedType = TodoItemType.list});
+  const _AddTodoState({this.todo = const TodoEntity(), this.successMessage, this.status = LoadStatus.initial, this.operation = OperationStatus.none, this.selectedType = TodoItemType.list});
   
 
 @override@JsonKey() final  TodoEntity todo;
-@override final  String? errorMessage;
 @override final  String? successMessage;
 @override@JsonKey() final  LoadStatus status;
 @override@JsonKey() final  OperationStatus operation;
@@ -240,16 +238,16 @@ _$AddTodoStateCopyWith<_AddTodoState> get copyWith => __$AddTodoStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AddTodoState&&(identical(other.todo, todo) || other.todo == todo)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage)&&(identical(other.status, status) || other.status == status)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.selectedType, selectedType) || other.selectedType == selectedType));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AddTodoState&&(identical(other.todo, todo) || other.todo == todo)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage)&&(identical(other.status, status) || other.status == status)&&(identical(other.operation, operation) || other.operation == operation)&&(identical(other.selectedType, selectedType) || other.selectedType == selectedType));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,todo,errorMessage,successMessage,status,operation,selectedType);
+int get hashCode => Object.hash(runtimeType,todo,successMessage,status,operation,selectedType);
 
 @override
 String toString() {
-  return 'AddTodoState(todo: $todo, errorMessage: $errorMessage, successMessage: $successMessage, status: $status, operation: $operation, selectedType: $selectedType)';
+  return 'AddTodoState(todo: $todo, successMessage: $successMessage, status: $status, operation: $operation, selectedType: $selectedType)';
 }
 
 
@@ -260,7 +258,7 @@ abstract mixin class _$AddTodoStateCopyWith<$Res> implements $AddTodoStateCopyWi
   factory _$AddTodoStateCopyWith(_AddTodoState value, $Res Function(_AddTodoState) _then) = __$AddTodoStateCopyWithImpl;
 @override @useResult
 $Res call({
- TodoEntity todo, String? errorMessage, String? successMessage, LoadStatus status, OperationStatus operation, TodoItemType selectedType
+ TodoEntity todo, String? successMessage, LoadStatus status, OperationStatus operation, TodoItemType selectedType
 });
 
 
@@ -277,11 +275,10 @@ class __$AddTodoStateCopyWithImpl<$Res>
 
 /// Create a copy of AddTodoState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? todo = null,Object? errorMessage = freezed,Object? successMessage = freezed,Object? status = null,Object? operation = null,Object? selectedType = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? todo = null,Object? successMessage = freezed,Object? status = null,Object? operation = null,Object? selectedType = null,}) {
   return _then(_AddTodoState(
 todo: null == todo ? _self.todo : todo // ignore: cast_nullable_to_non_nullable
-as TodoEntity,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable
+as TodoEntity,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable
 as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as LoadStatus,operation: null == operation ? _self.operation : operation // ignore: cast_nullable_to_non_nullable
 as OperationStatus,selectedType: null == selectedType ? _self.selectedType : selectedType // ignore: cast_nullable_to_non_nullable

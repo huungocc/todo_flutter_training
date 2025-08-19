@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:todo_flutter_training/common/app_format.dart';
 import 'package:todo_flutter_training/common/app_picker.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/global_blocs/local_notification/local_notification_cubit.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/repository/todo_repository.dart';
@@ -16,7 +17,13 @@ import 'package:todo_flutter_training/models/enums/operation_status.dart';
 class AddTodoCubit extends Cubit<AddTodoState> {
   final TodoRepository todoRepository;
 
-  AddTodoCubit({required this.todoRepository}) : super(const AddTodoState());
+  final LocalNotificationCubit _localNotificationCubit;
+
+  AddTodoCubit({
+    required this.todoRepository,
+    required LocalNotificationCubit localNotificationCubit,
+  }) : _localNotificationCubit = localNotificationCubit,
+       super(const AddTodoState());
 
   final TextEditingController taskTitleController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
@@ -78,9 +85,11 @@ class AddTodoCubit extends Cubit<AddTodoState> {
 
   Future<void> addTodo() async {
     try {
-      emit(state.copyWith(status: LoadStatus.loading));
-
       _updateEntityData();
+
+      if (!_validateTodoData()) return;
+
+      emit(state.copyWith(status: LoadStatus.loading));
 
       await todoRepository.addTodo(todo: state.todo);
 
@@ -91,18 +100,29 @@ class AddTodoCubit extends Cubit<AddTodoState> {
           operation: OperationStatus.add,
         ),
       );
-    } catch (e) {
-      emit(
-        state.copyWith(status: LoadStatus.failure, errorMessage: e.toString()),
+
+      // Schedule Notification
+      _localNotificationCubit.scheduleNotification(
+        id: state.todo.notificationId!,
+        title: state.todo.taskTitle!,
+        body: state.todo.notes!,
+        scheduledDateTime: state.todo.date!.withTime(state.todo.time!),
       );
+
+      ExceptionHandler.showSuccessSnackBar(S.current.todo_add_success);
+    } catch (e) {
+      emit(state.copyWith(status: LoadStatus.failure));
       ExceptionHandler.showErrorSnackBar('$e');
     }
   }
 
   Future<void> updateTodo() async {
     try {
-      emit(state.copyWith(status: LoadStatus.loading));
       _updateEntityData();
+
+      if (!_validateTodoData()) return;
+
+      emit(state.copyWith(status: LoadStatus.loading));
 
       await todoRepository.updateTodo(todo: state.todo);
 
@@ -113,10 +133,18 @@ class AddTodoCubit extends Cubit<AddTodoState> {
           operation: OperationStatus.update,
         ),
       );
-    } catch (e) {
-      emit(
-        state.copyWith(status: LoadStatus.failure, errorMessage: e.toString()),
+
+      // Schedule Notification
+      _localNotificationCubit.scheduleNotification(
+        id: state.todo.notificationId!,
+        title: state.todo.taskTitle!,
+        body: state.todo.notes!,
+        scheduledDateTime: state.todo.date!.withTime(state.todo.time!),
       );
+
+      ExceptionHandler.showSuccessSnackBar(S.current.todo_update_success);
+    } catch (e) {
+      emit(state.copyWith(status: LoadStatus.failure));
       ExceptionHandler.showErrorSnackBar('$e');
     }
   }
@@ -128,8 +156,23 @@ class AddTodoCubit extends Cubit<AddTodoState> {
       time: timeController.text.convertTime12hTo24hWithSeconds(),
       notes: notesController.text,
       category: state.selectedType.name,
+      notificationId: _localNotificationCubit.generateNotificationId(),
     );
 
     emit(state.copyWith(todo: updatedTodo));
+  }
+
+  bool _validateTodoData() {
+    if (state.todo.taskTitle == null || state.todo.taskTitle!.isEmpty) {
+      ExceptionHandler.showErrorSnackBar(S.current.todo_title_empty);
+      return false;
+    } else if (state.todo.date == null) {
+      ExceptionHandler.showErrorSnackBar(S.current.todo_time_empty);
+      return false;
+    } else if (state.todo.time == null || state.todo.time!.isEmpty) {
+      ExceptionHandler.showErrorSnackBar(S.current.todo_date_empty);
+      return false;
+    }
+    return true;
   }
 }

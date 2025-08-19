@@ -8,7 +8,6 @@ import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_state.dart';
 import 'package:todo_flutter_training/ui/pages/todo/widgets/add_todo_header.dart';
 import 'package:todo_flutter_training/ui/pages/todo/widgets/add_todo_input.dart';
-import 'package:todo_flutter_training/utils/exception_handler.dart';
 import 'package:todo_flutter_training/utils/injection.dart';
 
 class AddTodoPage extends StatelessWidget {
@@ -65,7 +64,6 @@ class _AddTodoBodyState extends State<_AddTodoBody> {
                 if (state.successMessage != null &&
                     (state.operation.isAdd || state.operation.isUpdate)) {
                   Navigator.pop(context, true);
-                  ExceptionHandler.showSuccessSnackBar(state.successMessage!);
                 }
               },
               child: const SizedBox.shrink(),

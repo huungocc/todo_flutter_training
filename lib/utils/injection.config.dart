@@ -54,10 +54,16 @@ extension GetItInjectableX on _i174.GetIt {
           _i626.LocalNotificationCubit(gh<_i728.LocalNotificationRepository>()),
     );
     gh.factory<_i356.AddTodoCubit>(
-      () => _i356.AddTodoCubit(todoRepository: gh<_i1020.TodoRepository>()),
+      () => _i356.AddTodoCubit(
+        todoRepository: gh<_i1020.TodoRepository>(),
+        localNotificationCubit: gh<_i626.LocalNotificationCubit>(),
+      ),
     );
     gh.factory<_i833.ListTodoCubit>(
-      () => _i833.ListTodoCubit(todoRepository: gh<_i1020.TodoRepository>()),
+      () => _i833.ListTodoCubit(
+        todoRepository: gh<_i1020.TodoRepository>(),
+        localNotificationCubit: gh<_i626.LocalNotificationCubit>(),
+      ),
     );
     return this;
   }
