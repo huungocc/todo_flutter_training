@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppDimens {
-  AppDimens._();
-
   static const double fontSmaller = 11.0;
   static const double fontMaxSmall = 10.0;
   static const double fontSmall = 12.0;
@@ -37,7 +35,7 @@ class AppDimens {
 }
 
 class ScreenSize {
-   static final ScreenSize _instance = ScreenSize._internal();
+  static final ScreenSize _instance = ScreenSize._internal();
 
   late double width;
   late double height;

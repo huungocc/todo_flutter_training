@@ -10,7 +10,6 @@ part 'add_todo_state.freezed.dart';
 abstract class AddTodoState with _$AddTodoState {
   const factory AddTodoState({
     @Default(TodoEntity()) TodoEntity todo,
-    String? errorMessage,
     String? successMessage,
     @Default(LoadStatus.initial) LoadStatus status,
     @Default(OperationStatus.none) OperationStatus operation,

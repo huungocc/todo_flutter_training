@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/global_blocs/local_notification/local_notification_cubit.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
-import 'package:todo_flutter_training/repository/todo_repository.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_page.dart';
 import 'package:todo_flutter_training/ui/pages/todo/widgets/list_todo_header.dart';
@@ -12,6 +12,7 @@ import 'package:todo_flutter_training/ui/pages/todo/widgets/list_todo_section.da
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
 import 'package:todo_flutter_training/ui/widgets/todo/custom_todo_background.dart';
+import 'package:todo_flutter_training/utils/injection.dart';
 
 class ListTodoPage extends StatelessWidget {
   const ListTodoPage({super.key});
@@ -19,8 +20,7 @@ class ListTodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ListTodoCubit>(
-      create: (_) =>
-          ListTodoCubit(todoRepository: context.read<TodoRepository>()),
+      create: (_) => getIt<ListTodoCubit>(),
       child: const _ListTodoBody(),
     );
   }
@@ -38,6 +38,7 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      //_initLocalNotification();
       _getTodos(TodoType.all);
     });
   }
@@ -58,6 +59,10 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
         _getTodos(TodoType.active);
       }
     }
+  }
+
+  void _initLocalNotification() {
+    context.read<LocalNotificationCubit>().initNotifications();
   }
 
   @override

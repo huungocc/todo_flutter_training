@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:todo_flutter_training/common/app_format.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/global_blocs/local_notification/local_notification_cubit.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/repository/todo_repository.dart';
@@ -7,55 +10,92 @@ import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_state.dart';
 import 'package:todo_flutter_training/utils/exception_handler.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 
+@injectable
 class ListTodoCubit extends Cubit<ListTodoState> {
   final TodoRepository todoRepository;
 
-  ListTodoCubit({required this.todoRepository}) : super(const ListTodoState());
+  final LocalNotificationCubit _localNotificationCubit;
+
+  ListTodoCubit({
+    required this.todoRepository,
+    required LocalNotificationCubit localNotificationCubit,
+  }) : _localNotificationCubit = localNotificationCubit,
+       super(const ListTodoState());
 
   Future<void> fetchTodos(TodoType todoType) async {
-    try {
-      emit(state.copyWith(loadStatus: LoadStatus.loading));
+    if (todoType == TodoType.all) {
+      await _fetchAllTodos();
+    } else if (todoType == TodoType.active) {
+      await _fetchActiveTodos();
+    } else if (todoType == TodoType.completed) {
+      await _fetchCompletedTodos();
+    }
+  }
 
-      if (todoType == TodoType.all) {
-        await _fetchAllTodos();
-      } else if (todoType == TodoType.active) {
-        await _fetchActiveTodos();
-      } else if (todoType == TodoType.completed) {
-        await _fetchCompletedTodos();
-      }
+  Future<void> _fetchAllTodos() async {
+    try {
+      emit(
+        state.copyWith(
+          activeLoadStatus: LoadStatus.loading,
+          completedLoadStatus: LoadStatus.loading,
+        ),
+      );
+
+      final todos = await todoRepository.fetchTodos();
+
+      emit(
+        state.copyWith(
+          activeLoadStatus: LoadStatus.success,
+          completedLoadStatus: LoadStatus.success,
+          activeTodos: _filterTodos(todos, false),
+          completedTodos: _filterTodos(todos, true),
+        ),
+      );
     } catch (e) {
       emit(
         state.copyWith(
-          loadStatus: LoadStatus.failure,
-          errorMessage: e.toString(),
+          activeLoadStatus: LoadStatus.failure,
+          completedLoadStatus: LoadStatus.failure,
         ),
       );
       ExceptionHandler.showErrorSnackBar('$e');
     }
   }
 
-  Future<void> _fetchAllTodos() async {
-    final todos = await todoRepository.fetchTodos();
-
-    emit(
-      state.copyWith(
-        loadStatus: LoadStatus.success,
-        activeTodos: _filterTodos(todos, false),
-        completedTodos: _filterTodos(todos, true),
-      ),
-    );
-  }
-
   Future<void> _fetchActiveTodos() async {
-    final todos = await todoRepository.fetchTodos(completed: false);
+    try {
+      emit(state.copyWith(activeLoadStatus: LoadStatus.loading));
 
-    emit(state.copyWith(loadStatus: LoadStatus.success, activeTodos: todos));
+      final todos = await todoRepository.fetchTodos(completed: false);
+
+      emit(
+        state.copyWith(
+          activeLoadStatus: LoadStatus.success,
+          activeTodos: todos,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(activeLoadStatus: LoadStatus.failure));
+      ExceptionHandler.showErrorSnackBar('$e');
+    }
   }
 
   Future<void> _fetchCompletedTodos() async {
-    final todos = await todoRepository.fetchTodos(completed: true);
+    try {
+      emit(state.copyWith(completedLoadStatus: LoadStatus.loading));
 
-    emit(state.copyWith(loadStatus: LoadStatus.success, completedTodos: todos));
+      final todos = await todoRepository.fetchTodos(completed: true);
+
+      emit(
+        state.copyWith(
+          completedLoadStatus: LoadStatus.success,
+          completedTodos: todos,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(completedLoadStatus: LoadStatus.failure));
+      ExceptionHandler.showErrorSnackBar('$e');
+    }
   }
 
   /// Update Status (Active <=> Completed)
@@ -69,17 +109,33 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       // Delete from Server
       await todoRepository.updateTodoStatus(id: todo.id!, completed: newStatus);
 
-      emit(state.copyWith(loadStatus: LoadStatus.success));
-    } catch (e) {
-      // Reset Data when Error
-      fetchTodos(TodoType.all);
-
       emit(
         state.copyWith(
-          loadStatus: LoadStatus.failure,
-          errorMessage: e.toString(),
+          activeLoadStatus: LoadStatus.success,
+          completedLoadStatus: LoadStatus.success,
         ),
       );
+
+      if (newStatus) {
+        _localNotificationCubit.cancelNotification(todo.notificationId!);
+      } else {
+        _localNotificationCubit.scheduleNotification(
+          id: todo.notificationId!,
+          title: todo.taskTitle!,
+          body: todo.notes!,
+          scheduledDateTime: todo.date!.withTime(todo.time!),
+        );
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          activeLoadStatus: LoadStatus.failure,
+          completedLoadStatus: LoadStatus.failure,
+        ),
+      );
+
+      // Reset Data when Error
+      fetchTodos(TodoType.all);
 
       ExceptionHandler.showErrorSnackBar('$e');
     }
@@ -94,23 +150,29 @@ class ListTodoCubit extends Cubit<ListTodoState> {
       // Delete from Server
       await todoRepository.deleteTodo(id: todo.id!);
 
-      emit(state.copyWith(loadStatus: LoadStatus.success));
+      if (todo.completed == true) {
+        emit(state.copyWith(completedLoadStatus: LoadStatus.success));
+      } else {
+        emit(state.copyWith(activeLoadStatus: LoadStatus.success));
+      }
+
+      // Cancel Notification
+      _localNotificationCubit.cancelNotification(todo.notificationId!);
 
       ExceptionHandler.showSuccessSnackBar(S.current.todo_delete_success);
     } catch (e) {
+      if (todo.completed == true) {
+        emit(state.copyWith(completedLoadStatus: LoadStatus.failure));
+      } else {
+        emit(state.copyWith(activeLoadStatus: LoadStatus.failure));
+      }
+
       // Reset Data when Error
       if (todo.completed == true) {
         fetchTodos(TodoType.completed);
       } else {
         fetchTodos(TodoType.active);
       }
-
-      emit(
-        state.copyWith(
-          loadStatus: LoadStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
 
       ExceptionHandler.showErrorSnackBar('$e');
     }

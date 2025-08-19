@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/network/api_client.dart';
 
@@ -13,6 +14,7 @@ abstract class TodoRepository {
   Future<void> deleteTodo({required String id});
 }
 
+@Injectable(as: TodoRepository)
 class TodoRepositoryImpl implements TodoRepository {
   final ApiClient apiClient;
 
