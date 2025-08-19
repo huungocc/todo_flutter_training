@@ -63,5 +63,18 @@
   "todo_title_empty": "Task title cannot be empty.",
   "todo_category_empty": "Please select a category.",
   "todo_time_empty": "Please select a date.",
-  "todo_date_empty": "Please select a time."
+  "todo_date_empty": "Please select a time.",
+
+  "login_here": "Login here",
+  "welcome_back": "Welcome back you’ve been missed!",
+  "email": "Email",
+  "password": "Password",
+  "forgot_password": "Forgot your password?",
+  "sign_in": "Sign in",
+  "create_new_account": "Create new account",
+  "create_account": "Create Account",
+  "create_account_explore": "Create an account if you don't have",
+  "confirm_password": "Confirm Password",
+  "sign_up": "Sign up",
+  "already_account": "Already have an account"
 }

@@ -63,5 +63,18 @@
   "todo_title_empty": "Tiêu đề công việc không được để trống.",
   "todo_category_empty": "Vui lòng chọn danh mục.",
   "todo_time_empty": "Vui lòng chọn ngày.",
-  "todo_date_empty": "Vui lòng chọn giờ."
+  "todo_date_empty": "Vui lòng chọn giờ.",
+
+  "login_here": "Đăng nhập tại đây",
+  "welcome_back": "Chào mừng bạn quay trở lại!",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "forgot_password": "Quên mật khẩu?",
+  "sign_in": "Đăng nhập",
+  "create_new_account": "Tạo tài khoản mới",
+  "create_account": "Tạo tài khoản",
+  "create_account_explore": "Tạo tài khoản nếu bạn chưa có",
+  "confirm_password": "Xác nhận mật khẩu",
+  "sign_up": "Đăng ký",
+  "already_account": "Đã có tài khoản"
 }

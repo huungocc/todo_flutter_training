@@ -58,6 +58,27 @@ class AppTextStyle {
   static final whiteS32Bold = whiteS32.copyWith(fontWeight: FontWeight.bold);
   static final whiteS32W400 = whiteS32.copyWith(fontWeight: FontWeight.w400);
   static final whiteS32W500 = whiteS32.copyWith(fontWeight: FontWeight.w500);
+
+  ///Purple
+  static const purple = TextStyle(
+    color: AppColors.todoPurple,
+    fontWeight: FontWeight.w400,
+  );
+
+  //s16
+  static final purpleS16 = purple.copyWith(fontSize: 16);
+  static final purpleS16Bold = purpleS16.copyWith(fontWeight: FontWeight.bold);
+  static final purpleS16W400 = purpleS16.copyWith(fontWeight: FontWeight.w400);
+  static final purpleS16W500 = purpleS16.copyWith(fontWeight: FontWeight.w500);
+  static final purpleS16W600 = purpleS16.copyWith(fontWeight: FontWeight.w600);
+
+  //s32
+  static final purpleS32 = purple.copyWith(fontSize: 32);
+  static final purpleS32Bold = purpleS32.copyWith(fontWeight: FontWeight.bold);
+
+  //s64
+  static final purpleS64 = purple.copyWith(fontSize: 64);
+  static final purpleS64Bold = purpleS64.copyWith(fontWeight: FontWeight.bold);
 }
 
 extension AppTextStyleExtension on AppTextStyle {

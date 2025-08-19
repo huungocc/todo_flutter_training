@@ -4,7 +4,8 @@ import 'package:todo_flutter_training/router/router_config.dart';
 class SplashNavigator extends AppNavigator {
   SplashNavigator({required super.context});
 
-  void openListTodo() {
-    navigateSplash(AppRouter.listTodo);
+  void checkAuthStatus() {
+    // Todo: Check Auth Status
+    navigateSplash(AppRouter.auth);
   }
 }
