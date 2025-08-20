@@ -14,8 +14,6 @@ abstract class AuthRepository {
   });
 
   Future<void> signOut();
-
-  Future<AuthEntity?> getCurrentUser();
 }
 
 @Injectable(as: AuthRepository)
@@ -43,10 +41,5 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> signOut() async {
     return _apiClient.signOut();
-  }
-
-  @override
-  Future<AuthEntity?> getCurrentUser() async {
-    return _apiClient.getCurrentUser();
   }
 }

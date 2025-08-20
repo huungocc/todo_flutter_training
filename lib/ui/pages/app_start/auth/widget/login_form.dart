@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_navigator.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
-import 'package:todo_flutter_training/database/share_preferences_helper.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
@@ -30,9 +28,7 @@ class _LoginFormState extends State<LoginForm> {
     context.read<AuthCubit>().changeAuthType(AuthType.register);
   }
 
-  Future<void> _onLoginSuccess(String accessToken) async {
-    await SharedPreferencesHelper.saveAccessToken(accessToken);
-
+  Future<void> _onLoginSuccess() async {
     if (mounted) {
       while (GoRouter.of(context).canPop()) {
         GoRouter.of(context).pop();
@@ -82,7 +78,7 @@ class _LoginFormState extends State<LoginForm> {
                 listener: (context, state) {
                   if (state.loginLoadStatus.isSuccess) {
                     if (state.isConfirmed) {
-                      _onLoginSuccess(state.authEntity!.session!.accessToken);
+                      _onLoginSuccess();
                     } else {
                       ExceptionHandler.showErrorSnackBar(
                         S.current.account_not_confirmed,

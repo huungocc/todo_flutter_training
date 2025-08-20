@@ -2,25 +2,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_flutter_training/models/entities/auth/auth_entity.dart';
 import 'package:todo_flutter_training/models/entities/session/session_entity.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
-import 'package:todo_flutter_training/database/share_preferences_helper.dart';
 import 'package:todo_flutter_training/models/entities/user/user_entity.dart';
 import 'package:todo_flutter_training/network/api_interceptors.dart';
-import 'package:todo_flutter_training/utils/device_info_util.dart';
 
 class ApiClient {
   final SupabaseClient _client;
 
   ApiClient(this._client);
-
-  // Lấy device ID
-  Future<String> _getDeviceId() async {
-    var deviceUDID = await SharedPreferencesHelper.getDeviceUDID();
-    if (deviceUDID != null) return deviceUDID;
-
-    deviceUDID = await DeviceInfoUtil.getDeviceId();
-    await SharedPreferencesHelper.saveDeviceUDID(deviceUDID);
-    return deviceUDID;
-  }
 
   /// ================== AUTH ==================
 
@@ -82,38 +70,18 @@ class ApiClient {
     });
   }
 
-  Future<AuthEntity?> getCurrentUser() async {
-    final user = _client.auth.currentUser;
-    final session = _client.auth.currentSession;
-
-    if (user == null || session == null) return null;
-
-    return AuthEntity(
-      user: UserEntity.fromJson(user.toJson()),
-      session: SessionEntity.fromJson({
-        ...session.toJson(),
-      }),
-    );
-  }
-
   /// ================== TODOS ==================
 
   Future<void> addTodo({required TodoEntity todo}) async {
     return ApiInterceptors.executeWithLogging('ADD_TODO', () async {
-      final deviceId = await _getDeviceId();
-
       final data = todo.toJson();
-      data['device_id'] = deviceId;
-
       await _client.from('todos').insert(data);
     });
   }
 
   Future<List<TodoEntity>> fetchTodos({bool? completed}) async {
     return ApiInterceptors.executeWithLogging('GET_TODOS', () async {
-      final deviceId = await _getDeviceId();
-
-      var query = _client.from('todos').select().eq('device_id', deviceId);
+      var query = _client.from('todos').select();
 
       if (completed != null) {
         query = query.eq('completed', completed);
