@@ -1,17 +1,10 @@
 import 'package:injectable/injectable.dart';
-import 'package:todo_flutter_training/models/entities/auth/auth_entity.dart';
 import 'package:todo_flutter_training/network/api_client.dart';
 
 abstract class AuthRepository {
-  Future<AuthEntity> signIn({
-    required String email,
-    required String password,
-  });
+  Future<void> signIn({required String email, required String password});
 
-  Future<AuthEntity> signUp({
-    required String email,
-    required String password,
-  });
+  Future<void> signUp({required String email, required String password});
 
   Future<void> signOut();
 }
@@ -23,18 +16,12 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._apiClient);
 
   @override
-  Future<AuthEntity> signIn({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signIn({required String email, required String password}) async {
     return _apiClient.signIn(email: email, password: password);
   }
 
   @override
-  Future<AuthEntity> signUp({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signUp({required String email, required String password}) async {
     return _apiClient.signUp(email: email, password: password);
   }
 

@@ -9,9 +9,9 @@ class SplashNavigator extends AppNavigator {
     final user = Supabase.instance.client.auth.currentUser;
 
     if (user != null) {
-      navigateSplash(AppRouter.listTodo);
+      navigateAndPopUntil(AppRouter.listTodo);
     } else {
-      navigateSplash(AppRouter.auth);
+      navigateAndPopUntil(AppRouter.auth);
     }
   }
 }

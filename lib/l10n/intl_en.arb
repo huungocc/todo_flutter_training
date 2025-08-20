@@ -83,5 +83,10 @@
   "invalid_email": "Invalid email",
   "invalid_password": "Password must be between 8 and 12 characters",
   "invalid_confirm_password": "Invalid confirm password",
-  "account_not_confirmed": "Account not confirmed, please check your email"
+  "account_not_confirmed": "Account not confirmed, please check your email",
+
+  "settings": "Settings",
+  "change_language": "Change language",
+  "logout": "Logout",
+  "logout_success": "Logout success"
 }

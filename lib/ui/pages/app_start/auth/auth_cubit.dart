@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:todo_flutter_training/common/app_validartor.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sab;
+import 'package:todo_flutter_training/common/app_validator.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
@@ -109,17 +110,17 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(state.copyWith(loginLoadStatus: LoadStatus.loading));
 
-      final authEntity = await authRepository.signIn(
+      await authRepository.signIn(
         email: loginEmailController.text,
         password: loginPasswordController.text,
       );
 
-      final isConfirmed = authEntity.session != null;
+      final session = sab.Supabase.instance.client.auth.currentSession;
+      final isConfirmed = session != null;
 
       emit(
         state.copyWith(
           loginLoadStatus: LoadStatus.success,
-          authEntity: authEntity,
           isConfirmed: isConfirmed,
         ),
       );
@@ -137,17 +138,17 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(state.copyWith(registerLoadStatus: LoadStatus.loading));
 
-      final authEntity = await authRepository.signUp(
+      await authRepository.signUp(
         email: registerEmailController.text,
         password: registerPasswordController.text,
       );
 
-      final isConfirmed = authEntity.session != null;
+      final session = sab.Supabase.instance.client.auth.currentSession;
+      final isConfirmed = session != null;
 
       emit(
         state.copyWith(
           registerLoadStatus: LoadStatus.success,
-          authEntity: authEntity,
           isConfirmed: isConfirmed,
         ),
       );
@@ -155,6 +156,21 @@ class AuthCubit extends Cubit<AuthState> {
       ExceptionHandler.showSuccessSnackBar(S.current.register_success);
     } catch (e) {
       emit(state.copyWith(registerLoadStatus: LoadStatus.failure));
+      ExceptionHandler.showErrorSnackBar('$e');
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      emit(state.copyWith(logoutLoadStatus: LoadStatus.loading));
+
+      await authRepository.signOut();
+
+      emit(state.copyWith(logoutLoadStatus: LoadStatus.success));
+
+      ExceptionHandler.showSuccessSnackBar(S.current.logout_success);
+    } catch (e) {
+      emit(state.copyWith(logoutLoadStatus: LoadStatus.failure));
       ExceptionHandler.showErrorSnackBar('$e');
     }
   }

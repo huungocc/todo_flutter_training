@@ -1,8 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:todo_flutter_training/models/entities/auth/auth_entity.dart';
-import 'package:todo_flutter_training/models/entities/session/session_entity.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
-import 'package:todo_flutter_training/models/entities/user/user_entity.dart';
 import 'package:todo_flutter_training/network/api_interceptors.dart';
 
 class ApiClient {
@@ -12,7 +9,7 @@ class ApiClient {
 
   /// ================== AUTH ==================
 
-  Future<AuthEntity> signIn({
+  Future<void> signIn({
     required String email,
     required String password,
   }) async {
@@ -22,23 +19,13 @@ class ApiClient {
         password: password,
       );
 
-      final user = response.user;
-      final session = response.session;
-
-      if (user == null || session == null) {
+      if (response.user == null) {
         throw Exception('Đăng nhập thất bại');
       }
-
-      return AuthEntity(
-        user: UserEntity.fromJson(user.toJson()),
-        session: SessionEntity.fromJson({
-          ...session.toJson(),
-        }),
-      );
     });
   }
 
-  Future<AuthEntity> signUp({
+  Future<void> signUp({
     required String email,
     required String password,
   }) async {
@@ -48,19 +35,9 @@ class ApiClient {
         password: password,
       );
 
-      final user = response.user;
-      final session = response.session;
-
-      if (user == null || session == null) {
+      if (response.user == null) {
         throw Exception('Đăng ký thất bại');
       }
-
-      return AuthEntity(
-        user: UserEntity.fromJson(user.toJson()),
-        session: SessionEntity.fromJson({
-          ...session.toJson(),
-        }),
-      );
     });
   }
 

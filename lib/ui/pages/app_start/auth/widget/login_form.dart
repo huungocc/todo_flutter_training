@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
-import 'package:todo_flutter_training/router/router_config.dart';
 import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_cubit.dart';
+import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_navigator.dart';
 import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_state.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_input.dart';
@@ -29,12 +28,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _onLoginSuccess() async {
-    if (mounted) {
-      while (GoRouter.of(context).canPop()) {
-        GoRouter.of(context).pop();
-      }
-      return GoRouter.of(context).goNamed(AppRouter.listTodo);
-    }
+    AuthNavigator(context: context).navigateToListTodo();
   }
 
   @override

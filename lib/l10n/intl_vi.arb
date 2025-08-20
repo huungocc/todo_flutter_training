@@ -83,5 +83,10 @@
   "invalid_email": "Sai định dạng email",
   "invalid_password": "Mật khẩu phải có từ 8 - 12 ký tự",
   "invalid_confirm_password": "Mật khẩu xác nhận không trùng khớp",
-  "account_not_confirmed": "Tài khoản chưa được xác nhận, vui lòng kiểm tra email"
+  "account_not_confirmed": "Tài khoản chưa được xác nhận, vui lòng kiểm tra email",
+
+  "settings": "Cài đặt",
+  "change_language": "Thay đổi ngôn ngữ",
+  "logout": "Đăng xuất",
+  "logout_success": "Đăng xuất thành công"
 }

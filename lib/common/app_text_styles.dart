@@ -79,6 +79,15 @@ class AppTextStyle {
   //s64
   static final purpleS64 = purple.copyWith(fontSize: 64);
   static final purpleS64Bold = purpleS64.copyWith(fontWeight: FontWeight.bold);
+
+  ///Red
+  static const red = TextStyle(
+    color: AppColors.error,
+    fontWeight: FontWeight.w400,
+  );
+
+  //s16
+  static final redS16 = red.copyWith(fontSize: 16);
 }
 
 extension AppTextStyleExtension on AppTextStyle {
