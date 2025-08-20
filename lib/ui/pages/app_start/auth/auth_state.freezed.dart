@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthState {
 
- LoadStatus get loadStatus; AuthType get authType;
+ LoadStatus get loginLoadStatus; LoadStatus get registerLoadStatus; AuthType get authType; bool get isConfirmed; AuthEntity? get authEntity;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.authType, authType) || other.authType == authType));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.loginLoadStatus, loginLoadStatus) || other.loginLoadStatus == loginLoadStatus)&&(identical(other.registerLoadStatus, registerLoadStatus) || other.registerLoadStatus == registerLoadStatus)&&(identical(other.authType, authType) || other.authType == authType)&&(identical(other.isConfirmed, isConfirmed) || other.isConfirmed == isConfirmed)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,authType);
+int get hashCode => Object.hash(runtimeType,loginLoadStatus,registerLoadStatus,authType,isConfirmed,authEntity);
 
 @override
 String toString() {
-  return 'AuthState(loadStatus: $loadStatus, authType: $authType)';
+  return 'AuthState(loginLoadStatus: $loginLoadStatus, registerLoadStatus: $registerLoadStatus, authType: $authType, isConfirmed: $isConfirmed, authEntity: $authEntity)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- LoadStatus loadStatus, AuthType authType
+ LoadStatus loginLoadStatus, LoadStatus registerLoadStatus, AuthType authType, bool isConfirmed, AuthEntity? authEntity
 });
 
 
-
+$AuthEntityCopyWith<$Res>? get authEntity;
 
 }
 /// @nodoc
@@ -62,14 +62,29 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? authType = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loginLoadStatus = null,Object? registerLoadStatus = null,Object? authType = null,Object? isConfirmed = null,Object? authEntity = freezed,}) {
   return _then(_self.copyWith(
-loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
+loginLoadStatus: null == loginLoadStatus ? _self.loginLoadStatus : loginLoadStatus // ignore: cast_nullable_to_non_nullable
+as LoadStatus,registerLoadStatus: null == registerLoadStatus ? _self.registerLoadStatus : registerLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,authType: null == authType ? _self.authType : authType // ignore: cast_nullable_to_non_nullable
-as AuthType,
+as AuthType,isConfirmed: null == isConfirmed ? _self.isConfirmed : isConfirmed // ignore: cast_nullable_to_non_nullable
+as bool,authEntity: freezed == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
+as AuthEntity?,
   ));
 }
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AuthEntityCopyWith<$Res>? get authEntity {
+    if (_self.authEntity == null) {
+    return null;
+  }
 
+  return $AuthEntityCopyWith<$Res>(_self.authEntity!, (value) {
+    return _then(_self.copyWith(authEntity: value));
+  });
+}
 }
 
 
@@ -151,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  AuthType authType)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus loginLoadStatus,  LoadStatus registerLoadStatus,  AuthType authType,  bool isConfirmed,  AuthEntity? authEntity)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.loadStatus,_that.authType);case _:
+return $default(_that.loginLoadStatus,_that.registerLoadStatus,_that.authType,_that.isConfirmed,_that.authEntity);case _:
   return orElse();
 
 }
@@ -172,10 +187,10 @@ return $default(_that.loadStatus,_that.authType);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  AuthType authType)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus loginLoadStatus,  LoadStatus registerLoadStatus,  AuthType authType,  bool isConfirmed,  AuthEntity? authEntity)  $default,) {final _that = this;
 switch (_that) {
 case _AuthState():
-return $default(_that.loadStatus,_that.authType);case _:
+return $default(_that.loginLoadStatus,_that.registerLoadStatus,_that.authType,_that.isConfirmed,_that.authEntity);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +207,10 @@ return $default(_that.loadStatus,_that.authType);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus loadStatus,  AuthType authType)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus loginLoadStatus,  LoadStatus registerLoadStatus,  AuthType authType,  bool isConfirmed,  AuthEntity? authEntity)?  $default,) {final _that = this;
 switch (_that) {
 case _AuthState() when $default != null:
-return $default(_that.loadStatus,_that.authType);case _:
+return $default(_that.loginLoadStatus,_that.registerLoadStatus,_that.authType,_that.isConfirmed,_that.authEntity);case _:
   return null;
 
 }
@@ -207,11 +222,14 @@ return $default(_that.loadStatus,_that.authType);case _:
 
 
 class _AuthState implements AuthState {
-  const _AuthState({this.loadStatus = LoadStatus.initial, this.authType = AuthType.login});
+  const _AuthState({this.loginLoadStatus = LoadStatus.initial, this.registerLoadStatus = LoadStatus.initial, this.authType = AuthType.login, this.isConfirmed = false, this.authEntity});
   
 
-@override@JsonKey() final  LoadStatus loadStatus;
+@override@JsonKey() final  LoadStatus loginLoadStatus;
+@override@JsonKey() final  LoadStatus registerLoadStatus;
 @override@JsonKey() final  AuthType authType;
+@override@JsonKey() final  bool isConfirmed;
+@override final  AuthEntity? authEntity;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -223,16 +241,16 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.authType, authType) || other.authType == authType));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.loginLoadStatus, loginLoadStatus) || other.loginLoadStatus == loginLoadStatus)&&(identical(other.registerLoadStatus, registerLoadStatus) || other.registerLoadStatus == registerLoadStatus)&&(identical(other.authType, authType) || other.authType == authType)&&(identical(other.isConfirmed, isConfirmed) || other.isConfirmed == isConfirmed)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,authType);
+int get hashCode => Object.hash(runtimeType,loginLoadStatus,registerLoadStatus,authType,isConfirmed,authEntity);
 
 @override
 String toString() {
-  return 'AuthState(loadStatus: $loadStatus, authType: $authType)';
+  return 'AuthState(loginLoadStatus: $loginLoadStatus, registerLoadStatus: $registerLoadStatus, authType: $authType, isConfirmed: $isConfirmed, authEntity: $authEntity)';
 }
 
 
@@ -243,11 +261,11 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoadStatus loadStatus, AuthType authType
+ LoadStatus loginLoadStatus, LoadStatus registerLoadStatus, AuthType authType, bool isConfirmed, AuthEntity? authEntity
 });
 
 
-
+@override $AuthEntityCopyWith<$Res>? get authEntity;
 
 }
 /// @nodoc
@@ -260,15 +278,30 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? authType = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? loginLoadStatus = null,Object? registerLoadStatus = null,Object? authType = null,Object? isConfirmed = null,Object? authEntity = freezed,}) {
   return _then(_AuthState(
-loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
+loginLoadStatus: null == loginLoadStatus ? _self.loginLoadStatus : loginLoadStatus // ignore: cast_nullable_to_non_nullable
+as LoadStatus,registerLoadStatus: null == registerLoadStatus ? _self.registerLoadStatus : registerLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,authType: null == authType ? _self.authType : authType // ignore: cast_nullable_to_non_nullable
-as AuthType,
+as AuthType,isConfirmed: null == isConfirmed ? _self.isConfirmed : isConfirmed // ignore: cast_nullable_to_non_nullable
+as bool,authEntity: freezed == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
+as AuthEntity?,
   ));
 }
 
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AuthEntityCopyWith<$Res>? get authEntity {
+    if (_self.authEntity == null) {
+    return null;
+  }
 
+  return $AuthEntityCopyWith<$Res>(_self.authEntity!, (value) {
+    return _then(_self.copyWith(authEntity: value));
+  });
+}
 }
 
 // dart format on

@@ -46,9 +46,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i728.LocalNotificationRepository>(
       () => _i728.LocalNotificationRepositoryImpl(),
     );
-    gh.factory<_i45.AuthRepository>(() => _i45.AuthRepositoryImpl());
     gh.lazySingleton<_i700.ApiClient>(
       () => apiUtil.provideApiClient(gh<_i454.SupabaseClient>()),
+    );
+    gh.factory<_i45.AuthRepository>(
+      () => _i45.AuthRepositoryImpl(gh<_i700.ApiClient>()),
     );
     gh.factory<_i145.AuthCubit>(
       () => _i145.AuthCubit(authRepository: gh<_i45.AuthRepository>()),

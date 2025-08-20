@@ -1,6 +1,9 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo_flutter_training/models/entities/auth/auth_entity.dart';
+import 'package:todo_flutter_training/models/entities/session/session_entity.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/database/share_preferences_helper.dart';
+import 'package:todo_flutter_training/models/entities/user/user_entity.dart';
 import 'package:todo_flutter_training/network/api_interceptors.dart';
 import 'package:todo_flutter_training/utils/device_info_util.dart';
 
@@ -18,6 +21,82 @@ class ApiClient {
     await SharedPreferencesHelper.saveDeviceUDID(deviceUDID);
     return deviceUDID;
   }
+
+  /// ================== AUTH ==================
+
+  Future<AuthEntity> signIn({
+    required String email,
+    required String password,
+  }) async {
+    return ApiInterceptors.executeWithLogging('SIGN_IN', () async {
+      final response = await _client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      final user = response.user;
+      final session = response.session;
+
+      if (user == null || session == null) {
+        throw Exception('Đăng nhập thất bại');
+      }
+
+      return AuthEntity(
+        user: UserEntity.fromJson(user.toJson()),
+        session: SessionEntity.fromJson({
+          ...session.toJson(),
+        }),
+      );
+    });
+  }
+
+  Future<AuthEntity> signUp({
+    required String email,
+    required String password,
+  }) async {
+    return ApiInterceptors.executeWithLogging('SIGN_UP', () async {
+      final response = await _client.auth.signUp(
+        email: email,
+        password: password,
+      );
+
+      final user = response.user;
+      final session = response.session;
+
+      if (user == null || session == null) {
+        throw Exception('Đăng ký thất bại');
+      }
+
+      return AuthEntity(
+        user: UserEntity.fromJson(user.toJson()),
+        session: SessionEntity.fromJson({
+          ...session.toJson(),
+        }),
+      );
+    });
+  }
+
+  Future<void> signOut() async {
+    return ApiInterceptors.executeWithLogging('SIGN_OUT', () async {
+      await _client.auth.signOut();
+    });
+  }
+
+  Future<AuthEntity?> getCurrentUser() async {
+    final user = _client.auth.currentUser;
+    final session = _client.auth.currentSession;
+
+    if (user == null || session == null) return null;
+
+    return AuthEntity(
+      user: UserEntity.fromJson(user.toJson()),
+      session: SessionEntity.fromJson({
+        ...session.toJson(),
+      }),
+    );
+  }
+
+  /// ================== TODOS ==================
 
   Future<void> addTodo({required TodoEntity todo}) async {
     return ApiInterceptors.executeWithLogging('ADD_TODO', () async {

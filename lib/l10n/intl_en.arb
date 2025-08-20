@@ -76,5 +76,12 @@
   "create_account_explore": "Create an account if you don't have",
   "confirm_password": "Confirm Password",
   "sign_up": "Sign up",
-  "already_account": "Already have an account"
+  "already_account": "Already have an account",
+
+  "login_success": "Login success",
+  "register_success": "Register success, please check confirm your email and login",
+  "invalid_email": "Invalid email",
+  "invalid_password": "Password must be between 8 and 12 characters",
+  "invalid_confirm_password": "Invalid confirm password",
+  "account_not_confirmed": "Account not confirmed, please check your email"
 }

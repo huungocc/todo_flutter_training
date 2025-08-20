@@ -76,5 +76,12 @@
   "create_account_explore": "Tạo tài khoản nếu bạn chưa có",
   "confirm_password": "Xác nhận mật khẩu",
   "sign_up": "Đăng ký",
-  "already_account": "Đã có tài khoản"
+  "already_account": "Đã có tài khoản",
+
+  "login_success": "Đăng nhập thành công",
+  "register_success": "Đăng ký thành công, vui lòng xác nhận trong email và đăng nhập lại",
+  "invalid_email": "Sai định dạng email",
+  "invalid_password": "Mật khẩu phải có từ 8 - 12 ký tự",
+  "invalid_confirm_password": "Mật khẩu xác nhận không trùng khớp",
+  "account_not_confirmed": "Tài khoản chưa được xác nhận, vui lòng kiểm tra email"
 }
