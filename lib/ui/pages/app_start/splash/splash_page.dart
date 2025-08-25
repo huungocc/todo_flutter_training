@@ -15,12 +15,12 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _navigateToListTodo(context);
+    _checkAuthStatus(context);
   }
 
-  void _navigateToListTodo(context) {
+  void _checkAuthStatus(context) {
     Future.delayed(const Duration(seconds: 2), () {
-      SplashNavigator(context: context).openListTodo();
+      SplashNavigator(context: context).checkAuthStatus();
     });
   }
 

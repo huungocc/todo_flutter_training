@@ -23,6 +23,7 @@ class BaseTextInput extends StatefulWidget {
   final bool readOnly;
   final TextEditingController? textController;
   final TextStyle? textStyle;
+  final Color? borderColor;
 
   const BaseTextInput({
     super.key,
@@ -44,6 +45,7 @@ class BaseTextInput extends StatefulWidget {
     this.onTap,
     this.readOnly = false,
     this.textStyle,
+    this.borderColor
   });
 
   @override
@@ -84,7 +86,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
         borderSide: BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.gray1, width: 1),
+        borderSide: BorderSide(color: widget.borderColor ?? AppColors.gray1, width: 1),
         borderRadius: BorderRadius.circular(
           widget.borderRadius ?? AppDimens.textInputCornerRadius,
         ),

@@ -43,7 +43,7 @@ class AppNavigator {
     );
   }
 
-  Future<void> navigateSplash(String name) async {
+  Future<void> navigateAndPopUntil(String name) async {
     while (GoRouter.of(context).canPop()) {
       GoRouter.of(context).pop();
     }

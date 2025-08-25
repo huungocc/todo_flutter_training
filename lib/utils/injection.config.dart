@@ -18,10 +18,13 @@ import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dar
     as _i112;
 import 'package:todo_flutter_training/network/api_client.dart' as _i700;
 import 'package:todo_flutter_training/network/api_util.dart' as _i924;
+import 'package:todo_flutter_training/repository/auth_repository.dart' as _i45;
 import 'package:todo_flutter_training/repository/local_notification_repository.dart'
     as _i728;
 import 'package:todo_flutter_training/repository/todo_repository.dart'
     as _i1020;
+import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_cubit.dart'
+    as _i145;
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_cubit.dart'
     as _i356;
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart'
@@ -45,6 +48,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i700.ApiClient>(
       () => apiUtil.provideApiClient(gh<_i454.SupabaseClient>()),
+    );
+    gh.factory<_i45.AuthRepository>(
+      () => _i45.AuthRepositoryImpl(gh<_i700.ApiClient>()),
+    );
+    gh.factory<_i145.AuthCubit>(
+      () => _i145.AuthCubit(authRepository: gh<_i45.AuthRepository>()),
     );
     gh.factory<_i1020.TodoRepository>(
       () => _i1020.TodoRepositoryImpl(apiClient: gh<_i700.ApiClient>()),
