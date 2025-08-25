@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -14,7 +17,13 @@ import 'package:todo_flutter_training/utils/exception_handler.dart';
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository authRepository;
 
-  AuthCubit({required this.authRepository}) : super(const AuthState());
+  StreamSubscription? _linkSubscription;
+  StreamSubscription? _authStateSubscription;
+
+  AuthCubit({required this.authRepository}) : super(const AuthState()) {
+    _listenAuthState();
+    _listenDeepLink();
+  }
 
   final TextEditingController loginEmailController = TextEditingController();
   final TextEditingController loginPasswordController = TextEditingController();
@@ -32,9 +41,13 @@ class AuthCubit extends Cubit<AuthState> {
     registerEmailController.dispose();
     registerPasswordController.dispose();
     registerConfirmPasswordController.dispose();
+
+    _linkSubscription?.cancel();
+    _authStateSubscription?.cancel();
     return super.close();
   }
 
+  // ------------------ Validation ------------------
   bool _validateLoginInput() {
     final email = loginEmailController.text.trim();
     final password = loginPasswordController.text;
@@ -104,6 +117,30 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // ------------------ Deep link ------------------
+  void _listenDeepLink() {
+    _linkSubscription = AppLinks().uriLinkStream.listen((Uri? uri) async {
+      if (uri != null) {
+        await sab.Supabase.instance.client.auth.getSessionFromUrl(uri);
+      }
+    });
+  }
+
+  // ------------------ Auth State ------------------
+  void _listenAuthState() {
+    _authStateSubscription = sab.Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      if (data.event == sab.AuthChangeEvent.signedIn) {
+        emit(state.copyWith(
+          loginLoadStatus: LoadStatus.success,
+          registerLoadStatus: LoadStatus.success,
+          isConfirmed: true,
+        ));
+        ExceptionHandler.showSuccessSnackBar(S.current.email_verification_successful);
+      }
+    });
+  }
+
+  // ------------------ Auth Actions ------------------
   Future<void> login() async {
     try {
       if (!_validateLoginInput()) return;

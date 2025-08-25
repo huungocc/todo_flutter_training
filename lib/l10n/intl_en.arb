@@ -79,7 +79,7 @@
   "already_account": "Already have an account",
 
   "login_success": "Login success",
-  "register_success": "Register success, please check confirm your email and login",
+  "register_success": "Register success, please check confirm your email",
   "invalid_email": "Invalid email",
   "invalid_password": "Password must be between 8 and 12 characters",
   "invalid_confirm_password": "Invalid confirm password",
@@ -88,5 +88,7 @@
   "settings": "Settings",
   "change_language": "Change language",
   "logout": "Logout",
-  "logout_success": "Logout success"
+  "logout_success": "Logout success",
+
+  "email_verification_successful": "Email verification successful"
 }

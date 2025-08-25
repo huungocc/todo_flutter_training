@@ -65,31 +65,7 @@ class _SettingBodyState extends State<_SettingBody> {
             const SizedBox.shrink(),
 
             /// UserInfoCard
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(width: 1, color: AppColors.todoPurple),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CircleAvatar(radius: 40, backgroundColor: AppColors.gray1),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 2,
-                    children: [
-                      BaseTextLabel(
-                        'Nguyen Van A',
-                        style: AppTextStyle.blackS18W400,
-                      ),
-                      BaseTextLabel('nguyenvana@gmail.com'),
-                    ],
-                  ),
-                  Icon(Icons.arrow_forward_ios, color: AppColors.todoPurple),
-                ],
-              ),
-            ),
+            _buildUserInfoCard(),
 
             const SizedBox(height: 5),
 
@@ -98,36 +74,8 @@ class _SettingBodyState extends State<_SettingBody> {
               style: AppTextStyle.blackS16W500,
             ),
 
-            BlocBuilder<AppSettingCubit, AppSettingState>(
-              buildWhen: (prev, curr) => prev.language != curr.language,
-              builder: (context, state) {
-                final language = state.language;
-                return BaseButton(
-                  height: 50,
-                  backgroundColor: AppColors.textWhite,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(width: 1, color: AppColors.textBlack),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BaseTextLabel(
-                        S.of(context).change_language,
-                        style: AppTextStyle.blackS16,
-                      ),
-                      BaseTextLabel(
-                        language.flag,
-                        style: AppTextStyle.blackS24W400,
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    _changeLanguage(language);
-                  },
-                );
-              },
-            ),
+            /// ChangeLanguageButton
+            _changeLanguageButton(),
 
             /// Logout Listener
             BlocListener<AuthCubit, AuthState>(
@@ -145,43 +93,108 @@ class _SettingBodyState extends State<_SettingBody> {
       ),
       bottomBar: BottomAppBar(
         color: Colors.transparent,
-        child: BlocConsumer<AuthCubit, AuthState>(
-          listenWhen: (prev, curr) =>
-              prev.logoutLoadStatus != curr.logoutLoadStatus,
-          listener: (context, state) {
-            if (state.logoutLoadStatus.isSuccess) {
-              _backToLogin();
-            }
-          },
-          buildWhen: (prev, curr) =>
-              prev.logoutLoadStatus != curr.logoutLoadStatus,
-          builder: (context, state) {
-            return BaseButton(
-              titleStyle: AppTextStyle.redS16,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(width: 1, color: AppColors.error),
-              ),
-              onTap: state.logoutLoadStatus.isLoading
-                  ? null
-                  : () {
-                _onLogout();
-              },
-              child: state.logoutLoadStatus.isLoading
-                  ? BaseLoading(
-                size: AppDimens.iconSizeNormal,
-                backgroundColor: AppColors.textBlack,
-                valueColor: AppColors.textWhite,
-              )
-                  : BaseTextLabel(
-                S.of(context).logout,
-                style: AppTextStyle.redS16,
-                textAlign: TextAlign.center,
-              ),
-            );
-          },
-        ),
+        child: _buildLogoutButton(),
       ),
+    );
+  }
+
+  Widget _buildUserInfoCard() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(width: 1, color: AppColors.todoPurple),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          const CircleAvatar(radius: 40, backgroundColor: AppColors.gray1),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 2,
+            children: [
+              BaseTextLabel(
+                'Nguyen Van A',
+                style: AppTextStyle.blackS18W400,
+              ),
+              const BaseTextLabel('nguyenvana@gmail.com'),
+            ],
+          ),
+          const Icon(Icons.arrow_forward_ios, color: AppColors.todoPurple),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton() {
+    return BlocConsumer<AuthCubit, AuthState>(
+      listenWhen: (prev, curr) =>
+          prev.logoutLoadStatus != curr.logoutLoadStatus,
+      listener: (context, state) {
+        if (state.logoutLoadStatus.isSuccess) {
+          _backToLogin();
+        }
+      },
+      buildWhen: (prev, curr) =>
+          prev.logoutLoadStatus != curr.logoutLoadStatus,
+      builder: (context, state) {
+        return BaseButton(
+          titleStyle: AppTextStyle.redS16,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(width: 1, color: AppColors.error),
+          ),
+          onTap: state.logoutLoadStatus.isLoading
+              ? null
+              : () {
+            _onLogout();
+          },
+          child: state.logoutLoadStatus.isLoading
+              ? BaseLoading(
+            size: AppDimens.iconSizeNormal,
+            backgroundColor: AppColors.textBlack,
+            valueColor: AppColors.textWhite,
+          )
+              : BaseTextLabel(
+            S.of(context).logout,
+            style: AppTextStyle.redS16,
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _changeLanguageButton() {
+    return BlocBuilder<AppSettingCubit, AppSettingState>(
+      buildWhen: (prev, curr) => prev.language != curr.language,
+      builder: (context, state) {
+        final language = state.language;
+        return BaseButton(
+          height: AppDimens.buttonHeight,
+          backgroundColor: AppColors.textWhite,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(width: 1, color: AppColors.textBlack),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BaseTextLabel(
+                S.of(context).change_language,
+                style: AppTextStyle.blackS16,
+              ),
+              BaseTextLabel(
+                language.flag,
+                style: AppTextStyle.blackS24W400,
+              ),
+            ],
+          ),
+          onTap: () {
+            _changeLanguage(language);
+          },
+        );
+      },
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/network/api_interceptors.dart';
 
@@ -33,6 +34,7 @@ class ApiClient {
       final response = await _client.auth.signUp(
         email: email,
         password: password,
+        emailRedirectTo: AppConfigs.emailRedirectLink
       );
 
       if (response.user == null) {

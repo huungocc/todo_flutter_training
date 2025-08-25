@@ -85,7 +85,7 @@ class _LoginFormState extends State<LoginForm> {
                 builder: (context, state) {
                   return BaseButton(
                     backgroundColor: AppColors.todoPurple,
-                    height: 50,
+                    height: AppDimens.buttonHeight,
                     onTap: state.loginLoadStatus.isLoading
                         ? null
                         : () {

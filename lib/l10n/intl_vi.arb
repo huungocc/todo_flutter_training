@@ -79,7 +79,7 @@
   "already_account": "Đã có tài khoản",
 
   "login_success": "Đăng nhập thành công",
-  "register_success": "Đăng ký thành công, vui lòng xác nhận trong email và đăng nhập lại",
+  "register_success": "Đăng ký thành công, vui lòng xác nhận trong email",
   "invalid_email": "Sai định dạng email",
   "invalid_password": "Mật khẩu phải có từ 8 - 12 ký tự",
   "invalid_confirm_password": "Mật khẩu xác nhận không trùng khớp",
@@ -88,5 +88,7 @@
   "settings": "Cài đặt",
   "change_language": "Thay đổi ngôn ngữ",
   "logout": "Đăng xuất",
-  "logout_success": "Đăng xuất thành công"
+  "logout_success": "Đăng xuất thành công",
+
+  "email_verification_successful": "Xác thực email thành công"
 }

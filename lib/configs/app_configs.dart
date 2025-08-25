@@ -7,6 +7,8 @@ class AppConfigs {
 
   ///Local
   static const defaultLanguage = Language.english;
+
+  static const emailRedirectLink = 'todoapp://login-callback';
 }
 
 class SupabaseAPIConfig {

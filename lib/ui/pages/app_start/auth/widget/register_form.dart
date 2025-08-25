@@ -81,7 +81,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 builder: (context, state) {
                   return BaseButton(
                     backgroundColor: AppColors.todoPurple,
-                    height: 50,
+                    height: AppDimens.buttonHeight,
                     onTap: state.registerLoadStatus.isLoading
                         ? null
                         : () {
