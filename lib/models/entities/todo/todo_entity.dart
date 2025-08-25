@@ -5,7 +5,7 @@ part 'todo_entity.g.dart';
 
 @freezed
 abstract class TodoEntity with _$TodoEntity {
-  const factory TodoEntity({
+  const factory TodoEntity ({
     @JsonKey(includeIfNull: false) String? id,
     @JsonKey(name: 'task_title') String? taskTitle,
     String? category,

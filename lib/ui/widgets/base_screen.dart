@@ -18,7 +18,6 @@ class BaseScreen extends StatelessWidget {
   final bool hiddenIconBack;
   final IconData? iconBack;
   final double? iconBackSize;
-  final Color colorTitle;
   final bool hideAppBar;
   final Color colorBackground;
   final Widget? customBackground;
@@ -38,7 +37,6 @@ class BaseScreen extends StatelessWidget {
     this.hiddenIconBack = false,
     this.iconBack,
     this.iconBackSize,
-    this.colorTitle = AppColors.textWhite,
     this.hideAppBar = false,
     this.floatingButton,
     this.colorBackground = AppColors.background,
@@ -79,7 +77,7 @@ class BaseScreen extends StatelessWidget {
     Widget widgetTitle = BaseTextLabel(
       title?.toString(),
       maxLines: 2,
-      style: AppTextStyle.blackS16W600,
+      style: AppTextStyle.whiteS18W500,
       textAlign: TextAlign.center,
     );
     return AppBar(

@@ -1,40 +1,66 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
-import 'package:todo_flutter_training/database/share_preferences_helper.dart';
 import 'package:todo_flutter_training/network/api_interceptors.dart';
-import 'package:todo_flutter_training/utils/device_info_util.dart';
 
 class ApiClient {
   final SupabaseClient _client;
 
   ApiClient(this._client);
 
-  // Lấy device ID
-  Future<String> _getDeviceId() async {
-    var deviceUDID = await SharedPreferencesHelper.getDeviceUDID();
-    if (deviceUDID != null) return deviceUDID;
+  /// ================== AUTH ==================
 
-    deviceUDID = await DeviceInfoUtil.getDeviceId();
-    await SharedPreferencesHelper.saveDeviceUDID(deviceUDID);
-    return deviceUDID;
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {
+    return ApiInterceptors.executeWithLogging('SIGN_IN', () async {
+      final response = await _client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      if (response.user == null) {
+        throw Exception('Đăng nhập thất bại');
+      }
+    });
   }
+
+  Future<void> signUp({
+    required String email,
+    required String password,
+  }) async {
+    return ApiInterceptors.executeWithLogging('SIGN_UP', () async {
+      final response = await _client.auth.signUp(
+        email: email,
+        password: password,
+        emailRedirectTo: AppConfigs.emailRedirectLink
+      );
+
+      if (response.user == null) {
+        throw Exception('Đăng ký thất bại');
+      }
+    });
+  }
+
+  Future<void> signOut() async {
+    return ApiInterceptors.executeWithLogging('SIGN_OUT', () async {
+      await _client.auth.signOut();
+    });
+  }
+
+  /// ================== TODOS ==================
 
   Future<void> addTodo({required TodoEntity todo}) async {
     return ApiInterceptors.executeWithLogging('ADD_TODO', () async {
-      final deviceId = await _getDeviceId();
-
       final data = todo.toJson();
-      data['device_id'] = deviceId;
-
       await _client.from('todos').insert(data);
     });
   }
 
   Future<List<TodoEntity>> fetchTodos({bool? completed}) async {
     return ApiInterceptors.executeWithLogging('GET_TODOS', () async {
-      final deviceId = await _getDeviceId();
-
-      var query = _client.from('todos').select().eq('device_id', deviceId);
+      var query = _client.from('todos').select();
 
       if (completed != null) {
         query = query.eq('completed', completed);
