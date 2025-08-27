@@ -51,6 +51,7 @@ class _RegisterBodyState extends State<_RegisterBody> {
         children: [
           Column(
             children: [
+              /// Header
               BaseTextLabel(
                 S.of(context).create_account,
                 textAlign: TextAlign.center,
@@ -64,6 +65,8 @@ class _RegisterBodyState extends State<_RegisterBody> {
                 maxLines: 2,
               ),
               const SizedBox(height: 40),
+
+              /// RegisterForm
               BaseTextInput(
                 textController: cubit.registerEmailController,
                 hintText: S.of(context).email,
@@ -84,40 +87,13 @@ class _RegisterBodyState extends State<_RegisterBody> {
                 isPasswordTF: true,
               ),
               const SizedBox(height: 40),
-              BlocConsumer<RegisterCubit, RegisterState>(
-                listenWhen: (prev, curr) =>
-                prev.registerLoadStatus != curr.registerLoadStatus,
-                listener: (context, state) {
-                  if (state.registerLoadStatus.isSuccess) {
-                    _changeToLogin();
-                  }
-                },
-                buildWhen: (prev, curr) =>
-                    prev.registerLoadStatus != curr.registerLoadStatus,
-                builder: (context, state) {
-                  return BaseButton(
-                    backgroundColor: AppColors.todoPurple,
-                    height: AppDimens.buttonHeight,
-                    onTap: state.registerLoadStatus.isLoading
-                        ? null
-                        : () {
-                      cubit.register();
-                    },
-                    child: state.registerLoadStatus.isLoading
-                        ? BaseLoading(
-                      size: AppDimens.iconSizeNormal,
-                      backgroundColor: AppColors.textBlack,
-                      valueColor: AppColors.textWhite,
-                    )
-                        : BaseTextLabel(
-                      S.of(context).sign_up,
-                      style: AppTextStyle.whiteS16W500,
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                },
-              ),
+
+              /// RegisterButton
+              _buildRegisterButton(cubit),
+
               const SizedBox(height: 20),
+
+              /// ChangeToLogin
               Material(
                 color: Colors.transparent,
                 child: InkWell(
@@ -133,6 +109,42 @@ class _RegisterBodyState extends State<_RegisterBody> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRegisterButton(RegisterCubit cubit) {
+    return BlocConsumer<RegisterCubit, RegisterState>(
+      listenWhen: (prev, curr) =>
+      prev.registerLoadStatus != curr.registerLoadStatus,
+      listener: (context, state) {
+        if (state.registerLoadStatus.isSuccess) {
+          _changeToLogin();
+        }
+      },
+      buildWhen: (prev, curr) =>
+          prev.registerLoadStatus != curr.registerLoadStatus,
+      builder: (context, state) {
+        return BaseButton(
+          backgroundColor: AppColors.todoPurple,
+          height: AppDimens.buttonHeight,
+          onTap: state.registerLoadStatus.isLoading
+              ? null
+              : () {
+            cubit.register();
+          },
+          child: state.registerLoadStatus.isLoading
+              ? BaseLoading(
+            size: AppDimens.iconSizeNormal,
+            backgroundColor: AppColors.textBlack,
+            valueColor: AppColors.textWhite,
+          )
+              : BaseTextLabel(
+            S.of(context).sign_up,
+            style: AppTextStyle.whiteS16W500,
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
     );
   }
 }

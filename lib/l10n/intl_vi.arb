@@ -85,10 +85,17 @@
   "invalid_confirm_password": "Mật khẩu xác nhận không trùng khớp",
   "account_not_confirmed": "Tài khoản chưa được xác nhận, vui lòng kiểm tra email",
 
+  "account": "Tài khoản",
   "settings": "Cài đặt",
   "change_language": "Thay đổi ngôn ngữ",
   "logout": "Đăng xuất",
   "logout_success": "Đăng xuất thành công",
+  "change_password": "Thay đổi mật khẩu",
+  "current_password": "Mật khẩu hiện tại",
+  "new_password": "Mật khẩu mới",
+  "confirm_new_password": "Xác nhận mật khẩu mới",
+  "change_password_success": "Thay đổi mật khẩu thành công",
+  "confirm": "Xác nhận",
 
   "email_verification_successful": "Xác thực email thành công"
 }

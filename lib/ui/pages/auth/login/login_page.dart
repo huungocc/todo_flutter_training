@@ -56,6 +56,7 @@ class _LoginBodyState extends State<_LoginBody> {
         children: [
           Column(
             children: [
+              /// Header
               BaseTextLabel(
                 S.of(context).login_here,
                 textAlign: TextAlign.center,
@@ -66,8 +67,11 @@ class _LoginBodyState extends State<_LoginBody> {
                 S.of(context).welcome_back,
                 textAlign: TextAlign.center,
                 style: AppTextStyle.blackS24Bold,
+                maxLines: 2,
               ),
               const SizedBox(height: 40),
+
+              /// LoginForm
               BaseTextInput(
                 textController: cubit.loginEmailController,
                 hintText: S.of(context).email,
@@ -81,47 +85,13 @@ class _LoginBodyState extends State<_LoginBody> {
                 isPasswordTF: true,
               ),
               const SizedBox(height: 40),
-              BlocConsumer<LoginCubit, LoginState>(
-                listenWhen: (prev, curr) =>
-                    prev.loginLoadStatus != curr.loginLoadStatus ||
-                    prev.isConfirmed != curr.isConfirmed,
-                listener: (context, state) {
-                  if (state.loginLoadStatus.isSuccess) {
-                    if (state.isConfirmed) {
-                      _onLoginSuccess();
-                    } else {
-                      ExceptionHandler.showErrorSnackBar(
-                        S.current.account_not_confirmed,
-                      );
-                    }
-                  }
-                },
-                buildWhen: (prev, curr) =>
-                    prev.loginLoadStatus != curr.loginLoadStatus,
-                builder: (context, state) {
-                  return BaseButton(
-                    backgroundColor: AppColors.todoPurple,
-                    height: AppDimens.buttonHeight,
-                    onTap: state.loginLoadStatus.isLoading
-                        ? null
-                        : () {
-                            cubit.login();
-                          },
-                    child: state.loginLoadStatus.isLoading
-                        ? BaseLoading(
-                            size: AppDimens.iconSizeNormal,
-                            backgroundColor: AppColors.textBlack,
-                            valueColor: AppColors.textWhite,
-                          )
-                        : BaseTextLabel(
-                            S.of(context).sign_in,
-                            style: AppTextStyle.whiteS16W500,
-                            textAlign: TextAlign.center,
-                          ),
-                  );
-                },
-              ),
+
+              /// LoginButton
+              _buildLoginButton(cubit),
+
               const SizedBox(height: 20),
+
+              /// ChangeToRegister
               Material(
                 color: Colors.transparent,
                 child: InkWell(
@@ -135,6 +105,49 @@ class _LoginBodyState extends State<_LoginBody> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLoginButton(LoginCubit cubit) {
+    return BlocConsumer<LoginCubit, LoginState>(
+      listenWhen: (prev, curr) =>
+          prev.loginLoadStatus != curr.loginLoadStatus ||
+          prev.isConfirmed != curr.isConfirmed,
+      listener: (context, state) {
+        if (state.loginLoadStatus.isSuccess) {
+          if (state.isConfirmed) {
+            _onLoginSuccess();
+          } else {
+            ExceptionHandler.showErrorSnackBar(
+              S.current.account_not_confirmed,
+            );
+          }
+        }
+      },
+      buildWhen: (prev, curr) =>
+          prev.loginLoadStatus != curr.loginLoadStatus,
+      builder: (context, state) {
+        return BaseButton(
+          backgroundColor: AppColors.todoPurple,
+          height: AppDimens.buttonHeight,
+          onTap: state.loginLoadStatus.isLoading
+              ? null
+              : () {
+                  cubit.login();
+                },
+          child: state.loginLoadStatus.isLoading
+              ? BaseLoading(
+                  size: AppDimens.iconSizeNormal,
+                  backgroundColor: AppColors.textBlack,
+                  valueColor: AppColors.textWhite,
+                )
+              : BaseTextLabel(
+                  S.of(context).sign_in,
+                  style: AppTextStyle.whiteS16W500,
+                  textAlign: TextAlign.center,
+                ),
+        );
+      },
     );
   }
 }
