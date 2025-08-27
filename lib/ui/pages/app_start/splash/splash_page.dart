@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/gen/assets.gen.dart';
+import 'package:todo_flutter_training/repository/auth_repository.dart';
 import 'package:todo_flutter_training/ui/pages/app_start/splash/splash_navigator.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
+import 'package:todo_flutter_training/utils/injection.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -15,12 +17,19 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _checkAuthStatus(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuthStatus();
+    });
   }
 
-  void _checkAuthStatus(context) {
+  void _checkAuthStatus() {
     Future.delayed(const Duration(seconds: 2), () {
-      SplashNavigator(context: context).checkAuthStatus();
+      if (!mounted) return;
+      final authRepository = getIt<AuthRepository>();
+      SplashNavigator(
+        context: context,
+        authRepository: authRepository,
+      ).checkAuthStatus();
     });
   }
 
@@ -33,3 +42,4 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 }
+

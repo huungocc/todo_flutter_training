@@ -8,9 +8,9 @@ import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dar
 import 'package:todo_flutter_training/models/enums/language.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_cubit.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_state.dart';
+import 'package:todo_flutter_training/ui/pages/setting/setting_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/setting/setting_navigator.dart';
+import 'package:todo_flutter_training/ui/pages/setting/setting_state.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
@@ -23,7 +23,7 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AuthCubit(authRepository: getIt<AuthRepository>()),
+      create: (_) => SettingCubit(authRepository: getIt<AuthRepository>()),
       child: const _SettingBody(),
     );
   }
@@ -42,7 +42,7 @@ class _SettingBodyState extends State<_SettingBody> {
   }
 
   void _onLogout() {
-    context.read<AuthCubit>().logout();
+    context.read<SettingCubit>().logout();
   }
 
   void _backToLogin() {
@@ -78,7 +78,7 @@ class _SettingBodyState extends State<_SettingBody> {
             _changeLanguageButton(),
 
             /// Logout Listener
-            BlocListener<AuthCubit, AuthState>(
+            BlocListener<SettingCubit, SettingState>(
               listenWhen: (prev, curr) =>
                   prev.logoutLoadStatus != curr.logoutLoadStatus,
               listener: (context, state) {
@@ -127,7 +127,7 @@ class _SettingBodyState extends State<_SettingBody> {
   }
 
   Widget _buildLogoutButton() {
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<SettingCubit, SettingState>(
       listenWhen: (prev, curr) =>
           prev.logoutLoadStatus != curr.logoutLoadStatus,
       listener: (context, state) {
