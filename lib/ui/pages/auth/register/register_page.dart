@@ -6,34 +6,44 @@ import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_cubit.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_navigator.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_state.dart';
+import 'package:todo_flutter_training/repository/auth_repository.dart';
+import 'package:todo_flutter_training/ui/pages/auth/auth_cubit.dart';
+import 'package:todo_flutter_training/ui/pages/auth/register/register_cubit.dart';
+import 'package:todo_flutter_training/ui/pages/auth/register/register_state.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_input.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
-import 'package:todo_flutter_training/utils/exception_handler.dart';
+import 'package:todo_flutter_training/utils/injection.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => RegisterCubit(authRepository: getIt<AuthRepository>()),
+      child: const _RegisterBody(),
+    );
+  }
 }
 
-class _LoginFormState extends State<LoginForm> {
-  void _changeToRegister() {
-    context.read<AuthCubit>().changeAuthType(AuthType.register);
-  }
+class _RegisterBody extends StatefulWidget {
+  const _RegisterBody();
 
-  Future<void> _onLoginSuccess() async {
-    AuthNavigator(context: context).navigateToListTodo();
+  @override
+  State<_RegisterBody> createState() => _RegisterBodyState();
+}
+
+class _RegisterBodyState extends State<_RegisterBody> {
+  void _changeToLogin() {
+    context.read<AuthCubit>().changeAuthType(AuthType.login);
   }
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AuthCubit>();
+    final cubit = context.read<RegisterCubit>();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 40),
       child: Column(
@@ -42,66 +52,68 @@ class _LoginFormState extends State<LoginForm> {
           Column(
             children: [
               BaseTextLabel(
-                S.of(context).login_here,
+                S.of(context).create_account,
                 textAlign: TextAlign.center,
                 style: AppTextStyle.purpleS32Bold,
               ),
               const SizedBox(height: 20),
               BaseTextLabel(
-                S.of(context).welcome_back,
+                S.of(context).create_account_explore,
                 textAlign: TextAlign.center,
                 style: AppTextStyle.blackS24Bold,
+                maxLines: 2,
               ),
               const SizedBox(height: 40),
               BaseTextInput(
-                textController: cubit.loginEmailController,
+                textController: cubit.registerEmailController,
                 hintText: S.of(context).email,
                 borderColor: AppColors.gray3,
               ),
               const SizedBox(height: 10),
               BaseTextInput(
-                textController: cubit.loginPasswordController,
+                textController: cubit.registerPasswordController,
                 hintText: S.of(context).password,
                 borderColor: AppColors.gray3,
+                isPasswordTF: true,
+              ),
+              const SizedBox(height: 10),
+              BaseTextInput(
+                textController: cubit.registerConfirmPasswordController,
+                hintText: S.of(context).confirm_password,
+                borderColor: AppColors.gray3,
+                isPasswordTF: true,
               ),
               const SizedBox(height: 40),
-              BlocConsumer<AuthCubit, AuthState>(
+              BlocConsumer<RegisterCubit, RegisterState>(
                 listenWhen: (prev, curr) =>
-                    prev.loginLoadStatus != curr.loginLoadStatus ||
-                    prev.isConfirmed != curr.isConfirmed,
+                prev.registerLoadStatus != curr.registerLoadStatus,
                 listener: (context, state) {
-                  if (state.loginLoadStatus.isSuccess) {
-                    if (state.isConfirmed) {
-                      _onLoginSuccess();
-                    } else {
-                      ExceptionHandler.showErrorSnackBar(
-                        S.current.account_not_confirmed,
-                      );
-                    }
+                  if (state.registerLoadStatus.isSuccess) {
+                    _changeToLogin();
                   }
                 },
                 buildWhen: (prev, curr) =>
-                    prev.loginLoadStatus != curr.loginLoadStatus,
+                    prev.registerLoadStatus != curr.registerLoadStatus,
                 builder: (context, state) {
                   return BaseButton(
                     backgroundColor: AppColors.todoPurple,
                     height: AppDimens.buttonHeight,
-                    onTap: state.loginLoadStatus.isLoading
+                    onTap: state.registerLoadStatus.isLoading
                         ? null
                         : () {
-                            cubit.login();
-                          },
-                    child: state.loginLoadStatus.isLoading
+                      cubit.register();
+                    },
+                    child: state.registerLoadStatus.isLoading
                         ? BaseLoading(
-                            size: AppDimens.iconSizeNormal,
-                            backgroundColor: AppColors.textBlack,
-                            valueColor: AppColors.textWhite,
-                          )
+                      size: AppDimens.iconSizeNormal,
+                      backgroundColor: AppColors.textBlack,
+                      valueColor: AppColors.textWhite,
+                    )
                         : BaseTextLabel(
-                            S.of(context).sign_in,
-                            style: AppTextStyle.whiteS16W500,
-                            textAlign: TextAlign.center,
-                          ),
+                      S.of(context).sign_up,
+                      style: AppTextStyle.whiteS16W500,
+                      textAlign: TextAlign.center,
+                    ),
                   );
                 },
               ),
@@ -110,9 +122,11 @@ class _LoginFormState extends State<LoginForm> {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    _changeToRegister();
+                    _changeToLogin();
                   },
-                  child: BaseTextLabel(S.of(context).create_new_account),
+                  child: BaseTextLabel(
+                    S.of(context).already_account,
+                  ),
                 ),
               ),
             ],

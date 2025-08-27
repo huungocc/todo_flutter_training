@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
-import 'package:todo_flutter_training/repository/auth_repository.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_cubit.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_state.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/widget/login_form.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/widget/register_form.dart';
+import 'package:todo_flutter_training/ui/pages/auth/auth_cubit.dart';
+import 'package:todo_flutter_training/ui/pages/auth/auth_state.dart';
+import 'package:todo_flutter_training/ui/pages/auth/login/login_page.dart';
+import 'package:todo_flutter_training/ui/pages/auth/register/register_page.dart';
 import 'package:todo_flutter_training/ui/widgets/auth/custom_auth_background.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
-import 'package:todo_flutter_training/utils/injection.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -16,7 +14,7 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AuthCubit(authRepository: getIt<AuthRepository>()),
+      create: (_) => AuthCubit(),
       child: const _AuthBody(),
     );
   }
@@ -35,15 +33,15 @@ class _AuthBodyState extends State<_AuthBody> {
     return BaseScreen(
       hideAppBar: true,
       colorAppBar: Colors.transparent,
-      customBackground: CustomAuthBackground(),
+      customBackground: const CustomAuthBackground(),
       body: BlocBuilder<AuthCubit, AuthState>(
         buildWhen: (prev, curr) =>
             prev.authType != curr.authType,
         builder: (context, state) {
           if (state.authType == AuthType.login) {
-            return LoginForm();
+            return LoginPage();
           } else if (state.authType == AuthType.register) {
-            return RegisterForm();
+            return RegisterPage();
           }
 
           return const SizedBox.shrink();
