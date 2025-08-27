@@ -56,6 +56,33 @@ class ApiClient {
   Future<void> getSessionFromUrl(Uri uri) =>
       _client.auth.getSessionFromUrl(uri);
 
+  Future<void> updatePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    return ApiInterceptors.executeWithLogging('UPDATE_PASSWORD', () async {
+      final user = _client.auth.currentUser;
+      if (user == null || user.email == null) {
+        throw Exception('Người dùng chưa đăng nhập');
+      }
+
+      // Re-authenticate
+      final signInResponse = await _client.auth.signInWithPassword(
+        email: user.email!,
+        password: oldPassword,
+      );
+
+      if (signInResponse.user == null) {
+        throw Exception('Mật khẩu cũ không đúng');
+      }
+
+      // Update new password
+      await _client.auth.updateUser(
+        UserAttributes(password: newPassword),
+      );
+    });
+  }
+
   /// ================== TODOS ==================
 
   Future<void> addTodo({required TodoEntity todo}) async {
