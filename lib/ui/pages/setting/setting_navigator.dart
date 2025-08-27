@@ -7,4 +7,8 @@ class SettingNavigator extends AppNavigator {
   void navigateToLogin() {
     navigateAndPopUntil(AppRouter.auth);
   }
+
+  void navigateToChangePassword() {
+    pushNamed(AppRouter.changePassword);
+  }
 }

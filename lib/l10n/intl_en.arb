@@ -85,10 +85,17 @@
   "invalid_confirm_password": "Invalid confirm password",
   "account_not_confirmed": "Account not confirmed, please check your email",
 
+  "account": "Account",
   "settings": "Settings",
   "change_language": "Change language",
   "logout": "Logout",
   "logout_success": "Logout success",
+  "change_password": "Change password",
+  "current_password": "Current password",
+  "new_password": "New password",
+  "confirm_new_password": "Confirm new password",
+  "change_password_success": "Change password success",
+  "confirm": "Confirm",
 
   "email_verification_successful": "Email verification successful"
 }

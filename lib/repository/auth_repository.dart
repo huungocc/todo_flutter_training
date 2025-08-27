@@ -16,6 +16,11 @@ abstract class AuthRepository {
   Stream<AuthStatus> authStatusStream();
 
   Future<void> handleDeepLink(Uri uri);
+
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  });
 }
 
 @Injectable(as: AuthRepository)
@@ -25,12 +30,18 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._apiClient);
 
   @override
-  Future<Session?> signIn({required String email, required String password}) async {
+  Future<Session?> signIn({
+    required String email,
+    required String password,
+  }) async {
     return _apiClient.signIn(email: email, password: password);
   }
 
   @override
-  Future<Session?> signUp({required String email, required String password}) async {
+  Future<Session?> signUp({
+    required String email,
+    required String password,
+  }) async {
     return _apiClient.signUp(email: email, password: password);
   }
 
@@ -69,4 +80,15 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> handleDeepLink(Uri uri) => _apiClient.getSessionFromUrl(uri);
+
+  @override
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    return _apiClient.updatePassword(
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    );
+  }
 }

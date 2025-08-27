@@ -81,9 +81,6 @@ class RegisterCubit extends Cubit<RegisterState> {
         password: registerPasswordController.text,
       );
 
-      final session = sab.Supabase.instance.client.auth.currentSession;
-      final isConfirmed = session != null;
-
       emit(
         state.copyWith(
           registerLoadStatus: LoadStatus.success,
