@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
-import 'package:todo_flutter_training/ui/pages/app_start/auth/auth_page.dart';
+import 'package:todo_flutter_training/ui/pages/auth/auth_page.dart';
 import 'package:todo_flutter_training/ui/pages/app_start/splash/splash_page.dart';
 import 'package:todo_flutter_training/ui/pages/setting/setting_page.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_page.dart';

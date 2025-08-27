@@ -10,7 +10,7 @@ class ApiClient {
 
   /// ================== AUTH ==================
 
-  Future<void> signIn({
+  Future<Session?> signIn({
     required String email,
     required String password,
   }) async {
@@ -19,14 +19,14 @@ class ApiClient {
         email: email,
         password: password,
       );
-
       if (response.user == null) {
         throw Exception('Đăng nhập thất bại');
       }
+      return response.session;
     });
   }
 
-  Future<void> signUp({
+  Future<Session?> signUp({
     required String email,
     required String password,
   }) async {
@@ -34,12 +34,12 @@ class ApiClient {
       final response = await _client.auth.signUp(
         email: email,
         password: password,
-        emailRedirectTo: AppConfigs.emailRedirectLink
+        emailRedirectTo: AppConfigs.emailRedirectLink,
       );
-
       if (response.user == null) {
         throw Exception('Đăng ký thất bại');
       }
+      return response.session;
     });
   }
 
@@ -48,6 +48,13 @@ class ApiClient {
       await _client.auth.signOut();
     });
   }
+
+  Session? getSession() => _client.auth.currentSession;
+
+  Stream<AuthState> listenAuthState() => _client.auth.onAuthStateChange;
+
+  Future<void> getSessionFromUrl(Uri uri) =>
+      _client.auth.getSessionFromUrl(uri);
 
   /// ================== TODOS ==================
 

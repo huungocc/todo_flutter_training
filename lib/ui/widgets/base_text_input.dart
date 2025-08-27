@@ -24,6 +24,7 @@ class BaseTextInput extends StatefulWidget {
   final TextEditingController? textController;
   final TextStyle? textStyle;
   final Color? borderColor;
+  final bool isPasswordTF;
 
   const BaseTextInput({
     super.key,
@@ -45,7 +46,8 @@ class BaseTextInput extends StatefulWidget {
     this.onTap,
     this.readOnly = false,
     this.textStyle,
-    this.borderColor
+    this.borderColor,
+    this.isPasswordTF = false,
   });
 
   @override
@@ -54,39 +56,59 @@ class BaseTextInput extends StatefulWidget {
 
 class _BaseTextInputState extends State<BaseTextInput> {
   late TextEditingController _controller;
+  late bool _obscureText;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.textController ?? TextEditingController();
+    _obscureText = widget.isPasswordTF;
   }
 
   InputDecoration _buildDecoration() {
     return InputDecoration(
       counterText: "",
-      suffixIcon: widget.suffixIcon != null
+      suffixIcon: widget.isPasswordTF
           ? Padding(
-              padding: EdgeInsets.only(right: AppDimens.marginSmall),
-              child: InkWell(
-                onTap: widget.onTapSuffixIcon,
-                child: widget.suffixIcon,
-              ),
-            )
-          : null,
+        padding: EdgeInsets.only(right: AppDimens.marginSmall),
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+          child: Icon(
+            _obscureText ? Icons.visibility_off : Icons.visibility,
+            color: AppColors.gray1,
+          ),
+        ),
+      )
+          : (widget.suffixIcon != null
+          ? Padding(
+        padding: EdgeInsets.only(right: AppDimens.marginSmall),
+        child: InkWell(
+          onTap: widget.onTapSuffixIcon,
+          child: widget.suffixIcon,
+        ),
+      )
+          : null),
       prefixIcon: widget.prefixIcon != null
           ? Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimens.marginSmall,
-              ),
-              child: widget.prefixIcon,
-            )
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimens.marginSmall,
+        ),
+        child: widget.prefixIcon,
+      )
           : null,
       focusColor: Colors.white,
       disabledBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: widget.borderColor ?? AppColors.gray1, width: 1),
+        borderSide: BorderSide(
+          color: widget.borderColor ?? AppColors.gray1,
+          width: 1,
+        ),
         borderRadius: BorderRadius.circular(
           widget.borderRadius ?? AppDimens.textInputCornerRadius,
         ),
@@ -97,10 +119,11 @@ class _BaseTextInputState extends State<BaseTextInput> {
           widget.borderRadius ?? AppDimens.textInputCornerRadius,
         ),
       ),
-      hintStyle:
-          widget.hintStyle ??
+      hintStyle: widget.hintStyle ??
           AppTextStyle.blackS16.copyWith(
-            color: !widget.enabled ? AppColors.textBlack : AppColors.textFieldHint,
+            color: !widget.enabled
+                ? AppColors.textBlack
+                : AppColors.textFieldHint,
             fontWeight: FontWeight.w400,
           ),
       hintText: widget.hintText,
@@ -138,9 +161,10 @@ class _BaseTextInputState extends State<BaseTextInput> {
             textAlignVertical: TextAlignVertical.center,
             onTap: widget.onTap,
             style: widget.textStyle ?? AppTextStyle.blackS16,
-            maxLines: widget.maxLines,
+            maxLines: widget.isPasswordTF ? 1 : widget.maxLines,
             minLines: widget.minLines,
             cursorColor: AppColors.todoPurple,
+            obscureText: widget.isPasswordTF ? _obscureText : false,
             decoration: _buildDecoration(),
           ),
         ),
