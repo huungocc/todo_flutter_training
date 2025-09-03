@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_flutter_training/common/app_validator.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
 import 'package:todo_flutter_training/ui/pages/change_password/change_password_state.dart';
 import 'package:todo_flutter_training/utils/exception_handler.dart';
+import 'package:todo_flutter_training/utils/validator_util.dart';
 
 class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   final AuthRepository authRepository;
@@ -27,56 +27,21 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
     return super.close();
   }
 
-  // ------------------ Validation ------------------
-  bool _validateChangePasswordInput() {
-    final oldPassword = currentPasswordController.text.trim();
-    final newPassword = newPasswordController.text;
-    final confirmNewPassword = confirmNewPasswordController.text;
-
-    if (oldPassword.isEmpty ||
-        newPassword.isEmpty ||
-        confirmNewPassword.isEmpty) {
-      ExceptionHandler.showErrorSnackBar(S.current.please_fill_in_all_fields);
-      return false;
-    }
-
-    final isOldPasswordValid = AppValidator.validatePassword(oldPassword);
-    if (!isOldPasswordValid) {
-      ExceptionHandler.showErrorSnackBar(S.current.invalid_password);
-      return false;
-    }
-
-    final isNewPasswordValid = AppValidator.validatePassword(newPassword);
-    if (!isNewPasswordValid) {
-      ExceptionHandler.showErrorSnackBar(S.current.invalid_password);
-      return false;
-    }
-
-    final isConfirmNewPasswordValid = AppValidator.validateConfirmPassword(
-      newPassword,
-      confirmNewPassword,
-    );
-    if (!isConfirmNewPasswordValid) {
-      ExceptionHandler.showErrorSnackBar(S.current.invalid_confirm_password);
-      return false;
-    }
-
-    return true;
-  }
-
-  // ------------------ Actions ------------------
   Future<void> changePassword() async {
     try {
-      if (!_validateChangePasswordInput()) return;
-
       emit(state.copyWith(changePasswordLoadStatus: LoadStatus.loading));
 
-      final oldPassword = currentPasswordController.text;
-      final newPassword = newPasswordController.text;
+      if (!ValidatorUtil.validateChangePasswordInput(
+        oldPassword: currentPasswordController.text,
+        newPassword: newPasswordController.text,
+        confirmNewPassword: confirmNewPasswordController.text,
+      )) {
+        throw Exception('check');
+      }
 
       await authRepository.changePassword(
-        oldPassword: oldPassword,
-        newPassword: newPassword,
+        oldPassword: currentPasswordController.text,
+        newPassword: newPasswordController.text,
       );
 
       emit(state.copyWith(changePasswordLoadStatus: LoadStatus.success));

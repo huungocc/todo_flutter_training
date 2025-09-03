@@ -13,10 +13,6 @@ abstract class AuthRepository {
 
   AuthUserEntity? getCurrentUser();
 
-  Stream<AuthStatus> authStatusStream();
-
-  Future<void> handleDeepLink(Uri uri);
-
   Future<void> changePassword({
     required String oldPassword,
     required String newPassword,
@@ -63,23 +59,6 @@ class AuthRepositoryImpl implements AuthRepository {
       isConfirmed: session != null,
     );
   }
-
-  @override
-  Stream<AuthStatus> authStatusStream() {
-    return _apiClient.listenAuthState().map((supabaseState) {
-      switch (supabaseState.event) {
-        case AuthChangeEvent.signedIn:
-          return AuthStatus.signedIn;
-        case AuthChangeEvent.signedOut:
-          return AuthStatus.signedOut;
-        default:
-          return AuthStatus.unknown;
-      }
-    });
-  }
-
-  @override
-  Future<void> handleDeepLink(Uri uri) => _apiClient.getSessionFromUrl(uri);
 
   @override
   Future<void> changePassword({

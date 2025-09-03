@@ -10,6 +10,7 @@ import 'package:todo_flutter_training/repository/auth_repository.dart';
 import 'package:todo_flutter_training/ui/pages/setting/setting_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/setting/setting_navigator.dart';
 import 'package:todo_flutter_training/ui/pages/setting/setting_state.dart';
+import 'package:todo_flutter_training/ui/widgets/base_dialog.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
@@ -41,7 +42,12 @@ class _SettingBodyState extends State<_SettingBody> {
   }
 
   void _onLogout() {
-    context.read<SettingCubit>().logout();
+    BaseDialog.showNotifyDialog(
+      message: S.of(context).are_you_sure_logout,
+      onConfirm: () {
+        context.read<SettingCubit>().logout();
+      }
+    );
   }
 
   void _backToLogin() {
@@ -50,6 +56,10 @@ class _SettingBodyState extends State<_SettingBody> {
 
   void _navigateToChangePassword() {
     SettingNavigator(context: context).navigateToChangePassword();
+  }
+
+  void _navigateToChangeInfo() {
+    SettingNavigator(context: context).navigateToChangeInfo();
   }
 
   @override
@@ -77,6 +87,13 @@ class _SettingBodyState extends State<_SettingBody> {
             ),
 
             const SizedBox(height: 20),
+
+            /// ChangeInfoButton
+            SettingButton(
+              onTap: () => _navigateToChangeInfo(),
+              icon: Icons.person,
+              title: S.of(context).change_info,
+            ),
 
             /// ChangePasswordButton
             SettingButton(

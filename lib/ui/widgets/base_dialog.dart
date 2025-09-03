@@ -38,6 +38,7 @@ class BaseDialog {
                     message,
                     style: AppTextStyle.blackS18Bold,
                     textAlign: TextAlign.center,
+                    maxLines: 2,
                   ),
                   Row(
                     spacing: 10,

@@ -43,8 +43,8 @@ extension GetItInjectableX on _i174.GetIt {
   }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final apiUtil = _$ApiUtil();
-    gh.factory<_i112.AppSettingCubit>(() => _i112.AppSettingCubit());
     gh.factory<_i591.AuthCubit>(() => _i591.AuthCubit());
+    gh.factory<_i112.AppSettingCubit>(() => _i112.AppSettingCubit());
     await gh.lazySingletonAsync<_i454.SupabaseClient>(
       () => apiUtil.initialize(),
       preResolve: true,

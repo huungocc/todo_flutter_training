@@ -26,12 +26,14 @@ class AppDimens {
 
   static const double cardCornerRadius = 20;
 
-  static const double iconSizeSmall = 10;
+  static const double iconSizeSmall = 15;
   static const double iconSizeNormal = 30;
   static const double iconSizeLarge = 50;
   static const double iconBorderRadius = 100;
 
   static const double textInputCornerRadius = 16;
+
+  static const double avatarSize = 120;
 }
 
 class ScreenSize {

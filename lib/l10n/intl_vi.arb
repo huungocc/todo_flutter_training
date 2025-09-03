@@ -96,6 +96,9 @@
   "confirm_new_password": "Xác nhận mật khẩu mới",
   "change_password_success": "Thay đổi mật khẩu thành công",
   "confirm": "Xác nhận",
+  "change_info": "Thay đổi thông tin",
+  "full_name": "Họ và tên",
+  "are_you_sure_logout": "Bạn có chắc chắn muốn đăng xuất?",
 
   "email_verification_successful": "Xác thực email thành công"
 }

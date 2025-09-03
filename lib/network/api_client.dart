@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
+import 'package:todo_flutter_training/models/entities/user_info/user_info_entity.dart';
 import 'package:todo_flutter_training/network/api_interceptors.dart';
 
 class ApiClient {
@@ -77,10 +80,47 @@ class ApiClient {
       }
 
       // Update new password
-      await _client.auth.updateUser(
-        UserAttributes(password: newPassword),
-      );
+      await _client.auth.updateUser(UserAttributes(password: newPassword));
     });
+  }
+
+  Future<String?> uploadAvatar(String userId, File file) async {
+    final fileExt = file.path.split('.').last;
+    final fileName = '$userId.$fileExt';
+    final filePath = 'avatars/$fileName';
+
+    await _client.storage
+        .from('avatars')
+        .upload(filePath, file, fileOptions: const FileOptions(upsert: true));
+
+    final publicUrl = _client.storage.from('avatars').getPublicUrl(filePath);
+
+    return publicUrl;
+  }
+
+  Future<void> updateUserInfo({
+    required String userId,
+    String? userName,
+    String? avatarUrl,
+  }) async {
+    await _client.from('user_info').upsert({
+      'user_id': userId,
+      if (userName != null) 'user_name': userName,
+      if (avatarUrl != null) 'avatar_url': avatarUrl,
+      'updated_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  Future<UserInfoEntity?> getUserInfo(String userId) async {
+    final data = await _client
+        .from('user_info')
+        .select()
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    return data != null
+        ? UserInfoEntity.fromJson(Map<String, dynamic>.from(data))
+        : null;
   }
 
   /// ================== TODOS ==================
