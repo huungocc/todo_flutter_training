@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
-import 'package:todo_flutter_training/ui/pages/user_info/user_info_cubit.dart';
-import 'package:todo_flutter_training/ui/pages/user_info/user_info_state.dart';
+import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
+import 'package:todo_flutter_training/global_blocs/user_info/user_info_state.dart';
+import 'package:todo_flutter_training/ui/pages/change_user_info/change_user_info_cubit.dart';
+import 'package:todo_flutter_training/ui/pages/change_user_info/change_user_info_state.dart';
 import 'package:todo_flutter_training/ui/widgets/user_info/pick_image_widget.dart';
 import 'package:todo_flutter_training/ui/widgets/base_local_image.dart';
 import 'package:todo_flutter_training/ui/widgets/base_cached_image.dart';
@@ -12,18 +14,18 @@ import 'package:todo_flutter_training/ui/widgets/base_text_input.dart';
 import 'package:todo_flutter_training/ui/widgets/setting/default_avatar_widget.dart';
 import 'package:todo_flutter_training/utils/exception_handler.dart';
 
-class UserInfoBody extends StatefulWidget {
-  const UserInfoBody({super.key});
+class ChangeUserInfoBody extends StatefulWidget {
+  const ChangeUserInfoBody({super.key});
 
   @override
-  State<UserInfoBody> createState() => _UserInfoBodyState();
+  State<ChangeUserInfoBody> createState() => _ChangeUserInfoBodyState();
 }
 
-class _UserInfoBodyState extends State<UserInfoBody> {
+class _ChangeUserInfoBodyState extends State<ChangeUserInfoBody> {
   final ImagePicker _picker = ImagePicker();
 
   void _pickAvatar(XFile avatarFile) {
-    context.read<UserInfoCubit>().pickAvatarFromFile(avatarFile);
+    context.read<ChangeUserInfoCubit>().pickAvatarFromFile(avatarFile);
   }
 
   Future<void> _onTakePhoto() async {
@@ -58,7 +60,7 @@ class _UserInfoBodyState extends State<UserInfoBody> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<UserInfoCubit>();
+    final cubit = context.read<ChangeUserInfoCubit>();
     return Column(
       spacing: 30,
       children: [
@@ -68,43 +70,54 @@ class _UserInfoBodyState extends State<UserInfoBody> {
 
         /// TextField Info
         BlocBuilder<UserInfoCubit, UserInfoState>(
-          buildWhen: (prev, curr) => curr.isEditing != prev.isEditing,
+          buildWhen: (prev, curr) => curr.userInfo != prev.userInfo,
           builder: (context, state) {
-            return BaseTextInput(
-              textController: cubit.userNameController,
-              title: S.of(context).full_name,
-              readOnly: !state.isEditing,
+            return BlocBuilder<ChangeUserInfoCubit, ChangeUserInfoState>(
+              buildWhen: (prev, curr) => curr.isEditing != prev.isEditing,
+              builder: (context, changeState) {
+                return BaseTextInput(
+                  textController: cubit.userNameController,
+                  title: S.of(context).full_name,
+                  readOnly: !changeState.isEditing,
+                  initData: state.userInfo.userName,
+                );
+              },
             );
-          },
+          }
         ),
       ],
     );
   }
 
   Widget _buildAvatar() {
-    return BlocBuilder<UserInfoCubit, UserInfoState>(
+    return BlocBuilder<ChangeUserInfoCubit, ChangeUserInfoState>(
       buildWhen: (prev, curr) =>
           curr.avatarFile != prev.avatarFile ||
           curr.isEditing != prev.isEditing,
-      builder: (context, state) {
-        if (state.avatarFile != null) {
+      builder: (context, changeState) {
+        if (changeState.avatarFile != null) {
           return BaseLocalImage(
-            filePath: state.avatarFile!.path,
+            filePath: changeState.avatarFile!.path,
             width: AppDimens.avatarSize,
             height: AppDimens.avatarSize,
             borderRadius: BorderRadius.circular(60),
             onEditTap: () => _showBottomSheet(),
-            showEditButton: state.isEditing,
+            showEditButton: changeState.isEditing,
           );
         }
-        return BaseCachedImage(
-          imageUrl: state.userInfo.avatarUrl ?? '',
-          width: AppDimens.avatarSize,
-          height: AppDimens.avatarSize,
-          borderRadius: BorderRadius.circular(60),
-          errorWidget: const DefaultAvatarWidget(),
-          onEditTap: () => _showBottomSheet(),
-          showEditButton: state.isEditing,
+        return BlocBuilder<UserInfoCubit, UserInfoState>(
+          buildWhen: (prev, curr) => curr.userInfo != prev.userInfo,
+          builder: (context, state) {
+            return BaseCachedImage(
+              imageUrl: state.userInfo.avatarUrl ?? '',
+              width: AppDimens.avatarSize,
+              height: AppDimens.avatarSize,
+              borderRadius: BorderRadius.circular(60),
+              errorWidget: const DefaultAvatarWidget(),
+              onEditTap: () => _showBottomSheet(),
+              showEditButton: changeState.isEditing,
+            );
+          }
         );
       },
     );

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserInfoState {
 
- UserInfoEntity get userInfo; XFile? get avatarFile; LoadStatus get loadStatus; LoadStatus get updateStatus; LoadStatus get uploadStatus; bool get isEditing;
+ UserInfoEntity get userInfo; LoadStatus get loadStatus;
 /// Create a copy of UserInfoState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UserInfoStateCopyWith<UserInfoState> get copyWith => _$UserInfoStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserInfoState&&(identical(other.userInfo, userInfo) || other.userInfo == userInfo)&&(identical(other.avatarFile, avatarFile) || other.avatarFile == avatarFile)&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.updateStatus, updateStatus) || other.updateStatus == updateStatus)&&(identical(other.uploadStatus, uploadStatus) || other.uploadStatus == uploadStatus)&&(identical(other.isEditing, isEditing) || other.isEditing == isEditing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserInfoState&&(identical(other.userInfo, userInfo) || other.userInfo == userInfo)&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userInfo,avatarFile,loadStatus,updateStatus,uploadStatus,isEditing);
+int get hashCode => Object.hash(runtimeType,userInfo,loadStatus);
 
 @override
 String toString() {
-  return 'UserInfoState(userInfo: $userInfo, avatarFile: $avatarFile, loadStatus: $loadStatus, updateStatus: $updateStatus, uploadStatus: $uploadStatus, isEditing: $isEditing)';
+  return 'UserInfoState(userInfo: $userInfo, loadStatus: $loadStatus)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $UserInfoStateCopyWith<$Res>  {
   factory $UserInfoStateCopyWith(UserInfoState value, $Res Function(UserInfoState) _then) = _$UserInfoStateCopyWithImpl;
 @useResult
 $Res call({
- UserInfoEntity userInfo, XFile? avatarFile, LoadStatus loadStatus, LoadStatus updateStatus, LoadStatus uploadStatus, bool isEditing
+ UserInfoEntity userInfo, LoadStatus loadStatus
 });
 
 
@@ -62,15 +62,11 @@ class _$UserInfoStateCopyWithImpl<$Res>
 
 /// Create a copy of UserInfoState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userInfo = null,Object? avatarFile = freezed,Object? loadStatus = null,Object? updateStatus = null,Object? uploadStatus = null,Object? isEditing = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userInfo = null,Object? loadStatus = null,}) {
   return _then(_self.copyWith(
 userInfo: null == userInfo ? _self.userInfo : userInfo // ignore: cast_nullable_to_non_nullable
-as UserInfoEntity,avatarFile: freezed == avatarFile ? _self.avatarFile : avatarFile // ignore: cast_nullable_to_non_nullable
-as XFile?,loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,updateStatus: null == updateStatus ? _self.updateStatus : updateStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,uploadStatus: null == uploadStatus ? _self.uploadStatus : uploadStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,isEditing: null == isEditing ? _self.isEditing : isEditing // ignore: cast_nullable_to_non_nullable
-as bool,
+as UserInfoEntity,loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
+as LoadStatus,
   ));
 }
 /// Create a copy of UserInfoState
@@ -164,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserInfoEntity userInfo,  XFile? avatarFile,  LoadStatus loadStatus,  LoadStatus updateStatus,  LoadStatus uploadStatus,  bool isEditing)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserInfoEntity userInfo,  LoadStatus loadStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserInfoState() when $default != null:
-return $default(_that.userInfo,_that.avatarFile,_that.loadStatus,_that.updateStatus,_that.uploadStatus,_that.isEditing);case _:
+return $default(_that.userInfo,_that.loadStatus);case _:
   return orElse();
 
 }
@@ -185,10 +181,10 @@ return $default(_that.userInfo,_that.avatarFile,_that.loadStatus,_that.updateSta
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserInfoEntity userInfo,  XFile? avatarFile,  LoadStatus loadStatus,  LoadStatus updateStatus,  LoadStatus uploadStatus,  bool isEditing)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserInfoEntity userInfo,  LoadStatus loadStatus)  $default,) {final _that = this;
 switch (_that) {
 case _UserInfoState():
-return $default(_that.userInfo,_that.avatarFile,_that.loadStatus,_that.updateStatus,_that.uploadStatus,_that.isEditing);case _:
+return $default(_that.userInfo,_that.loadStatus);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +201,10 @@ return $default(_that.userInfo,_that.avatarFile,_that.loadStatus,_that.updateSta
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserInfoEntity userInfo,  XFile? avatarFile,  LoadStatus loadStatus,  LoadStatus updateStatus,  LoadStatus uploadStatus,  bool isEditing)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserInfoEntity userInfo,  LoadStatus loadStatus)?  $default,) {final _that = this;
 switch (_that) {
 case _UserInfoState() when $default != null:
-return $default(_that.userInfo,_that.avatarFile,_that.loadStatus,_that.updateStatus,_that.uploadStatus,_that.isEditing);case _:
+return $default(_that.userInfo,_that.loadStatus);case _:
   return null;
 
 }
@@ -220,15 +216,11 @@ return $default(_that.userInfo,_that.avatarFile,_that.loadStatus,_that.updateSta
 
 
 class _UserInfoState implements UserInfoState {
-  const _UserInfoState({this.userInfo = const UserInfoEntity(), this.avatarFile, this.loadStatus = LoadStatus.initial, this.updateStatus = LoadStatus.initial, this.uploadStatus = LoadStatus.initial, this.isEditing = false});
+  const _UserInfoState({this.userInfo = const UserInfoEntity(), this.loadStatus = LoadStatus.initial});
   
 
 @override@JsonKey() final  UserInfoEntity userInfo;
-@override final  XFile? avatarFile;
 @override@JsonKey() final  LoadStatus loadStatus;
-@override@JsonKey() final  LoadStatus updateStatus;
-@override@JsonKey() final  LoadStatus uploadStatus;
-@override@JsonKey() final  bool isEditing;
 
 /// Create a copy of UserInfoState
 /// with the given fields replaced by the non-null parameter values.
@@ -240,16 +232,16 @@ _$UserInfoStateCopyWith<_UserInfoState> get copyWith => __$UserInfoStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserInfoState&&(identical(other.userInfo, userInfo) || other.userInfo == userInfo)&&(identical(other.avatarFile, avatarFile) || other.avatarFile == avatarFile)&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.updateStatus, updateStatus) || other.updateStatus == updateStatus)&&(identical(other.uploadStatus, uploadStatus) || other.uploadStatus == uploadStatus)&&(identical(other.isEditing, isEditing) || other.isEditing == isEditing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserInfoState&&(identical(other.userInfo, userInfo) || other.userInfo == userInfo)&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userInfo,avatarFile,loadStatus,updateStatus,uploadStatus,isEditing);
+int get hashCode => Object.hash(runtimeType,userInfo,loadStatus);
 
 @override
 String toString() {
-  return 'UserInfoState(userInfo: $userInfo, avatarFile: $avatarFile, loadStatus: $loadStatus, updateStatus: $updateStatus, uploadStatus: $uploadStatus, isEditing: $isEditing)';
+  return 'UserInfoState(userInfo: $userInfo, loadStatus: $loadStatus)';
 }
 
 
@@ -260,7 +252,7 @@ abstract mixin class _$UserInfoStateCopyWith<$Res> implements $UserInfoStateCopy
   factory _$UserInfoStateCopyWith(_UserInfoState value, $Res Function(_UserInfoState) _then) = __$UserInfoStateCopyWithImpl;
 @override @useResult
 $Res call({
- UserInfoEntity userInfo, XFile? avatarFile, LoadStatus loadStatus, LoadStatus updateStatus, LoadStatus uploadStatus, bool isEditing
+ UserInfoEntity userInfo, LoadStatus loadStatus
 });
 
 
@@ -277,15 +269,11 @@ class __$UserInfoStateCopyWithImpl<$Res>
 
 /// Create a copy of UserInfoState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userInfo = null,Object? avatarFile = freezed,Object? loadStatus = null,Object? updateStatus = null,Object? uploadStatus = null,Object? isEditing = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userInfo = null,Object? loadStatus = null,}) {
   return _then(_UserInfoState(
 userInfo: null == userInfo ? _self.userInfo : userInfo // ignore: cast_nullable_to_non_nullable
-as UserInfoEntity,avatarFile: freezed == avatarFile ? _self.avatarFile : avatarFile // ignore: cast_nullable_to_non_nullable
-as XFile?,loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,updateStatus: null == updateStatus ? _self.updateStatus : updateStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,uploadStatus: null == uploadStatus ? _self.uploadStatus : uploadStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,isEditing: null == isEditing ? _self.isEditing : isEditing // ignore: cast_nullable_to_non_nullable
-as bool,
+as UserInfoEntity,loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
+as LoadStatus,
   ));
 }
 
