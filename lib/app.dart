@@ -6,6 +6,7 @@ import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/global_blocs/local_notification/local_notification_cubit.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
+import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
 import 'package:todo_flutter_training/router/router_config.dart';
 import 'package:todo_flutter_training/utils/injection.dart';
@@ -35,6 +36,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<LocalNotificationCubit>(
           create: (_) => getIt<LocalNotificationCubit>(),
+        ),
+        BlocProvider<UserInfoCubit>(
+          create: (_) => getIt<UserInfoCubit>(),
         ),
       ],
       child: BlocBuilder<AppSettingCubit, AppSettingState>(
