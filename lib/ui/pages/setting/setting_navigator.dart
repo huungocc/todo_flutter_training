@@ -11,4 +11,8 @@ class SettingNavigator extends AppNavigator {
   void navigateToChangePassword() {
     pushNamed(AppRouter.changePassword);
   }
+
+  void navigateToChangeInfo() {
+    pushNamed(AppRouter.changeInfo);
+  }
 }

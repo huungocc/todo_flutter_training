@@ -85,9 +85,9 @@ class AddTodoCubit extends Cubit<AddTodoState> {
 
   Future<void> addTodo() async {
     try {
-      _updateEntityData();
-
       if (!_validateTodoData()) return;
+
+      _updateEntityData();
 
       emit(state.copyWith(status: LoadStatus.loading));
 
@@ -118,9 +118,9 @@ class AddTodoCubit extends Cubit<AddTodoState> {
 
   Future<void> updateTodo() async {
     try {
-      _updateEntityData();
-
       if (!_validateTodoData()) return;
+
+      _updateEntityData();
 
       emit(state.copyWith(status: LoadStatus.loading));
 
@@ -163,14 +163,14 @@ class AddTodoCubit extends Cubit<AddTodoState> {
   }
 
   bool _validateTodoData() {
-    if (state.todo.taskTitle == null || state.todo.taskTitle!.isEmpty) {
+    if (taskTitleController.text.isEmpty) {
       ExceptionHandler.showErrorSnackBar(S.current.todo_title_empty);
       return false;
-    } else if (state.todo.date == null) {
-      ExceptionHandler.showErrorSnackBar(S.current.todo_time_empty);
-      return false;
-    } else if (state.todo.time == null || state.todo.time!.isEmpty) {
+    } else if (dateController.text.isEmpty) {
       ExceptionHandler.showErrorSnackBar(S.current.todo_date_empty);
+      return false;
+    } else if (timeController.text.isEmpty) {
+      ExceptionHandler.showErrorSnackBar(S.current.todo_time_empty);
       return false;
     }
     return true;

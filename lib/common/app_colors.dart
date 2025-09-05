@@ -40,7 +40,7 @@ class AppColors {
   static const Color textFieldHint = Color(0xFFA1A1A1);
 
   ///Button
-  static const Color disableButton = Color(0xfff2f3f4);
+  static const Color disableButton = Color(0xffd5d5d5);
   static const Color colorButton = Color(0xff2B68B2);
   static const Color buttonBGWhite = Color(0xFFcdd0d5);
   static const Color buttonBGPrimary = primary;

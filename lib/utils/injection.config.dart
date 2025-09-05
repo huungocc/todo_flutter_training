@@ -16,6 +16,8 @@ import 'package:todo_flutter_training/global_blocs/local_notification/local_noti
     as _i626;
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart'
     as _i112;
+import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart'
+    as _i1028;
 import 'package:todo_flutter_training/network/api_client.dart' as _i700;
 import 'package:todo_flutter_training/network/api_util.dart' as _i924;
 import 'package:todo_flutter_training/repository/auth_repository.dart' as _i45;
@@ -28,6 +30,8 @@ import 'package:todo_flutter_training/ui/pages/auth/login/login_cubit.dart'
     as _i534;
 import 'package:todo_flutter_training/ui/pages/auth/register/register_cubit.dart'
     as _i861;
+import 'package:todo_flutter_training/ui/pages/change_user_info/change_user_info_cubit.dart'
+    as _i85;
 import 'package:todo_flutter_training/ui/pages/setting/setting_cubit.dart'
     as _i940;
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_cubit.dart'
@@ -43,8 +47,8 @@ extension GetItInjectableX on _i174.GetIt {
   }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final apiUtil = _$ApiUtil();
-    gh.factory<_i112.AppSettingCubit>(() => _i112.AppSettingCubit());
     gh.factory<_i591.AuthCubit>(() => _i591.AuthCubit());
+    gh.factory<_i112.AppSettingCubit>(() => _i112.AppSettingCubit());
     await gh.lazySingletonAsync<_i454.SupabaseClient>(
       () => apiUtil.initialize(),
       preResolve: true,
@@ -66,6 +70,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i940.SettingCubit>(
       () => _i940.SettingCubit(authRepository: gh<_i45.AuthRepository>()),
+    );
+    gh.factory<_i1028.UserInfoCubit>(
+      () => _i1028.UserInfoCubit(authRepository: gh<_i45.AuthRepository>()),
+    );
+    gh.factory<_i85.ChangeUserInfoCubit>(
+      () => _i85.ChangeUserInfoCubit(authRepository: gh<_i45.AuthRepository>()),
     );
     gh.factory<_i1020.TodoRepository>(
       () => _i1020.TodoRepositoryImpl(apiClient: gh<_i700.ApiClient>()),
