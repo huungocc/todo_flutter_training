@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
@@ -11,7 +12,7 @@ class ApiClient {
 
   ApiClient(this._client);
 
-  /// ================== AUTH ==================
+  // ================== AUTH ==================
 
   Future<Session?> signIn({
     required String email,
@@ -84,46 +85,54 @@ class ApiClient {
     });
   }
 
-  Future<String?> uploadAvatar(String userId, File file) async {
-    final fileExt = file.path.split('.').last;
-    final fileName = '$userId.$fileExt';
-    final filePath = 'avatars/$fileName';
+  Future<String?> uploadAvatar(XFile file) async {
+    return ApiInterceptors.executeWithLogging('UPLOAD_AVATAR', () async {
+      final userId = _client.auth.currentUser!.id;
+      final filePath = userId;
 
-    await _client.storage
-        .from('avatars')
-        .upload(filePath, file, fileOptions: const FileOptions(upsert: true));
+      final uploadFile = File(file.path);
 
-    final publicUrl = _client.storage.from('avatars').getPublicUrl(filePath);
+      // Upload file, ghi đè
+      await _client.storage.from('avatars').upload(
+        filePath,
+        uploadFile,
+        fileOptions: const FileOptions(upsert: true),
+      );
 
-    return publicUrl;
-  }
+      // Lấy public URL
+      final publicUrl = _client.storage.from('avatars').getPublicUrl(filePath);
 
-  Future<void> updateUserInfo({
-    required String userId,
-    String? userName,
-    String? avatarUrl,
-  }) async {
-    await _client.from('user_info').upsert({
-      'user_id': userId,
-      if (userName != null) 'user_name': userName,
-      if (avatarUrl != null) 'avatar_url': avatarUrl,
-      'updated_at': DateTime.now().toIso8601String(),
+      // Thêm timestamp query để cache refresh
+      final versionedUrl = '$publicUrl?v=${DateTime.now().millisecondsSinceEpoch}';
+
+      return versionedUrl;
     });
   }
 
-  Future<UserInfoEntity?> getUserInfo(String userId) async {
-    final data = await _client
-        .from('user_info')
-        .select()
-        .eq('user_id', userId)
-        .maybeSingle();
 
-    return data != null
-        ? UserInfoEntity.fromJson(Map<String, dynamic>.from(data))
-        : null;
+  Future<void> updateUserInfo(UserInfoEntity entity) async {
+    return ApiInterceptors.executeWithLogging('UPDATE_USER_INFO', () async {
+      await _client.from('user_info').upsert({
+        if (entity.userName != null) 'user_name': entity.userName,
+        if (entity.avatarUrl != null) 'avatar_url': entity.avatarUrl,
+      });
+    });
   }
 
-  /// ================== TODOS ==================
+  Future<UserInfoEntity?> getUserInfo() async {
+    return ApiInterceptors.executeWithLogging('GET_USER_INFO', () async {
+      final data = await _client
+          .from('user_info')
+          .select()
+          .maybeSingle();
+
+      return data != null
+          ? UserInfoEntity.fromJson(Map<String, dynamic>.from(data))
+          : null;
+    });
+  }
+
+  // ================== TODOS ==================
 
   Future<void> addTodo({required TodoEntity todo}) async {
     return ApiInterceptors.executeWithLogging('ADD_TODO', () async {

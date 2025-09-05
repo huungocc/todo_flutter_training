@@ -2,10 +2,10 @@ import 'package:go_router/go_router.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/ui/pages/auth/auth_page.dart';
 import 'package:todo_flutter_training/ui/pages/app_start/splash/splash_page.dart';
-import 'package:todo_flutter_training/ui/pages/change_info/change_info_page.dart';
 import 'package:todo_flutter_training/ui/pages/change_password/change_password_page.dart';
 import 'package:todo_flutter_training/ui/pages/setting/setting_page.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_page.dart';
+import 'package:todo_flutter_training/ui/pages/user_info/user_info_page.dart';
 
 class AppRouter {
   AppRouter._();
@@ -49,7 +49,7 @@ class AppRouter {
     GoRoute(
       name: changeInfo,
       path: changeInfo,
-      builder: (context, state) => const ChangeInfoPage(),
+      builder: (context, state) => const UserInfoPage(),
     ),
   ];
 }

@@ -26,6 +26,7 @@ class BaseTextInput extends StatefulWidget {
   final Color? borderColor;
   final bool isPasswordTF;
   final String? initData;
+  final ValueChanged<String>? onChanged;
 
   const BaseTextInput({
     super.key,
@@ -50,6 +51,7 @@ class BaseTextInput extends StatefulWidget {
     this.borderColor,
     this.isPasswordTF = false,
     this.initData,
+    this.onChanged
   });
 
   @override
@@ -152,7 +154,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
           margin: widget.margin,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColors.textWhite,
+            color: widget.readOnly ? AppColors.gray2 : AppColors.textWhite,
             borderRadius: BorderRadius.circular(
               widget.borderRadius ?? AppDimens.textInputCornerRadius,
             ),
@@ -165,6 +167,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
             readOnly: widget.readOnly,
             textAlign: TextAlign.start,
             textAlignVertical: TextAlignVertical.center,
+            onChanged: widget.onChanged,
             onTap: widget.onTap,
             style: widget.textStyle ?? AppTextStyle.blackS16,
             maxLines: widget.isPasswordTF ? 1 : widget.maxLines,
