@@ -55,11 +55,6 @@ class ApiClient {
 
   Session? getSession() => _client.auth.currentSession;
 
-  Stream<AuthState> listenAuthState() => _client.auth.onAuthStateChange;
-
-  Future<void> getSessionFromUrl(Uri uri) =>
-      _client.auth.getSessionFromUrl(uri);
-
   Future<void> updatePassword({
     required String oldPassword,
     required String newPassword,

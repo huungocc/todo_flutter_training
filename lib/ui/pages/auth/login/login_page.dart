@@ -42,6 +42,10 @@ class _LoginBodyState extends State<_LoginBody> {
     context.read<AuthCubit>().changeAuthType(AuthType.register);
   }
 
+  void _onLogin() {
+    context.read<LoginCubit>().login();
+  }
+
   Future<void> _onLoginSuccess() async {
     AuthNavigator(context: context).navigateToListTodo();
   }
@@ -87,7 +91,7 @@ class _LoginBodyState extends State<_LoginBody> {
               const SizedBox(height: 40),
 
               /// LoginButton
-              _buildLoginButton(cubit),
+              _buildLoginButton(),
 
               const SizedBox(height: 20),
 
@@ -108,7 +112,7 @@ class _LoginBodyState extends State<_LoginBody> {
     );
   }
 
-  Widget _buildLoginButton(LoginCubit cubit) {
+  Widget _buildLoginButton() {
     return BlocConsumer<LoginCubit, LoginState>(
       listenWhen: (prev, curr) =>
           prev.loginLoadStatus != curr.loginLoadStatus ||
@@ -133,7 +137,7 @@ class _LoginBodyState extends State<_LoginBody> {
           onTap: state.loginLoadStatus.isLoading
               ? null
               : () {
-                  cubit.login();
+                  _onLogin();
                 },
           child: state.loginLoadStatus.isLoading
               ? BaseLoading(

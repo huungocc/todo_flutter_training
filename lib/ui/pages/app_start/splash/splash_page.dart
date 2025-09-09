@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/gen/assets.gen.dart';
+import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
 import 'package:todo_flutter_training/ui/pages/app_start/splash/splash_navigator.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
@@ -18,19 +20,28 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAuthStatus();
+      _initSplashSequence();
     });
   }
 
-  void _checkAuthStatus() {
-    Future.delayed(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      final authRepository = getIt<AuthRepository>();
-      SplashNavigator(
-        context: context,
-        authRepository: authRepository,
-      ).checkAuthStatus();
-    });
+  Future<void> _initSplashSequence() async {
+    await _checkAuthStatus();
+    _loadUserInfo();
+  }
+
+  Future<void> _checkAuthStatus() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+
+    final authRepository = getIt<AuthRepository>();
+    await SplashNavigator(
+      context: context,
+      authRepository: authRepository,
+    ).checkAuthStatus();
+  }
+
+  void _loadUserInfo() {
+    context.read<UserInfoCubit>().loadUserInfo();
   }
 
   @override

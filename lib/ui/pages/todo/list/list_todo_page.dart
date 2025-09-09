@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
-import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_page.dart';
@@ -38,17 +37,12 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadUserInfo();
       _getTodos(TodoType.all);
     });
   }
 
   void _getTodos(TodoType todoType) {
     context.read<ListTodoCubit>().fetchTodos(todoType);
-  }
-
-  void _loadUserInfo() {
-    context.read<UserInfoCubit>().loadUserInfo();
   }
 
   void _onAddTodo() async {

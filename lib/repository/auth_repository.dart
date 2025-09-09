@@ -92,4 +92,6 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> updateUserInfo(UserInfoEntity entity) {
     return _apiClient.updateUserInfo(entity);
   }
+
+
 }

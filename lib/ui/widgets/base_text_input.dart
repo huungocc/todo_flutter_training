@@ -109,8 +109,14 @@ class _BaseTextInputState extends State<BaseTextInput> {
       )
           : null,
       focusColor: Colors.white,
-      disabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.border),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: widget.borderColor ?? AppColors.gray1,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(
+          widget.borderRadius ?? AppDimens.textInputCornerRadius,
+        ),
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
@@ -147,14 +153,14 @@ class _BaseTextInputState extends State<BaseTextInput> {
           BaseTextLabel(
             widget.title,
             isRequired: widget.isRequired,
-            style: AppTextStyle.blackS16W500,
+            style: AppTextStyle.blackS16W400,
           ),
         Container(
           width: double.infinity,
           margin: widget.margin,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.readOnly ? AppColors.gray2 : AppColors.textWhite,
+            color: widget.enabled ? AppColors.textWhite : AppColors.gray2,
             borderRadius: BorderRadius.circular(
               widget.borderRadius ?? AppDimens.textInputCornerRadius,
             ),
