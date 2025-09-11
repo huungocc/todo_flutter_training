@@ -100,5 +100,6 @@
   "full_name": "Full name",
   "are_you_sure_logout": "Are you sure you want to logout?",
 
-  "email_verification_successful": "Email verification successful"
+  "email_verification_successful": "Email verification successful",
+  "unknown_user": "Unknown User"
 }

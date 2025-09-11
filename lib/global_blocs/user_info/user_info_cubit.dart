@@ -29,8 +29,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         emit(
           state.copyWith(loadStatus: LoadStatus.success, userInfo: remoteUser),
         );
-      } else {
-        emit(state.copyWith(loadStatus: LoadStatus.failure));
       }
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.failure));
@@ -66,5 +64,15 @@ class UserInfoCubit extends Cubit<UserInfoState> {
       emit(state.copyWith(loadStatus: LoadStatus.failure));
       ExceptionHandler.showErrorSnackBar('$e');
     }
+  }
+
+  Future<void> deleteUserInfo() async {
+    await SharedPreferencesHelper.clearUserInfo();
+    emit(
+      state.copyWith(
+        loadStatus: LoadStatus.success,
+        userInfo: UserInfoEntity(),
+      ),
+    );
   }
 }

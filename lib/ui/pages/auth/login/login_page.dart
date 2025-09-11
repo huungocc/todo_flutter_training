@@ -4,6 +4,7 @@ import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
@@ -42,8 +43,16 @@ class _LoginBodyState extends State<_LoginBody> {
     context.read<AuthCubit>().changeAuthType(AuthType.register);
   }
 
+  void _onLogin() {
+    context.read<LoginCubit>().login();
+  }
+
   Future<void> _onLoginSuccess() async {
     AuthNavigator(context: context).navigateToListTodo();
+  }
+
+  void _loadUserInfo() {
+    context.read<UserInfoCubit>().loadUserInfo();
   }
 
   @override
@@ -87,7 +96,7 @@ class _LoginBodyState extends State<_LoginBody> {
               const SizedBox(height: 40),
 
               /// LoginButton
-              _buildLoginButton(cubit),
+              _buildLoginButton(),
 
               const SizedBox(height: 20),
 
@@ -108,7 +117,7 @@ class _LoginBodyState extends State<_LoginBody> {
     );
   }
 
-  Widget _buildLoginButton(LoginCubit cubit) {
+  Widget _buildLoginButton() {
     return BlocConsumer<LoginCubit, LoginState>(
       listenWhen: (prev, curr) =>
           prev.loginLoadStatus != curr.loginLoadStatus ||
@@ -117,6 +126,7 @@ class _LoginBodyState extends State<_LoginBody> {
         if (state.loginLoadStatus.isSuccess) {
           if (state.isConfirmed) {
             _onLoginSuccess();
+            _loadUserInfo();
           } else {
             ExceptionHandler.showErrorSnackBar(
               S.current.account_not_confirmed,
@@ -133,7 +143,7 @@ class _LoginBodyState extends State<_LoginBody> {
           onTap: state.loginLoadStatus.isLoading
               ? null
               : () {
-                  cubit.login();
+                  _onLogin();
                 },
           child: state.loginLoadStatus.isLoading
               ? BaseLoading(

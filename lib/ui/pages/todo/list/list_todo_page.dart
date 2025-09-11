@@ -3,15 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
-import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_page.dart';
+import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_navigator.dart';
 import 'package:todo_flutter_training/ui/pages/todo/widgets/list_todo_header.dart';
 import 'package:todo_flutter_training/ui/pages/todo/widgets/list_todo_section.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
 import 'package:todo_flutter_training/ui/widgets/todo/custom_todo_background.dart';
+import 'package:todo_flutter_training/utils/deep_link_service.dart';
 import 'package:todo_flutter_training/utils/injection.dart';
 
 class ListTodoPage extends StatelessWidget {
@@ -38,17 +39,28 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadUserInfo();
       _getTodos(TodoType.all);
+      _handlePendingDeeplink();
     });
+  }
+
+  void _handlePendingDeeplink() {
+    final deepLinkService = getIt<DeepLinkService>();
+    final uri = deepLinkService.consumePendingDeeplink();
+
+    if (uri != null) {
+      if (uri.scheme == 'todoapp' && uri.host == 'login-callback') {
+        _navigateToSetting();
+      }
+    }
+  }
+
+  void _navigateToSetting() {
+    ListTodoNavigator(context: context).navigateToSetting();
   }
 
   void _getTodos(TodoType todoType) {
     context.read<ListTodoCubit>().fetchTodos(todoType);
-  }
-
-  void _loadUserInfo() {
-    context.read<UserInfoCubit>().loadUserInfo();
   }
 
   void _onAddTodo() async {

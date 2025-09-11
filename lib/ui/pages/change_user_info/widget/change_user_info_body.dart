@@ -78,7 +78,7 @@ class _ChangeUserInfoBodyState extends State<ChangeUserInfoBody> {
                 return BaseTextInput(
                   textController: cubit.userNameController,
                   title: S.of(context).full_name,
-                  readOnly: !changeState.isEditing,
+                  enabled: changeState.isEditing,
                   initData: state.userInfo.userName,
                 );
               },
