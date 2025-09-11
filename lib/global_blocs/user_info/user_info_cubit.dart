@@ -68,5 +68,11 @@ class UserInfoCubit extends Cubit<UserInfoState> {
 
   Future<void> deleteUserInfo() async {
     await SharedPreferencesHelper.clearUserInfo();
+    emit(
+      state.copyWith(
+        loadStatus: LoadStatus.success,
+        userInfo: UserInfoEntity(),
+      ),
+    );
   }
 }

@@ -1,7 +1,5 @@
+import 'dart:async';
 import 'package:app_links/app_links.dart';
-import 'package:go_router/go_router.dart';
-import 'package:todo_flutter_training/configs/app_configs.dart';
-import 'package:todo_flutter_training/router/router_config.dart';
 
 class DeepLinkService {
   static final DeepLinkService _instance = DeepLinkService._internal();
@@ -9,36 +7,33 @@ class DeepLinkService {
   DeepLinkService._internal();
 
   late final AppLinks _appLinks;
-  bool _initialized = false;
+  StreamSubscription<Uri>? _sub;
+  Uri? _pendingUri;
 
   Future<void> init() async {
-    if (_initialized) return;
-    _initialized = true;
-
     _appLinks = AppLinks();
 
-    // Initial link (cold start)
-    final initialLink = await _appLinks.getInitialLink();
-    if (initialLink != null) {
-      _handleUri(initialLink);
-    }
-
-    // Runtime link
-    _appLinks.uriLinkStream.listen((uri) {
-      _handleUri(uri);
+    _sub = _appLinks.uriLinkStream.listen((uri) {
+      // Supabase xử lý login → chỉ lưu lại để UI dùng
+      _pendingUri = uri;
     });
+
+    // Deeplink khi app cold start
+    final initialUri = await _appLinks.getInitialLink();
+    if (initialUri != null) {
+      _pendingUri = initialUri;
+    }
   }
 
-  void _handleUri(Uri uri) {
-    final context = NavigationConfig.context;
-    if (context == null) return;
+  Uri? consumePendingDeeplink() {
+    final uri = _pendingUri;
+    _pendingUri = null;
+    return uri;
+  }
 
-    switch (uri.host) {
-      case "login-callback":
-        context.go(AppRouter.setting);
-        break;
-      default:
-        break;
-    }
+  void dispose() {
+    _sub?.cancel();
   }
 }
+
+

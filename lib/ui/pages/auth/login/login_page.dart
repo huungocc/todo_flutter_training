@@ -4,6 +4,7 @@ import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
@@ -48,6 +49,10 @@ class _LoginBodyState extends State<_LoginBody> {
 
   Future<void> _onLoginSuccess() async {
     AuthNavigator(context: context).navigateToListTodo();
+  }
+
+  void _loadUserInfo() {
+    context.read<UserInfoCubit>().loadUserInfo();
   }
 
   @override
@@ -121,6 +126,7 @@ class _LoginBodyState extends State<_LoginBody> {
         if (state.loginLoadStatus.isSuccess) {
           if (state.isConfirmed) {
             _onLoginSuccess();
+            _loadUserInfo();
           } else {
             ExceptionHandler.showErrorSnackBar(
               S.current.account_not_confirmed,
