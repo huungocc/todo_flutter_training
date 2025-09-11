@@ -100,5 +100,6 @@
   "full_name": "Họ và tên",
   "are_you_sure_logout": "Bạn có chắc chắn muốn đăng xuất?",
 
-  "email_verification_successful": "Xác thực email thành công"
+  "email_verification_successful": "Xác thực email thành công",
+  "unknown_user": "Người dùng không xác định"
 }

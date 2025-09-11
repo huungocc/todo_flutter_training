@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
 
 class AppConfigs {
-  static const String appName = "Movie";
+  static const String appName = "Todo";
 
   ///Local
   static const defaultLanguage = Language.english;

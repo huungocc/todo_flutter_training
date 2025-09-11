@@ -42,11 +42,11 @@ class _ChangeUserInfoBodyState extends State<_ChangeUserInfoBody> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadUserInfo();
+      _refreshUserInfo();
     });
   }
 
-  void _loadUserInfo() {
+  void _refreshUserInfo() {
     context.read<UserInfoCubit>().refreshUserInfo();
   }
 
@@ -70,7 +70,7 @@ class _ChangeUserInfoBodyState extends State<_ChangeUserInfoBody> {
           listenWhen: (prev, curr) => curr.updateStatus != prev.updateStatus,
           listener: (context, state) {
             if (state.updateStatus.isSuccess) {
-              _loadUserInfo();
+              _refreshUserInfo();
             }
           },
         ),

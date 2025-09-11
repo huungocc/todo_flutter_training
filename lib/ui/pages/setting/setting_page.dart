@@ -4,6 +4,7 @@ import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
+import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
@@ -47,8 +48,13 @@ class _SettingBodyState extends State<_SettingBody> {
       message: S.of(context).are_you_sure_logout,
       onConfirm: () {
         context.read<SettingCubit>().logout();
+        _deleteUserInfo();
       }
     );
+  }
+
+  void _deleteUserInfo() {
+    context.read<UserInfoCubit>().deleteUserInfo();
   }
 
   void _backToLogin() {
