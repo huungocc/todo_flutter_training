@@ -28,7 +28,7 @@ class UserInfoWidget extends StatelessWidget {
                 errorWidget: const DefaultAvatarWidget(),
               ),
               BaseTextLabel(
-                state.userInfo.userName,
+                state.userInfo.userName ?? 'Unknown User',
                 style: AppTextStyle.blackS18W400,
               ),
             ],

@@ -38,6 +38,7 @@ import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_cubit.dart'
     as _i356;
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_cubit.dart'
     as _i833;
+import 'package:todo_flutter_training/utils/deep_link_service.dart' as _i330;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -50,7 +51,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i591.AuthCubit>(() => _i591.AuthCubit());
     gh.factory<_i112.AppSettingCubit>(() => _i112.AppSettingCubit());
     await gh.lazySingletonAsync<_i454.SupabaseClient>(
-      () => apiUtil.initialize(),
+      () => apiUtil.provideSupabaseClient(),
+      preResolve: true,
+    );
+    await gh.lazySingletonAsync<_i330.DeepLinkService>(
+      () => apiUtil.provideDeepLinkService(),
       preResolve: true,
     );
     gh.factory<_i728.LocalNotificationRepository>(
