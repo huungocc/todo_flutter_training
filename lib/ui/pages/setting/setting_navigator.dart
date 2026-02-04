@@ -15,4 +15,8 @@ class SettingNavigator extends AppNavigator {
   void navigateToChangeInfo() {
     pushNamed(AppRouter.changeInfo);
   }
+
+  void navigateToChangeTheme() {
+    pushNamed(AppRouter.changeTheme);
+  }
 }

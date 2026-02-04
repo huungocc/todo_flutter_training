@@ -21,7 +21,7 @@ class CustomAuthBackground extends StatelessWidget {
               height: 500,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.todoBackground,
+                color: AppColors.lightBackground,
               ),
             ),
           ),
@@ -34,7 +34,7 @@ class CustomAuthBackground extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppColors.todoBackground,
+                  color: AppColors.lightBackground,
                   width: 3,
                 ),
               ),
@@ -48,7 +48,7 @@ class CustomAuthBackground extends StatelessWidget {
               height: 500,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: AppColors.todoBackground,
+                  color: AppColors.lightBackground,
                   width: 3,
                 ),
               ),
@@ -63,7 +63,7 @@ class CustomAuthBackground extends StatelessWidget {
                 height: 500,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: AppColors.todoBackground,
+                    color: AppColors.lightBackground,
                     width: 3,
                   ),
                 ),

@@ -75,8 +75,8 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                   if (state.activeLoadStatus.isLoading) {
                     return BaseLoading(
                       size: AppDimens.iconSizeNormal,
-                      backgroundColor: AppColors.textWhite,
-                      valueColor: AppColors.textBlack,
+                      backgroundColor: AppColors.textPrimary,
+                      valueColor: AppColors.textOnDark,
                     );
                   }
                   return _buildActiveTodos(state.activeTodos, context);
@@ -97,8 +97,8 @@ class _ListTodoSectionState extends State<ListTodoSection> {
                   if (state.completedLoadStatus.isLoading) {
                     return BaseLoading(
                       size: AppDimens.iconSizeNormal,
-                      backgroundColor: AppColors.textWhite,
-                      valueColor: AppColors.textBlack,
+                      backgroundColor: AppColors.textPrimary,
+                      valueColor: AppColors.textOnDark,
                     );
                   }
                   return _buildCompletedTodos(state.completedTodos, context);

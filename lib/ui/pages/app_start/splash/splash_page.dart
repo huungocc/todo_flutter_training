@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/gen/assets.gen.dart';
 import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
@@ -47,7 +46,6 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      colorBackground: AppColors.background,
       hideAppBar: true,
       body: Center(child: Assets.images.iconApp.image(scale: 5)),
     );

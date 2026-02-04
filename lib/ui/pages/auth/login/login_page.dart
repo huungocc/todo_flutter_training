@@ -84,13 +84,13 @@ class _LoginBodyState extends State<_LoginBody> {
               BaseTextInput(
                 textController: cubit.loginEmailController,
                 hintText: S.of(context).email,
-                borderColor: AppColors.gray3,
+                borderColor: AppColors.textSecondary,
               ),
               const SizedBox(height: 10),
               BaseTextInput(
                 textController: cubit.loginPasswordController,
                 hintText: S.of(context).password,
-                borderColor: AppColors.gray3,
+                borderColor: AppColors.textSecondary,
                 isPasswordTF: true,
               ),
               const SizedBox(height: 40),
@@ -138,7 +138,6 @@ class _LoginBodyState extends State<_LoginBody> {
           prev.loginLoadStatus != curr.loginLoadStatus,
       builder: (context, state) {
         return BaseButton(
-          backgroundColor: AppColors.todoPurple,
           height: AppDimens.buttonHeight,
           onTap: state.loginLoadStatus.isLoading
               ? null
@@ -148,8 +147,8 @@ class _LoginBodyState extends State<_LoginBody> {
           child: state.loginLoadStatus.isLoading
               ? BaseLoading(
                   size: AppDimens.iconSizeNormal,
-                  backgroundColor: AppColors.textBlack,
-                  valueColor: AppColors.textWhite,
+                  backgroundColor: AppColors.textPrimary,
+                  valueColor: AppColors.textOnDark,
                 )
               : BaseTextLabel(
                   S.of(context).sign_in,

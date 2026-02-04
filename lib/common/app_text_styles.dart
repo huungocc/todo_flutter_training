@@ -5,7 +5,7 @@ import 'app_colors.dart';
 class AppTextStyle {
   ///Black
   static const black = TextStyle(
-    color: AppColors.textBlack,
+    color: AppColors.textPrimary,
     fontWeight: FontWeight.w400,
   );
 
@@ -30,7 +30,7 @@ class AppTextStyle {
 
   ///White
   static const white = TextStyle(
-    color: AppColors.textWhite,
+    color: AppColors.textOnDark,
     fontWeight: FontWeight.w400,
   );
 
@@ -61,7 +61,7 @@ class AppTextStyle {
 
   ///Purple
   static const purple = TextStyle(
-    color: AppColors.todoPurple,
+    color: AppColors.primary,
     fontWeight: FontWeight.w400,
   );
 
@@ -96,7 +96,7 @@ extension AppTextStyleExtension on AppTextStyle {
     required bool isCompleted,
   }) {
     var style = AppTextStyle.blackS16W600.copyWith(
-      color: isExpired ? AppColors.error : AppColors.textBlack,
+      color: isExpired ? AppColors.error : AppColors.textPrimary,
       decoration: isCompleted ? TextDecoration.lineThrough : null,
     );
     return style;
@@ -107,7 +107,7 @@ extension AppTextStyleExtension on AppTextStyle {
     required bool isCompleted,
   }) {
     var style = AppTextStyle.blackS16W500.copyWith(
-      color: isExpired ? AppColors.subError : AppColors.buttonBGDisabled,
+      color: isExpired ? AppColors.error : AppColors.textPrimary,
       decoration: isCompleted ? TextDecoration.lineThrough : null,
     );
     return style;

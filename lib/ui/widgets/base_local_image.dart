@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseLocalImage extends StatelessWidget {
   final String filePath;
@@ -72,13 +72,13 @@ class BaseLocalImage extends StatelessWidget {
                 height: AppDimens.iconSizeNormal,
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: AppColors.todoPurple,
+                  color: context.colors.primary,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(width: 3, color: AppColors.textWhite),
+                  border: Border.all(width: 3, color: context.colors.onPrimary),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.edit,
-                  color: AppColors.textWhite,
+                  color: context.colors.onPrimary,
                   size: AppDimens.iconSizeSmall,
                 ),
               ),

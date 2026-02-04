@@ -45,8 +45,6 @@ class _ChangePasswordBodyState extends State<_ChangePasswordBody> {
     final cubit = context.read<ChangePasswordCubit>();
     return BaseScreen(
       title: S.of(context).change_password,
-      iconBackColor: AppColors.textWhite,
-      colorAppBar: AppColors.todoPurple,
       isLightStatusBar: true,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -92,7 +90,6 @@ class _ChangePasswordBodyState extends State<_ChangePasswordBody> {
           curr.changePasswordLoadStatus != prev.changePasswordLoadStatus,
       builder: (context, state) {
         return BaseButton(
-          backgroundColor: AppColors.todoPurple,
           onTap: state.changePasswordLoadStatus.isLoading
               ? null
               : () {
@@ -101,8 +98,8 @@ class _ChangePasswordBodyState extends State<_ChangePasswordBody> {
           child: state.changePasswordLoadStatus.isLoading
               ? BaseLoading(
             size: AppDimens.iconSizeNormal,
-            backgroundColor: AppColors.textBlack,
-            valueColor: AppColors.textWhite,
+            backgroundColor: AppColors.textPrimary,
+            valueColor: AppColors.textOnDark,
           )
               : BaseTextLabel(
             S.of(context).confirm,

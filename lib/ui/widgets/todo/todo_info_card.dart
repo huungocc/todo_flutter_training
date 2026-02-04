@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/todo/todo_icon_widget.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class TodoInfoCard extends StatelessWidget {
   final double? borderRadius;
@@ -33,7 +33,7 @@ class TodoInfoCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.textWhite,
+          color: context.colors.onPrimary,
           borderRadius: BorderRadius.circular(borderRadius ?? 0),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
@@ -75,12 +75,12 @@ class TodoInfoCard extends StatelessWidget {
                   ),
 
                   /// White Layer on Completed Todos
-                  if (isCompleted)
-                    Positioned.fill(
-                      child: Container(
-                        color: Colors.white.withValues(alpha: 0.7),
-                      ),
-                    ),
+                  // if (isCompleted)
+                  //   Positioned.fill(
+                  //     child: Container(
+                  //       color: Colors.white.withValues(alpha: 0.7),
+                  //     ),
+                  //   ),
                 ],
               ),
             ),

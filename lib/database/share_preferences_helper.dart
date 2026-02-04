@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:todo_flutter_training/models/entities/user_info/user_info_entity.dart';
+import 'package:todo_flutter_training/models/enums/app_theme_mode.dart';
 import 'package:todo_flutter_training/models/enums/language.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesHelper {
   static const _currentLanguageKey = 'current_language';
-
+  static const _currentThemeModeKey = 'current_theme_mode';
   static const _userInfoKey = 'user_info';
 
   static Future<Language?> getCurrentLanguage() async {
@@ -22,6 +23,24 @@ class SharedPreferencesHelper {
   static Future<void> setCurrentLanguage(Language language) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(_currentLanguageKey, language.code);
+  }
+
+  static Future<AppThemeMode> getCurrentThemeMode() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final themeModeString = prefs.getString(_currentThemeModeKey);
+      return AppThemeMode.values.firstWhere(
+        (mode) => mode.code == themeModeString,
+        orElse: () => AppThemeMode.system,
+      );
+    } catch (e) {
+      return AppThemeMode.system;
+    }
+  }
+
+  static Future<void> setCurrentThemeMode(AppThemeMode themeMode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_currentThemeModeKey, themeMode.code);
   }
 
   static Future<void> saveUserInfo(UserInfoEntity userInfo) async {

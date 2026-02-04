@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseButton extends StatelessWidget {
   final String? title;
@@ -48,9 +48,11 @@ class BaseButton extends StatelessWidget {
       decoration:
           decoration ??
           BoxDecoration(
-            color: isDisable
-                ? AppColors.disableButton
-                : (backgroundColor ?? AppColors.colorButton),
+            color:
+                backgroundColor ??
+                (isDisable
+                    ? context.colors.primary.withValues(alpha: 0.5)
+                    : context.colors.primary),
             border: Border.all(color: borderColor ?? Colors.transparent),
             borderRadius: BorderRadius.circular(
               borderRadius ?? AppDimens.buttonCornerRadius,
@@ -78,22 +80,28 @@ class BaseButton extends StatelessWidget {
                   vertical: AppDimens.marginSmall,
                   horizontal: AppDimens.marginSmall,
                 ),
-            child: _renderChild(),
+            child: _renderChild(context),
           ),
         ),
       ),
     );
   }
 
-  Widget _renderChild() {
+  Widget _renderChild(BuildContext context) {
     if (title != null) {
       TextStyle style = titleStyle ?? AppTextStyle.whiteS16W500;
 
       if (isDisable) {
-        style = style.copyWith(color: AppColors.disableButton);
+        style = style.copyWith(
+          color: context.colors.primary.withValues(alpha: 0.5),
+        );
       }
 
-      return BaseTextLabel(title, style: style, textAlign: TextAlign.center);
+      return BaseTextLabel(
+        title,
+        style: style,
+        textAlign: TextAlign.center,
+      );
     }
     return child ?? const SizedBox();
   }

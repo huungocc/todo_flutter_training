@@ -15,6 +15,7 @@ import 'package:todo_flutter_training/ui/widgets/base_text_input.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
 import 'package:todo_flutter_training/ui/widgets/todo/todo_radio_group.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class AddTodoInput extends StatefulWidget {
   const AddTodoInput({super.key});
@@ -50,7 +51,6 @@ class _AddTodoInputState extends State<AddTodoInput> {
       body: _buildInputBody(context),
       resizeToAvoidBottomInset: true,
       hideAppBar: true,
-      colorBackground: AppColors.todoBackground,
       bottomBar: BottomAppBar(
         color: Colors.transparent,
         child: _buildSaveButton(),
@@ -134,7 +134,7 @@ class _AddTodoInputState extends State<AddTodoInput> {
             title: S.of(context).date,
             hintText: S.of(context).date,
             readOnly: true,
-            suffixIcon: Icon(Icons.date_range, color: AppColors.todoPurple),
+            suffixIcon: Icon(Icons.date_range, color: context.colors.primary),
             onTap: () {
               _onPickDate();
             },
@@ -148,7 +148,7 @@ class _AddTodoInputState extends State<AddTodoInput> {
             readOnly: true,
             suffixIcon: Icon(
               Icons.access_time_rounded,
-              color: AppColors.todoPurple,
+              color: context.colors.primary,
             ),
             onTap: () {
               _onPickTime();
@@ -166,7 +166,6 @@ class _AddTodoInputState extends State<AddTodoInput> {
           prev.status.isLoading != curr.status.isLoading,
       builder: (context, state) {
         return BaseButton(
-          backgroundColor: AppColors.todoPurple,
           onTap: state.status.isLoading
               ? null
               : () {
@@ -180,8 +179,8 @@ class _AddTodoInputState extends State<AddTodoInput> {
           child: state.status.isLoading
               ? BaseLoading(
                   size: AppDimens.iconSizeNormal,
-                  backgroundColor: AppColors.textBlack,
-                  valueColor: AppColors.textWhite,
+                  backgroundColor: AppColors.textPrimary,
+                  valueColor: AppColors.textOnDark,
                 )
               : BaseTextLabel(
                   S.of(context).save,

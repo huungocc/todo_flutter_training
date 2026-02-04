@@ -15,6 +15,7 @@ import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 import 'package:todo_flutter_training/utils/injection.dart';
 
 class ChangeUserInfoPage extends StatelessWidget {
@@ -85,8 +86,6 @@ class _ChangeUserInfoBodyState extends State<_ChangeUserInfoBody> {
       ],
       child: BaseScreen(
         title: S.of(context).change_info,
-        iconBackColor: AppColors.textWhite,
-        colorAppBar: AppColors.todoPurple,
         isLightStatusBar: true,
         rightWidgets: [
           BlocBuilder<ChangeUserInfoCubit, ChangeUserInfoState>(
@@ -95,7 +94,7 @@ class _ChangeUserInfoBodyState extends State<_ChangeUserInfoBody> {
               return IconButton(
                 onPressed: _setEditing,
                 icon: Icon(
-                  color: AppColors.textWhite,
+                  color: context.colors.onPrimary,
                   state.isEditing ? Icons.close : Icons.edit,
                 ),
               );
@@ -136,7 +135,6 @@ class _ChangeUserInfoBodyState extends State<_ChangeUserInfoBody> {
             state.updateStatus.isLoading || state.uploadStatus.isLoading;
 
         return BaseButton(
-          backgroundColor: AppColors.todoPurple,
           isDisable: isLoading,
           onTap: () {
             if (state.avatarFile != null) {
@@ -155,8 +153,8 @@ class _ChangeUserInfoBodyState extends State<_ChangeUserInfoBody> {
     if (state.updateStatus.isLoading || state.uploadStatus.isLoading) {
       return BaseLoading(
         size: AppDimens.iconSizeNormal,
-        backgroundColor: AppColors.textBlack,
-        valueColor: AppColors.textWhite,
+        backgroundColor: AppColors.textPrimary,
+        valueColor: AppColors.textOnDark,
       );
     }
 

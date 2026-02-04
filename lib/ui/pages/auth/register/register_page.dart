@@ -70,20 +70,20 @@ class _RegisterBodyState extends State<_RegisterBody> {
               BaseTextInput(
                 textController: cubit.registerEmailController,
                 hintText: S.of(context).email,
-                borderColor: AppColors.gray3,
+                borderColor: AppColors.textSecondary,
               ),
               const SizedBox(height: 10),
               BaseTextInput(
                 textController: cubit.registerPasswordController,
                 hintText: S.of(context).password,
-                borderColor: AppColors.gray3,
+                borderColor: AppColors.textSecondary,
                 isPasswordTF: true,
               ),
               const SizedBox(height: 10),
               BaseTextInput(
                 textController: cubit.registerConfirmPasswordController,
                 hintText: S.of(context).confirm_password,
-                borderColor: AppColors.gray3,
+                borderColor: AppColors.textSecondary,
                 isPasswordTF: true,
               ),
               const SizedBox(height: 40),
@@ -125,7 +125,6 @@ class _RegisterBodyState extends State<_RegisterBody> {
           prev.registerLoadStatus != curr.registerLoadStatus,
       builder: (context, state) {
         return BaseButton(
-          backgroundColor: AppColors.todoPurple,
           height: AppDimens.buttonHeight,
           onTap: state.registerLoadStatus.isLoading
               ? null
@@ -135,8 +134,8 @@ class _RegisterBodyState extends State<_RegisterBody> {
           child: state.registerLoadStatus.isLoading
               ? BaseLoading(
             size: AppDimens.iconSizeNormal,
-            backgroundColor: AppColors.textBlack,
-            valueColor: AppColors.textWhite,
+            backgroundColor: AppColors.textPrimary,
+            valueColor: AppColors.textOnDark,
           )
               : BaseTextLabel(
             S.of(context).sign_up,

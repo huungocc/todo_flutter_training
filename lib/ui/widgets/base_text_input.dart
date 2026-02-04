@@ -3,6 +3,7 @@ import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseTextInput extends StatefulWidget {
   final String? title;
@@ -87,7 +88,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
           },
           child: Icon(
             _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: AppColors.gray1,
+            color: context.colors.onSurface,
           ),
         ),
       )
@@ -111,7 +112,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
       focusColor: Colors.white,
       disabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: widget.borderColor ?? AppColors.gray1,
+          color: widget.borderColor ?? AppColors.textSecondary,
           width: 1,
         ),
         borderRadius: BorderRadius.circular(
@@ -120,7 +121,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: widget.borderColor ?? AppColors.gray1,
+          color: widget.borderColor ?? AppColors.textSecondary,
           width: 1,
         ),
         borderRadius: BorderRadius.circular(
@@ -128,7 +129,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
         ),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.todoPurple, width: 1),
+        borderSide: BorderSide(color: context.colors.onSurface, width: 1),
         borderRadius: BorderRadius.circular(
           widget.borderRadius ?? AppDimens.textInputCornerRadius,
         ),
@@ -136,8 +137,8 @@ class _BaseTextInputState extends State<BaseTextInput> {
       hintStyle: widget.hintStyle ??
           AppTextStyle.blackS16.copyWith(
             color: !widget.enabled
-                ? AppColors.textBlack
-                : AppColors.textFieldHint,
+                ? AppColors.textPrimary
+                : AppColors.textPrimary,
             fontWeight: FontWeight.w400,
           ),
       hintText: widget.hintText,
@@ -160,7 +161,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
           margin: widget.margin,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.enabled ? AppColors.textWhite : AppColors.gray2,
+            color: widget.enabled ? context.colors.onPrimary : AppColors.textSecondary,
             borderRadius: BorderRadius.circular(
               widget.borderRadius ?? AppDimens.textInputCornerRadius,
             ),
@@ -178,7 +179,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
             style: widget.textStyle ?? AppTextStyle.blackS16,
             maxLines: widget.isPasswordTF ? 1 : widget.maxLines,
             minLines: widget.minLines,
-            cursorColor: AppColors.todoPurple,
+            cursorColor: context.colors.primary,
             obscureText: widget.isPasswordTF ? _obscureText : false,
             decoration: _buildDecoration(),
           ),

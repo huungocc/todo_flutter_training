@@ -25,6 +25,7 @@ import 'package:todo_flutter_training/repository/local_notification_repository.d
     as _i728;
 import 'package:todo_flutter_training/repository/todo_repository.dart'
     as _i1020;
+import 'package:todo_flutter_training/theme/app_theme_data.dart' as _i595;
 import 'package:todo_flutter_training/ui/pages/auth/auth_cubit.dart' as _i591;
 import 'package:todo_flutter_training/ui/pages/auth/login/login_cubit.dart'
     as _i534;
@@ -48,8 +49,8 @@ extension GetItInjectableX on _i174.GetIt {
   }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final apiUtil = _$ApiUtil();
-    gh.factory<_i591.AuthCubit>(() => _i591.AuthCubit());
     gh.factory<_i112.AppSettingCubit>(() => _i112.AppSettingCubit());
+    gh.factory<_i591.AuthCubit>(() => _i591.AuthCubit());
     await gh.lazySingletonAsync<_i454.SupabaseClient>(
       () => apiUtil.provideSupabaseClient(),
       preResolve: true,
@@ -58,6 +59,8 @@ extension GetItInjectableX on _i174.GetIt {
       () => apiUtil.provideDeepLinkService(),
       preResolve: true,
     );
+    gh.lazySingleton<_i595.LightThemeData>(() => _i595.LightThemeData());
+    gh.lazySingleton<_i595.DarkThemeData>(() => _i595.DarkThemeData());
     gh.factory<_i728.LocalNotificationRepository>(
       () => _i728.LocalNotificationRepositoryImpl(),
     );
@@ -67,20 +70,20 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i45.AuthRepository>(
       () => _i45.AuthRepositoryImpl(gh<_i700.ApiClient>()),
     );
-    gh.factory<_i861.RegisterCubit>(
-      () => _i861.RegisterCubit(authRepository: gh<_i45.AuthRepository>()),
+    gh.factory<_i1028.UserInfoCubit>(
+      () => _i1028.UserInfoCubit(authRepository: gh<_i45.AuthRepository>()),
     );
     gh.factory<_i534.LoginCubit>(
       () => _i534.LoginCubit(authRepository: gh<_i45.AuthRepository>()),
     );
-    gh.factory<_i940.SettingCubit>(
-      () => _i940.SettingCubit(authRepository: gh<_i45.AuthRepository>()),
-    );
-    gh.factory<_i1028.UserInfoCubit>(
-      () => _i1028.UserInfoCubit(authRepository: gh<_i45.AuthRepository>()),
+    gh.factory<_i861.RegisterCubit>(
+      () => _i861.RegisterCubit(authRepository: gh<_i45.AuthRepository>()),
     );
     gh.factory<_i85.ChangeUserInfoCubit>(
       () => _i85.ChangeUserInfoCubit(authRepository: gh<_i45.AuthRepository>()),
+    );
+    gh.factory<_i940.SettingCubit>(
+      () => _i940.SettingCubit(authRepository: gh<_i45.AuthRepository>()),
     );
     gh.factory<_i1020.TodoRepository>(
       () => _i1020.TodoRepositoryImpl(apiClient: gh<_i700.ApiClient>()),

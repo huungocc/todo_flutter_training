@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseCachedImage extends StatelessWidget {
   final String imageUrl;
@@ -25,7 +25,7 @@ class BaseCachedImage extends StatelessWidget {
     this.placeholder,
     this.errorWidget,
     this.onEditTap,
-    this.showEditButton = false
+    this.showEditButton = false,
   });
 
   @override
@@ -40,17 +40,17 @@ class BaseCachedImage extends StatelessWidget {
             height: height,
             fit: fit,
             placeholder: (context, url) =>
-            placeholder ??
+                placeholder ??
                 Container(
                   width: width,
                   height: height,
                   color: Colors.grey.shade300,
                   child: const Center(
-                    child: BaseLoading(size: AppDimens.iconSizeNormal,),
+                    child: BaseLoading(size: AppDimens.iconSizeNormal),
                   ),
                 ),
             errorWidget: (context, url, error) =>
-            errorWidget ??
+                errorWidget ??
                 Container(
                   width: width,
                   height: height,
@@ -72,19 +72,19 @@ class BaseCachedImage extends StatelessWidget {
                 height: AppDimens.iconSizeNormal,
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: AppColors.todoPurple,
+                  color: context.colors.primary,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(width: 3, color: AppColors.textWhite),
+                  border: Border.all(width: 3, color: context.colors.onPrimary),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.edit,
-                  color: AppColors.textWhite,
+                  color: context.colors.onPrimary,
                   size: AppDimens.iconSizeSmall,
                 ),
               ),
             ),
           ),
-      ]
+      ],
     );
   }
 }

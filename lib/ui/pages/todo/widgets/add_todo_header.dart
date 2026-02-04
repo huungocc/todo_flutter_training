@@ -33,10 +33,10 @@ class _AddTodoHeaderState extends State<AddTodoHeader> {
               height: AppDimens.iconSizeLarge,
               width: AppDimens.iconSizeLarge,
               decoration: BoxDecoration(
-                color: AppColors.textWhite,
+                color: AppColors.lightBackground,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.close, color: AppColors.textBlack),
+              child: const Icon(Icons.close, color: AppColors.textPrimary),
             ),
           ),
         ),

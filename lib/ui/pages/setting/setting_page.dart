@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
@@ -49,7 +48,7 @@ class _SettingBodyState extends State<_SettingBody> {
       onConfirm: () {
         context.read<SettingCubit>().logout();
         _deleteUserInfo();
-      }
+      },
     );
   }
 
@@ -69,12 +68,14 @@ class _SettingBodyState extends State<_SettingBody> {
     SettingNavigator(context: context).navigateToChangeInfo();
   }
 
+  void _navigateToChangeTheme() {
+    SettingNavigator(context: context).navigateToChangeTheme();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       title: S.of(context).account,
-      iconBackColor: AppColors.textWhite,
-      colorAppBar: AppColors.todoPurple,
       isLightStatusBar: true,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -109,11 +110,18 @@ class _SettingBodyState extends State<_SettingBody> {
               title: S.of(context).change_password,
             ),
 
+            /// ThemeButton
+            SettingButton(
+              onTap: () => _navigateToChangeTheme(),
+              icon: Icons.light_mode,
+              title: S.of(context).change_theme,
+            ),
+
             /// ChangeLanguageButton
             _buildChangeLanguageButton(),
 
             /// LogoutButton
-            _buildLogoutButton()
+            _buildLogoutButton(),
           ],
         ),
       ),
@@ -140,7 +148,7 @@ class _SettingBodyState extends State<_SettingBody> {
           icon: Icons.logout,
           title: S.of(context).logout,
           action: state.logoutLoadStatus.isLoading
-              ? const BaseLoading(size: 18,)
+              ? const BaseLoading(size: 18)
               : null,
         );
       },
