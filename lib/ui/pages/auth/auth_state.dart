@@ -5,7 +5,6 @@ part 'auth_state.freezed.dart';
 
 @freezed
 abstract class AuthState with _$AuthState {
-  const factory AuthState({
-    @Default(AuthType.login) AuthType authType,
-  }) = _AuthState;
+  const factory AuthState({@Default(AuthType.login) AuthType authType}) =
+      _AuthState;
 }

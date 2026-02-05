@@ -16,7 +16,6 @@ abstract class LocalNotificationRepository {
   Future<void> cancelNotification(int id);
 
   Future<void> cancelAllScheduledNotifications();
-
 }
 
 @Injectable(as: LocalNotificationRepository)
@@ -37,10 +36,12 @@ class LocalNotificationRepositoryImpl implements LocalNotificationRepository {
       iOS: iosInit,
     );
 
-    await _notifications.initialize(initSettings,);
+    await _notifications.initialize(initSettings);
 
-    final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final androidPlugin = _notifications
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
     await androidPlugin?.requestNotificationsPermission();
     await androidPlugin?.requestExactAlarmsPermission();
 

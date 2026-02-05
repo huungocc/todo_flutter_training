@@ -1,66 +1,35 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class AppColors {
-  ///Common
-  static const Color primary = Color(0xFF173d7e);
-  static const Color secondary = Color(0xFF1E8AE7);
-  static const Color error = Color(0xFFEE3134);
-  static const Color subError = Color(0xFFFF8080);
+  AppColors._();
 
-  ///Background
-  static const Color background = Color(0xFFFFFFFF);
+  // Brand
+  static const Color primary = Color(0xFF4A3780);
+  static const Color primaryLight = Color(0xFF6A56A5);
+  static const Color primaryDark = Color(0xFF33255A);
 
-  ///Gray
-  static const Color gray1 = Color(0xFFC9C8C8);
-  static const Color gray2 = Color(0xFFF9F9F9);
-  static const Color gray3 = Color(0xFF4A4A4A);
+  // Accent
+  static const Color accent = Color(0xFFFFC857);
 
-  ///Shadow
-  static const Color shadow = Color.fromRGBO(0, 0, 0, 0.15);
+  // Light surfaces
+  static const Color lightSurface = Color(0xFFEFEFEF);
+  static const Color lightBackground = Color(0xFFFFFFFF);
 
-  ///Border
-  static const Color border = Color(0xFF606060);
-  static const Color inputBorder = Color(0xFFD8D8D8);
-  static const Color inputDisabled = Color(0xFFF1F1F1);
+  // Dark surfaces
+  static const Color darkSurface = Color(0xFF373737);
+  static const Color darkBackground = Color(0xFF121212);
 
-  ///Divider
-  static const Color divider = Color(0xFFD8D8D8);
+  // Text
+  static const Color textPrimary = Color(0xFF1F1F1F);
+  static const Color textSecondary = Color(0xFF6B6B6B);
+  static const Color textOnDark = Color(0xFFE6E1F2);
 
-  ///Text
-  static const Color textWhite = Color(0xFFFFFFFF);
-  static const Color textBlack = Color(0xFF000000);
-  static const Color textGray = Color(0xFF808080);
+  // State
+  static const Color success = Color(0xFF4CAF50);
+  static const Color error = Color(0xFFE53935);
+  static const Color warning = Color(0xFFFF9800);
 
-  ///TextField
-  static const Color textFieldEnabledBorder = Color(0xFF919191);
-  static const Color textFieldFocusedBorder = Color(0xFF1E8AE7);
-  static const Color textFieldDisabledBorder = Color(0xFF919191);
-  static const Color textFieldCursor = Color(0xFF919191);
-  static const Color textFieldErrorBorder = Color(0xFFFB7181);
-  static const Color textFieldHint = Color(0xFFA1A1A1);
-
-  ///Button
-  static const Color disableButton = Color(0xffd5d5d5);
-  static const Color colorButton = Color(0xff2B68B2);
-  static const Color buttonBGWhite = Color(0xFFcdd0d5);
-  static const Color buttonBGPrimary = primary;
-  static const Color buttonBGBlack = Color(0xFF4A4A4A);
-  static const Color buttonBGDisabled = Color(0xFF919191);
-  static const Color buttonBorder = Color(0xFFC9C8C8);
-
-  /// Tabs
-  static const Color imageBG = Color(0xFF919191);
-
-  ///BottomNavigationBar
-  static const Color bottomNavigationBar = Color(0xFF919191);
-
-  ///Shadow
-  static const Color boxShadowColor = Color(0x3D40BFFF);
-
-  ///Todos
-  static const Color todoPurple = Color(0xff4a3780);
-  static const Color todoLightPurple = Color(0xff5c4a8c);
-  static const Color todoBackground = Color(0xffe5e9ed);
+  // Icon
   static const Color bgListIcon = Color(0xffdbecf6);
   static const Color bgCalendarIcon = Color(0xffe7e2f3);
   static const Color bgTrophyIcon = Color(0xfffef5d3);

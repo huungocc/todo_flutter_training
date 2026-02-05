@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseDialog {
   static void showNotifyDialog({
@@ -21,7 +21,7 @@ class BaseDialog {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppDimens.paddingLarge),
             ),
-            backgroundColor: AppColors.textWhite,
+            backgroundColor: context.colors.onPrimary,
             child: Padding(
               padding: const EdgeInsets.all(AppDimens.paddingLarge),
               child: Column(
@@ -29,14 +29,14 @@ class BaseDialog {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 spacing: 30,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.notifications_active_rounded,
                     size: 50,
-                    color: AppColors.todoPurple,
+                    color: context.colors.primary,
                   ),
                   BaseTextLabel(
                     message,
-                    style: AppTextStyle.blackS18Bold,
+                    style: context.appTextStyle.onSurface.s18.bold,
                     textAlign: TextAlign.center,
                     maxLines: 2,
                   ),
@@ -45,7 +45,6 @@ class BaseDialog {
                     children: [
                       Expanded(
                         child: BaseButton(
-                          backgroundColor: AppColors.todoPurple,
                           title: S.of(context).ok,
                           onTap: () {
                             Navigator.pop(context);
@@ -55,9 +54,9 @@ class BaseDialog {
                       ),
                       Expanded(
                         child: BaseButton(
-                          backgroundColor: AppColors.gray1,
                           title: S.current.cancel,
-                          titleStyle: AppTextStyle.blackS16W500,
+                          titleStyle: context.appTextStyle.onSurface.s16.w500,
+                          backgroundColor: Colors.transparent,
                           onTap: () => Navigator.pop(context),
                         ),
                       ),

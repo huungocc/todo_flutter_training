@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseTextLabel extends StatelessWidget {
   final String? title;
@@ -20,7 +21,7 @@ class BaseTextLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = style ?? AppTextStyle.blackS16;
+    final textStyle = style ?? context.appTextStyle.onSurface.s16;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

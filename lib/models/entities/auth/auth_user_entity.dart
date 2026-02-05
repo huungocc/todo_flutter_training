@@ -5,7 +5,7 @@ part 'auth_user_entity.g.dart';
 
 @freezed
 abstract class AuthUserEntity with _$AuthUserEntity {
-  const factory AuthUserEntity ({
+  const factory AuthUserEntity({
     @JsonKey(includeIfNull: false) String? id,
     String? email,
     @Default(false) bool isConfirmed,

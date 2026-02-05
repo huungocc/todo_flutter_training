@@ -99,7 +99,12 @@
   "change_info": "Thay đổi thông tin",
   "full_name": "Họ và tên",
   "are_you_sure_logout": "Bạn có chắc chắn muốn đăng xuất?",
+  "change_theme": "Thay đổi chủ đề",
 
   "email_verification_successful": "Xác thực email thành công",
-  "unknown_user": "Người dùng không xác định"
+  "unknown_user": "Người dùng không xác định",
+
+  "theme_light": "Sáng",
+  "theme_dark": "Tối",
+  "theme_system": "Hệ thống"
 }

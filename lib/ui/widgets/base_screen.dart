@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseScreen extends StatelessWidget {
   final double? toolbarHeight;
@@ -11,7 +12,7 @@ class BaseScreen extends StatelessWidget {
   final Widget? bottomBar;
   final String? title;
   final Widget? customAppBar;
-  final Color colorAppBar;
+  final Color? colorAppBar;
   final Function? onBackPress;
   final List<Widget>? rightWidgets;
   final Widget? floatingButton;
@@ -19,7 +20,6 @@ class BaseScreen extends StatelessWidget {
   final IconData? iconBack;
   final double? iconBackSize;
   final bool hideAppBar;
-  final Color colorBackground;
   final Widget? customBackground;
   final Color? iconBackColor;
   final bool isLightStatusBar;
@@ -31,7 +31,7 @@ class BaseScreen extends StatelessWidget {
     this.bottomBar,
     this.title = "",
     this.customAppBar,
-    this.colorAppBar = AppColors.background,
+    this.colorAppBar,
     this.onBackPress,
     this.rightWidgets,
     this.hiddenIconBack = false,
@@ -39,11 +39,10 @@ class BaseScreen extends StatelessWidget {
     this.iconBackSize,
     this.hideAppBar = false,
     this.floatingButton,
-    this.colorBackground = AppColors.background,
     this.customBackground,
     this.isLightStatusBar = false,
     this.toolbarHeight,
-    this.iconBackColor = AppColors.textBlack,
+    this.iconBackColor,
     this.resizeToAvoidBottomInset = false,
   });
 
@@ -51,12 +50,10 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(child: Container(color: colorBackground)),
         if (customBackground != null) Positioned.fill(child: customBackground!),
         Scaffold(
           resizeToAvoidBottomInset: resizeToAvoidBottomInset,
           appBar: hideAppBar ? null : (customAppBar ?? baseAppBar(context)),
-          backgroundColor: Colors.transparent,
           body: Stack(
             children: [
               Container(
@@ -77,13 +74,15 @@ class BaseScreen extends StatelessWidget {
     Widget widgetTitle = BaseTextLabel(
       title?.toString(),
       maxLines: 2,
-      style: AppTextStyle.whiteS18W500,
+      style: context.appTextStyle.onPrimary.s18.w500.copyWith(
+        color: AppColors.lightSurface,
+      ),
       textAlign: TextAlign.center,
     );
     return AppBar(
       elevation: 0,
       toolbarHeight: toolbarHeight ?? AppDimens.appBarNormal,
-      backgroundColor: colorAppBar,
+      backgroundColor: colorAppBar ?? context.colors.primary,
       title: widgetTitle,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -111,7 +110,7 @@ class BaseScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: AppDimens.paddingNormal),
                 child: Icon(
                   iconBack ?? Icons.arrow_back_rounded,
-                  color: iconBackColor,
+                  color: iconBackColor ?? AppColors.lightBackground,
                 ),
               ),
             ),

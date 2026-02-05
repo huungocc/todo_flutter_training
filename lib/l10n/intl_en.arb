@@ -99,7 +99,12 @@
   "change_info": "Change info",
   "full_name": "Full name",
   "are_you_sure_logout": "Are you sure you want to logout?",
+  "change_theme": "Change theme",
 
   "email_verification_successful": "Email verification successful",
-  "unknown_user": "Unknown User"
+  "unknown_user": "Unknown User",
+
+  "theme_light": "Light",
+  "theme_dark": "Dark",
+  "theme_system": "System"
 }

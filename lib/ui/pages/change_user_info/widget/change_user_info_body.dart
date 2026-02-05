@@ -83,7 +83,7 @@ class _ChangeUserInfoBodyState extends State<ChangeUserInfoBody> {
                 );
               },
             );
-          }
+          },
         ),
       ],
     );
@@ -117,7 +117,7 @@ class _ChangeUserInfoBodyState extends State<ChangeUserInfoBody> {
               onEditTap: () => _showBottomSheet(),
               showEditButton: changeState.isEditing,
             );
-          }
+          },
         );
       },
     );

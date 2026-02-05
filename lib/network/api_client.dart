@@ -88,22 +88,24 @@ class ApiClient {
       final uploadFile = File(file.path);
 
       // Upload file, ghi đè
-      await _client.storage.from('avatars').upload(
-        filePath,
-        uploadFile,
-        fileOptions: const FileOptions(upsert: true),
-      );
+      await _client.storage
+          .from('avatars')
+          .upload(
+            filePath,
+            uploadFile,
+            fileOptions: const FileOptions(upsert: true),
+          );
 
       // Lấy public URL
       final publicUrl = _client.storage.from('avatars').getPublicUrl(filePath);
 
       // Thêm timestamp query để cache refresh
-      final versionedUrl = '$publicUrl?v=${DateTime.now().millisecondsSinceEpoch}';
+      final versionedUrl =
+          '$publicUrl?v=${DateTime.now().millisecondsSinceEpoch}';
 
       return versionedUrl;
     });
   }
-
 
   Future<void> updateUserInfo(UserInfoEntity entity) async {
     return ApiInterceptors.executeWithLogging('UPDATE_USER_INFO', () async {
@@ -116,10 +118,7 @@ class ApiClient {
 
   Future<UserInfoEntity?> getUserInfo() async {
     return ApiInterceptors.executeWithLogging('GET_USER_INFO', () async {
-      final data = await _client
-          .from('user_info')
-          .select()
-          .maybeSingle();
+      final data = await _client.from('user_info').select().maybeSingle();
 
       return data != null
           ? UserInfoEntity.fromJson(Map<String, dynamic>.from(data))

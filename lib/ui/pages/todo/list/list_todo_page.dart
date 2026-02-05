@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
@@ -82,7 +81,6 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
     return BaseScreen(
       hideAppBar: true,
       isLightStatusBar: true,
-      colorBackground: AppColors.todoBackground,
       body: Stack(
         children: [
           const CustomTodoBackground(height: AppDimens.appBarExtra),
@@ -98,7 +96,6 @@ class _ListTodoBodyState extends State<_ListTodoBody> {
         color: Colors.transparent,
         child: BaseButton(
           title: S.of(context).add_new_task,
-          backgroundColor: AppColors.todoPurple,
           onTap: () {
             _onAddTodo();
           },

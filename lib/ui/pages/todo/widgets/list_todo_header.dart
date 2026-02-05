@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/common/app_format.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/pages/todo/list/list_todo_navigator.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class ListTodoHeader extends StatefulWidget {
   const ListTodoHeader({super.key});
@@ -30,7 +31,9 @@ class _ListTodoHeaderState extends State<ListTodoHeader> {
               Center(
                 child: BaseTextLabel(
                   DateTime.now().formatLongDate(),
-                  style: AppTextStyle.whiteS18W400,
+                  style: context.appTextStyle.onPrimary.s18.w400.copyWith(
+                    color: AppColors.lightSurface,
+                  ),
                 ),
               ),
               Positioned(
@@ -38,7 +41,7 @@ class _ListTodoHeaderState extends State<ListTodoHeader> {
                 bottom: 0,
                 top: 0,
                 child: GestureDetector(
-                  child: Icon(Icons.settings, color: AppColors.textWhite,),
+                  child: Icon(Icons.settings, color: AppColors.textOnDark),
                   onTap: () {
                     _navigateToSetting();
                   },
@@ -64,7 +67,9 @@ class _ListTodoHeaderState extends State<ListTodoHeader> {
           const SizedBox(height: 40),
           BaseTextLabel(
             S.of(context).my_todo_list,
-            style: AppTextStyle.whiteS32Bold,
+            style: context.appTextStyle.onPrimary.s32.bold.copyWith(
+              color: AppColors.lightSurface,
+            ),
           ),
         ],
       ),
