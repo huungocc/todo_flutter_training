@@ -9,8 +9,7 @@ extension LocalizationExtension on BuildContext {
 }
 
 extension AppThemeContextExtension on BuildContext {
-  AppColorData get colors =>
-      Theme.of(this).extension<AppColorTheme>()!.colors;
+  AppColorData get colors => Theme.of(this).extension<AppColorTheme>()!.colors;
 }
 
 extension AppTextStyleExtension on BuildContext {

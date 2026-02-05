@@ -12,63 +12,63 @@ class AppTextStyle {
     return TextStyle(
       color: context.colors.primary,
       fontSize: 16,
-      fontFamily: fontFamily
+      fontFamily: fontFamily,
     );
   }
 
   static TextStyle secondary(BuildContext context) {
     return TextStyle(
-        color: context.colors.secondary,
-        fontSize: 16,
-        fontFamily: fontFamily
+      color: context.colors.secondary,
+      fontSize: 16,
+      fontFamily: fontFamily,
     );
   }
 
   static TextStyle surface(BuildContext context) {
     return TextStyle(
-        color: context.colors.surface,
-        fontSize: 16,
-        fontFamily: fontFamily
+      color: context.colors.surface,
+      fontSize: 16,
+      fontFamily: fontFamily,
     );
   }
 
   static TextStyle error(BuildContext context) {
     return TextStyle(
-        color: context.colors.error,
-        fontSize: 16,
-        fontFamily: fontFamily
+      color: context.colors.error,
+      fontSize: 16,
+      fontFamily: fontFamily,
     );
   }
 
   static TextStyle onPrimary(BuildContext context) {
     return TextStyle(
-        color: context.colors.onPrimary,
-        fontSize: 16,
-        fontFamily: fontFamily
+      color: context.colors.onPrimary,
+      fontSize: 16,
+      fontFamily: fontFamily,
     );
   }
 
   static TextStyle onSecondary(BuildContext context) {
     return TextStyle(
-        color: context.colors.onSecondary,
-        fontSize: 16,
-        fontFamily: fontFamily
+      color: context.colors.onSecondary,
+      fontSize: 16,
+      fontFamily: fontFamily,
     );
   }
 
   static TextStyle onSurface(BuildContext context) {
     return TextStyle(
-        color: context.colors.onSurface,
-        fontSize: 16,
-        fontFamily: fontFamily
+      color: context.colors.onSurface,
+      fontSize: 16,
+      fontFamily: fontFamily,
     );
   }
 
   static TextStyle onError(BuildContext context) {
     return TextStyle(
-        color: context.colors.onError,
-        fontSize: 16,
-        fontFamily: fontFamily
+      color: context.colors.onError,
+      fontSize: 16,
+      fontFamily: fontFamily,
     );
   }
 }
@@ -106,36 +106,30 @@ extension AppTextStyleExt on TextStyle {
 
   // Common
   static TextStyle taskTitle(
-      BuildContext context, {
-        required bool isExpired,
-        required bool isCompleted,
-      }) {
-    return AppTextStyle.onSurface(context)
-        .s16
-        .w500
-        .copyWith(
-      color: isExpired
-          ? context.colors.error
-          : context.colors.onSurface,
-      decoration:
-      isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+    BuildContext context, {
+    required bool isExpired,
+    required bool isCompleted,
+  }) {
+    return AppTextStyle.onSurface(context).s16.w500.copyWith(
+      color: isExpired ? context.colors.error : context.colors.onSurface,
+      decoration: isCompleted
+          ? TextDecoration.lineThrough
+          : TextDecoration.none,
     );
   }
 
   static TextStyle taskTime(
-      BuildContext context, {
-        required bool isExpired,
-        required bool isCompleted,
-      }) {
-    return AppTextStyle.secondary(context)
-        .s14
-        .w500
-        .copyWith(
+    BuildContext context, {
+    required bool isExpired,
+    required bool isCompleted,
+  }) {
+    return AppTextStyle.secondary(context).s14.w500.copyWith(
       color: isExpired
           ? context.colors.error
           : context.colors.onSurface.withValues(alpha: 0.6),
-      decoration:
-      isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+      decoration: isCompleted
+          ? TextDecoration.lineThrough
+          : TextDecoration.none,
     );
   }
 }

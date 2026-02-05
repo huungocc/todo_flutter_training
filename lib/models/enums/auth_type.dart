@@ -5,11 +5,7 @@ extension AuthTypeExtension on AuthType {
   bool get isRegister => this == AuthType.register;
 }
 
-enum AuthStatus {
-  signedIn,
-  signedOut,
-  unknown,
-}
+enum AuthStatus { signedIn, signedOut, unknown }
 
 extension AuthStatusExtension on AuthStatus {
   bool get isSignedIn => this == AuthStatus.signedIn;

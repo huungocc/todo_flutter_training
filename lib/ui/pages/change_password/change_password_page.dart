@@ -94,21 +94,21 @@ class _ChangePasswordBodyState extends State<_ChangePasswordBody> {
           onTap: state.changePasswordLoadStatus.isLoading
               ? null
               : () {
-            cubit.changePassword();
-          },
+                  cubit.changePassword();
+                },
           child: state.changePasswordLoadStatus.isLoading
               ? BaseLoading(
-            size: AppDimens.iconSizeNormal,
-            backgroundColor: AppColors.textPrimary,
-            valueColor: AppColors.textOnDark,
-          )
+                  size: AppDimens.iconSizeNormal,
+                  backgroundColor: AppColors.textPrimary,
+                  valueColor: AppColors.textOnDark,
+                )
               : BaseTextLabel(
-            S.of(context).confirm,
-            style: context.appTextStyle.onPrimary.s16.w500.copyWith(
-              color: AppColors.lightSurface,
-            ),
-            textAlign: TextAlign.center,
-          ),
+                  S.of(context).confirm,
+                  style: context.appTextStyle.onPrimary.s16.w500.copyWith(
+                    color: AppColors.lightSurface,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
         );
       },
     );

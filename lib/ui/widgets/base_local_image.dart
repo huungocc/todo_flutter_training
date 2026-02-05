@@ -26,7 +26,7 @@ class BaseLocalImage extends StatelessWidget {
     this.placeholder,
     this.errorWidget,
     this.onEditTap,
-    this.showEditButton = false
+    this.showEditButton = false,
   });
 
   @override
@@ -37,28 +37,31 @@ class BaseLocalImage extends StatelessWidget {
           borderRadius: borderRadius ?? BorderRadius.zero,
           child: filePath.isEmpty
               ? placeholder ??
-              Container(
-                width: width,
-                height: height,
-                color: Colors.grey.shade300,
-                child: const Center(
-                  child: BaseLoading(size: AppDimens.iconSizeNormal),
-                ),
-              )
+                    Container(
+                      width: width,
+                      height: height,
+                      color: Colors.grey.shade300,
+                      child: const Center(
+                        child: BaseLoading(size: AppDimens.iconSizeNormal),
+                      ),
+                    )
               : Image.file(
-            File(filePath),
-            width: width,
-            height: height,
-            fit: fit,
-            errorBuilder: (context, error, stackTrace) =>
-            errorWidget ??
-                Container(
+                  File(filePath),
                   width: width,
                   height: height,
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.broken_image, color: Colors.grey),
+                  fit: fit,
+                  errorBuilder: (context, error, stackTrace) =>
+                      errorWidget ??
+                      Container(
+                        width: width,
+                        height: height,
+                        color: Colors.grey.shade200,
+                        child: const Icon(
+                          Icons.broken_image,
+                          color: Colors.grey,
+                        ),
+                      ),
                 ),
-          ),
         ),
         if (showEditButton)
           Positioned(

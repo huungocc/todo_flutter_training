@@ -123,7 +123,9 @@ class _ListTodoSectionState extends State<ListTodoSection> {
               separatorBuilder: (_, __) => CommonWidget.buildSeparator(),
               itemBuilder: (context, index) {
                 final activeTodo = activeTodos[index];
-                final isExpired = activeTodo.time!.isDateTimeExpired(activeTodo.date);
+                final isExpired = activeTodo.time!.isDateTimeExpired(
+                  activeTodo.date,
+                );
 
                 return Dismissible(
                   key: Key(activeTodo.id!),

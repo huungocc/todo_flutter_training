@@ -101,9 +101,7 @@ class _RegisterBodyState extends State<_RegisterBody> {
                   onTap: () {
                     _changeToLogin();
                   },
-                  child: BaseTextLabel(
-                    S.of(context).already_account,
-                  ),
+                  child: BaseTextLabel(S.of(context).already_account),
                 ),
               ),
             ],
@@ -116,7 +114,7 @@ class _RegisterBodyState extends State<_RegisterBody> {
   Widget _buildRegisterButton(RegisterCubit cubit) {
     return BlocConsumer<RegisterCubit, RegisterState>(
       listenWhen: (prev, curr) =>
-      prev.registerLoadStatus != curr.registerLoadStatus,
+          prev.registerLoadStatus != curr.registerLoadStatus,
       listener: (context, state) {
         if (state.registerLoadStatus.isSuccess) {
           _changeToLogin();
@@ -130,21 +128,21 @@ class _RegisterBodyState extends State<_RegisterBody> {
           onTap: state.registerLoadStatus.isLoading
               ? null
               : () {
-            cubit.register();
-          },
+                  cubit.register();
+                },
           child: state.registerLoadStatus.isLoading
               ? BaseLoading(
-            size: AppDimens.iconSizeNormal,
-            backgroundColor: AppColors.textPrimary,
-            valueColor: AppColors.textOnDark,
-          )
+                  size: AppDimens.iconSizeNormal,
+                  backgroundColor: AppColors.textPrimary,
+                  valueColor: AppColors.textOnDark,
+                )
               : BaseTextLabel(
-            S.of(context).sign_up,
-            style: context.appTextStyle.onPrimary.s16.w500.copyWith(
-              color: AppColors.lightSurface,
-            ),
-            textAlign: TextAlign.center,
-          ),
+                  S.of(context).sign_up,
+                  style: context.appTextStyle.onPrimary.s16.w500.copyWith(
+                    color: AppColors.lightSurface,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
         );
       },
     );

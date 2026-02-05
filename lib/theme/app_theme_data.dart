@@ -27,9 +27,7 @@ class LightThemeData extends AppThemeData {
         onSurface: colors.onSurface,
         onError: colors.onError,
       ),
-      extensions: [
-        AppColorTheme(colors: colors),
-      ],
+      extensions: [AppColorTheme(colors: colors)],
     );
   }
 }
@@ -57,9 +55,7 @@ class DarkThemeData extends AppThemeData {
         onSurface: colors.onSurface,
         onError: colors.onError,
       ),
-      extensions: [
-        AppColorTheme(colors: colors),
-      ],
+      extensions: [AppColorTheme(colors: colors)],
     );
   }
 }

@@ -52,7 +52,7 @@ class BaseTextInput extends StatefulWidget {
     this.borderColor,
     this.isPasswordTF = false,
     this.initData,
-    this.onChanged
+    this.onChanged,
   });
 
   @override
@@ -79,35 +79,35 @@ class _BaseTextInputState extends State<BaseTextInput> {
       counterText: "",
       suffixIcon: widget.isPasswordTF
           ? Padding(
-        padding: EdgeInsets.only(right: AppDimens.marginSmall),
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          child: Icon(
-            _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: context.colors.onSurface,
-          ),
-        ),
-      )
+              padding: EdgeInsets.only(right: AppDimens.marginSmall),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: context.colors.onSurface,
+                ),
+              ),
+            )
           : (widget.suffixIcon != null
-          ? Padding(
-        padding: EdgeInsets.only(right: AppDimens.marginSmall),
-        child: InkWell(
-          onTap: widget.onTapSuffixIcon,
-          child: widget.suffixIcon,
-        ),
-      )
-          : null),
+                ? Padding(
+                    padding: EdgeInsets.only(right: AppDimens.marginSmall),
+                    child: InkWell(
+                      onTap: widget.onTapSuffixIcon,
+                      child: widget.suffixIcon,
+                    ),
+                  )
+                : null),
       prefixIcon: widget.prefixIcon != null
           ? Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimens.marginSmall,
-        ),
-        child: widget.prefixIcon,
-      )
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimens.marginSmall,
+              ),
+              child: widget.prefixIcon,
+            )
           : null,
       focusColor: Colors.white,
       disabledBorder: OutlineInputBorder(
@@ -134,11 +134,9 @@ class _BaseTextInputState extends State<BaseTextInput> {
           widget.borderRadius ?? AppDimens.textInputCornerRadius,
         ),
       ),
-      hintStyle: widget.hintStyle ??
-          context.appTextStyle.onSurface
-              .s16
-              .w400
-              .copyWith(
+      hintStyle:
+          widget.hintStyle ??
+          context.appTextStyle.onSurface.s16.w400.copyWith(
             color: widget.enabled
                 ? context.colors.onSurface.withValues(alpha: 0.5)
                 : context.colors.onSurface.withValues(alpha: 0.3),
@@ -163,7 +161,9 @@ class _BaseTextInputState extends State<BaseTextInput> {
           margin: widget.margin,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.enabled ? context.colors.onPrimary : AppColors.textSecondary,
+            color: widget.enabled
+                ? context.colors.onPrimary
+                : AppColors.textSecondary,
             borderRadius: BorderRadius.circular(
               widget.borderRadius ?? AppDimens.textInputCornerRadius,
             ),

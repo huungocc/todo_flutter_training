@@ -35,5 +35,3 @@ class DeepLinkService {
     _sub?.cancel();
   }
 }
-
-

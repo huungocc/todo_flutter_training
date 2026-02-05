@@ -14,8 +14,8 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthRepository _authRepository;
 
   LoginCubit({required AuthRepository authRepository})
-      : _authRepository = authRepository,
-        super(const LoginState());
+    : _authRepository = authRepository,
+      super(const LoginState());
 
   final loginEmailController = TextEditingController();
   final loginPasswordController = TextEditingController();
@@ -44,16 +44,20 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
       if (user != null) {
-        emit(state.copyWith(
-          loginLoadStatus: LoadStatus.success,
-          isConfirmed: true,
-        ));
+        emit(
+          state.copyWith(
+            loginLoadStatus: LoadStatus.success,
+            isConfirmed: true,
+          ),
+        );
         ExceptionHandler.showSuccessSnackBar(S.current.login_success);
       } else {
-        emit(state.copyWith(
-          loginLoadStatus: LoadStatus.success,
-          isConfirmed: false,
-        ));
+        emit(
+          state.copyWith(
+            loginLoadStatus: LoadStatus.success,
+            isConfirmed: false,
+          ),
+        );
       }
     } catch (e) {
       emit(state.copyWith(loginLoadStatus: LoadStatus.failure));

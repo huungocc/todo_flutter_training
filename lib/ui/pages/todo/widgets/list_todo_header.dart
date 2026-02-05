@@ -41,7 +41,7 @@ class _ListTodoHeaderState extends State<ListTodoHeader> {
                 bottom: 0,
                 top: 0,
                 child: GestureDetector(
-                  child: Icon(Icons.settings, color: AppColors.textOnDark,),
+                  child: Icon(Icons.settings, color: AppColors.textOnDark),
                   onTap: () {
                     _navigateToSetting();
                   },

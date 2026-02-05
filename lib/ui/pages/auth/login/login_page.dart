@@ -129,14 +129,11 @@ class _LoginBodyState extends State<_LoginBody> {
             _onLoginSuccess();
             _loadUserInfo();
           } else {
-            ExceptionHandler.showErrorSnackBar(
-              S.current.account_not_confirmed,
-            );
+            ExceptionHandler.showErrorSnackBar(S.current.account_not_confirmed);
           }
         }
       },
-      buildWhen: (prev, curr) =>
-          prev.loginLoadStatus != curr.loginLoadStatus,
+      buildWhen: (prev, curr) => prev.loginLoadStatus != curr.loginLoadStatus,
       builder: (context, state) {
         return BaseButton(
           height: AppDimens.buttonHeight,

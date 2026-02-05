@@ -33,16 +33,16 @@ class BaseRadioButton<T> extends StatelessWidget {
           border: Border.all(
             color: isSelected ? activeColor : inactiveColor,
             width: 1,
-          )
+          ),
         ),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isSelected ? activeColor : Colors.transparent
-          )
+            color: isSelected ? activeColor : Colors.transparent,
+          ),
         ),
-      )
+      ),
     );
   }
 }
