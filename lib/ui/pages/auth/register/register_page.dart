@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/pages/auth/auth_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/auth/register/register_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/auth/register/register_state.dart';
@@ -14,6 +14,7 @@ import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_input.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 import 'package:todo_flutter_training/utils/injection.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -55,13 +56,13 @@ class _RegisterBodyState extends State<_RegisterBody> {
               BaseTextLabel(
                 S.of(context).create_account,
                 textAlign: TextAlign.center,
-                style: AppTextStyle.purpleS32Bold,
+                style: context.appTextStyle.primary.s32.bold,
               ),
               const SizedBox(height: 20),
               BaseTextLabel(
                 S.of(context).create_account_explore,
                 textAlign: TextAlign.center,
-                style: AppTextStyle.blackS24Bold,
+                style: context.appTextStyle.onSurface.s18.bold,
                 maxLines: 2,
               ),
               const SizedBox(height: 40),
@@ -70,20 +71,20 @@ class _RegisterBodyState extends State<_RegisterBody> {
               BaseTextInput(
                 textController: cubit.registerEmailController,
                 hintText: S.of(context).email,
-                borderColor: AppColors.gray3,
+                borderColor: AppColors.textSecondary,
               ),
               const SizedBox(height: 10),
               BaseTextInput(
                 textController: cubit.registerPasswordController,
                 hintText: S.of(context).password,
-                borderColor: AppColors.gray3,
+                borderColor: AppColors.textSecondary,
                 isPasswordTF: true,
               ),
               const SizedBox(height: 10),
               BaseTextInput(
                 textController: cubit.registerConfirmPasswordController,
                 hintText: S.of(context).confirm_password,
-                borderColor: AppColors.gray3,
+                borderColor: AppColors.textSecondary,
                 isPasswordTF: true,
               ),
               const SizedBox(height: 40),
@@ -100,9 +101,7 @@ class _RegisterBodyState extends State<_RegisterBody> {
                   onTap: () {
                     _changeToLogin();
                   },
-                  child: BaseTextLabel(
-                    S.of(context).already_account,
-                  ),
+                  child: BaseTextLabel(S.of(context).already_account),
                 ),
               ),
             ],
@@ -115,7 +114,7 @@ class _RegisterBodyState extends State<_RegisterBody> {
   Widget _buildRegisterButton(RegisterCubit cubit) {
     return BlocConsumer<RegisterCubit, RegisterState>(
       listenWhen: (prev, curr) =>
-      prev.registerLoadStatus != curr.registerLoadStatus,
+          prev.registerLoadStatus != curr.registerLoadStatus,
       listener: (context, state) {
         if (state.registerLoadStatus.isSuccess) {
           _changeToLogin();
@@ -125,24 +124,25 @@ class _RegisterBodyState extends State<_RegisterBody> {
           prev.registerLoadStatus != curr.registerLoadStatus,
       builder: (context, state) {
         return BaseButton(
-          backgroundColor: AppColors.todoPurple,
           height: AppDimens.buttonHeight,
           onTap: state.registerLoadStatus.isLoading
               ? null
               : () {
-            cubit.register();
-          },
+                  cubit.register();
+                },
           child: state.registerLoadStatus.isLoading
               ? BaseLoading(
-            size: AppDimens.iconSizeNormal,
-            backgroundColor: AppColors.textBlack,
-            valueColor: AppColors.textWhite,
-          )
+                  size: AppDimens.iconSizeNormal,
+                  backgroundColor: AppColors.textPrimary,
+                  valueColor: AppColors.textOnDark,
+                )
               : BaseTextLabel(
-            S.of(context).sign_up,
-            style: AppTextStyle.whiteS16W500,
-            textAlign: TextAlign.center,
-          ),
+                  S.of(context).sign_up,
+                  style: context.appTextStyle.onPrimary.s16.w500.copyWith(
+                    color: AppColors.lightSurface,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
         );
       },
     );

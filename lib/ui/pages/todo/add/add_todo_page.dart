@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/models/entities/todo/todo_entity.dart';
 import 'package:todo_flutter_training/models/enums/operation_status.dart';
@@ -52,7 +51,6 @@ class _AddTodoBodyState extends State<_AddTodoBody> {
       borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
       child: Container(
         height: ScreenSize.instance().height - 70,
-        color: AppColors.todoBackground,
         child: Column(
           children: [
             BlocListener<AddTodoCubit, AddTodoState>(

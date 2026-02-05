@@ -10,7 +10,7 @@ class CustomTodoBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      color: AppColors.todoPurple,
+      color: AppColors.primary,
       child: Stack(
         children: [
           Positioned(
@@ -21,7 +21,7 @@ class CustomTodoBackground extends StatelessWidget {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.todoLightPurple, width: 50),
+                border: Border.all(color: AppColors.primaryLight, width: 50),
               ),
             ),
           ),
@@ -33,7 +33,7 @@ class CustomTodoBackground extends StatelessWidget {
               height: 500,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.todoLightPurple, width: 50),
+                border: Border.all(color: AppColors.primaryLight, width: 50),
               ),
             ),
           ),

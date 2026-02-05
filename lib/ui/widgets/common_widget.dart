@@ -3,7 +3,7 @@ import 'package:todo_flutter_training/common/app_colors.dart';
 
 class CommonWidget {
   static Widget buildSeparator() {
-    return Container(color: AppColors.todoBackground, height: 1);
+    return Container(color: AppColors.lightBackground, height: 1);
   }
 
   static Widget buildDeleteBackground() {

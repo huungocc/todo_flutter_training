@@ -39,7 +39,13 @@ class AppPicker {
     );
     if (pickedTime != null) {
       final now = DateTime.now();
-      final dateTime = DateTime(now.year, now.month, now.day, pickedTime.hour, pickedTime.minute);
+      final dateTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
       return dateTime.formatPickedTimeTo12h();
     }
     return null;

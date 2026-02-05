@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseLocalImage extends StatelessWidget {
   final String filePath;
@@ -25,7 +26,7 @@ class BaseLocalImage extends StatelessWidget {
     this.placeholder,
     this.errorWidget,
     this.onEditTap,
-    this.showEditButton = false
+    this.showEditButton = false,
   });
 
   @override
@@ -36,28 +37,31 @@ class BaseLocalImage extends StatelessWidget {
           borderRadius: borderRadius ?? BorderRadius.zero,
           child: filePath.isEmpty
               ? placeholder ??
-              Container(
-                width: width,
-                height: height,
-                color: Colors.grey.shade300,
-                child: const Center(
-                  child: BaseLoading(size: AppDimens.iconSizeNormal),
-                ),
-              )
+                    Container(
+                      width: width,
+                      height: height,
+                      color: Colors.grey.shade300,
+                      child: const Center(
+                        child: BaseLoading(size: AppDimens.iconSizeNormal),
+                      ),
+                    )
               : Image.file(
-            File(filePath),
-            width: width,
-            height: height,
-            fit: fit,
-            errorBuilder: (context, error, stackTrace) =>
-            errorWidget ??
-                Container(
+                  File(filePath),
                   width: width,
                   height: height,
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.broken_image, color: Colors.grey),
+                  fit: fit,
+                  errorBuilder: (context, error, stackTrace) =>
+                      errorWidget ??
+                      Container(
+                        width: width,
+                        height: height,
+                        color: Colors.grey.shade200,
+                        child: const Icon(
+                          Icons.broken_image,
+                          color: Colors.grey,
+                        ),
+                      ),
                 ),
-          ),
         ),
         if (showEditButton)
           Positioned(
@@ -72,13 +76,13 @@ class BaseLocalImage extends StatelessWidget {
                 height: AppDimens.iconSizeNormal,
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: AppColors.todoPurple,
+                  color: context.colors.primary,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(width: 3, color: AppColors.textWhite),
+                  border: Border.all(width: 3, color: context.colors.surface),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.edit,
-                  color: AppColors.textWhite,
+                  color: AppColors.lightSurface,
                   size: AppDimens.iconSizeSmall,
                 ),
               ),

@@ -13,7 +13,7 @@ abstract class ArrayResponse<T> with _$ArrayResponse<T> {
   }) = _ArrayResponse<T>;
 
   factory ArrayResponse.fromJson(
-      Map<String, dynamic> json,
-      T Function(Object? json) fromJsonT,
-      ) => _$ArrayResponseFromJson(json, fromJsonT);
+    Map<String, dynamic> json,
+    T Function(Object? json) fromJsonT,
+  ) => _$ArrayResponseFromJson(json, fromJsonT);
 }

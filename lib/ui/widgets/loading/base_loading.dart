@@ -9,8 +9,8 @@ class BaseLoading extends StatelessWidget {
 
   const BaseLoading({
     super.key,
-    this.valueColor = AppColors.textBlack,
-    this.backgroundColor = AppColors.textWhite,
+    this.valueColor = AppColors.textPrimary,
+    this.backgroundColor = AppColors.textOnDark,
     this.size = AppDimens.iconSizeNormal,
   });
 

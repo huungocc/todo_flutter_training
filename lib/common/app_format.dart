@@ -87,13 +87,6 @@ extension DateTimeFormatExtensions on DateTime {
     final minute = parts.length > 1 ? int.tryParse(parts[1]) ?? 0 : 0;
     final second = parts.length > 2 ? int.tryParse(parts[2]) ?? 0 : 0;
 
-    return DateTime(
-      year,
-      month,
-      day,
-      hour,
-      minute,
-      second,
-    );
+    return DateTime(year, month, day, hour, minute, second);
   }
 }

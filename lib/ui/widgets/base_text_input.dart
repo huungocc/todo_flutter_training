@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class BaseTextInput extends StatefulWidget {
   final String? title;
@@ -51,7 +52,7 @@ class BaseTextInput extends StatefulWidget {
     this.borderColor,
     this.isPasswordTF = false,
     this.initData,
-    this.onChanged
+    this.onChanged,
   });
 
   @override
@@ -78,40 +79,40 @@ class _BaseTextInputState extends State<BaseTextInput> {
       counterText: "",
       suffixIcon: widget.isPasswordTF
           ? Padding(
-        padding: EdgeInsets.only(right: AppDimens.marginSmall),
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          child: Icon(
-            _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: AppColors.gray1,
-          ),
-        ),
-      )
+              padding: EdgeInsets.only(right: AppDimens.marginSmall),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: context.colors.onSurface,
+                ),
+              ),
+            )
           : (widget.suffixIcon != null
-          ? Padding(
-        padding: EdgeInsets.only(right: AppDimens.marginSmall),
-        child: InkWell(
-          onTap: widget.onTapSuffixIcon,
-          child: widget.suffixIcon,
-        ),
-      )
-          : null),
+                ? Padding(
+                    padding: EdgeInsets.only(right: AppDimens.marginSmall),
+                    child: InkWell(
+                      onTap: widget.onTapSuffixIcon,
+                      child: widget.suffixIcon,
+                    ),
+                  )
+                : null),
       prefixIcon: widget.prefixIcon != null
           ? Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimens.marginSmall,
-        ),
-        child: widget.prefixIcon,
-      )
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimens.marginSmall,
+              ),
+              child: widget.prefixIcon,
+            )
           : null,
       focusColor: Colors.white,
       disabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: widget.borderColor ?? AppColors.gray1,
+          color: widget.borderColor ?? AppColors.textSecondary,
           width: 1,
         ),
         borderRadius: BorderRadius.circular(
@@ -120,7 +121,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: widget.borderColor ?? AppColors.gray1,
+          color: widget.borderColor ?? AppColors.textSecondary,
           width: 1,
         ),
         borderRadius: BorderRadius.circular(
@@ -128,17 +129,17 @@ class _BaseTextInputState extends State<BaseTextInput> {
         ),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.todoPurple, width: 1),
+        borderSide: BorderSide(color: context.colors.onSurface, width: 1),
         borderRadius: BorderRadius.circular(
           widget.borderRadius ?? AppDimens.textInputCornerRadius,
         ),
       ),
-      hintStyle: widget.hintStyle ??
-          AppTextStyle.blackS16.copyWith(
-            color: !widget.enabled
-                ? AppColors.textBlack
-                : AppColors.textFieldHint,
-            fontWeight: FontWeight.w400,
+      hintStyle:
+          widget.hintStyle ??
+          context.appTextStyle.onSurface.s16.w400.copyWith(
+            color: widget.enabled
+                ? context.colors.onSurface.withValues(alpha: 0.5)
+                : context.colors.onSurface.withValues(alpha: 0.3),
           ),
       hintText: widget.hintText,
     );
@@ -153,14 +154,16 @@ class _BaseTextInputState extends State<BaseTextInput> {
           BaseTextLabel(
             widget.title,
             isRequired: widget.isRequired,
-            style: AppTextStyle.blackS16W400,
+            style: context.appTextStyle.onSurface.s16.w400,
           ),
         Container(
           width: double.infinity,
           margin: widget.margin,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.enabled ? AppColors.textWhite : AppColors.gray2,
+            color: widget.enabled
+                ? context.colors.onPrimary
+                : AppColors.textSecondary,
             borderRadius: BorderRadius.circular(
               widget.borderRadius ?? AppDimens.textInputCornerRadius,
             ),
@@ -175,10 +178,10 @@ class _BaseTextInputState extends State<BaseTextInput> {
             textAlignVertical: TextAlignVertical.center,
             onChanged: widget.onChanged,
             onTap: widget.onTap,
-            style: widget.textStyle ?? AppTextStyle.blackS16,
+            style: widget.textStyle ?? context.appTextStyle.onSurface.s16,
             maxLines: widget.isPasswordTF ? 1 : widget.maxLines,
             minLines: widget.minLines,
-            cursorColor: AppColors.todoPurple,
+            cursorColor: context.colors.primary,
             obscureText: widget.isPasswordTF ? _obscureText : false,
             decoration: _buildDecoration(),
           ),

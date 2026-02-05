@@ -5,13 +5,11 @@ part 'object_response.g.dart';
 
 @Freezed(genericArgumentFactories: true)
 abstract class ObjectResponse<T> with _$ObjectResponse<T> {
-  const factory ObjectResponse({
-    @Default("") String message,
-    T? data,
-  }) = _ObjectResponse<T>;
+  const factory ObjectResponse({@Default("") String message, T? data}) =
+      _ObjectResponse<T>;
 
   factory ObjectResponse.fromJson(
-      Map<String, dynamic> json,
-      T Function(Object? json) fromJsonT,
-      ) => _$ObjectResponseFromJson(json, fromJsonT);
+    Map<String, dynamic> json,
+    T Function(Object? json) fromJsonT,
+  ) => _$ObjectResponseFromJson(json, fromJsonT);
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/global_blocs/user_info/user_info_cubit.dart';
 import 'package:todo_flutter_training/global_blocs/user_info/user_info_state.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_cached_image.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/setting/default_avatar_widget.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class UserInfoWidget extends StatelessWidget {
   const UserInfoWidget({super.key});
@@ -29,7 +30,7 @@ class UserInfoWidget extends StatelessWidget {
               ),
               BaseTextLabel(
                 state.userInfo.userName ?? 'Unknown User',
-                style: AppTextStyle.blackS18W400,
+                style: context.appTextStyle.onSurface.s18.w400,
               ),
             ],
           );

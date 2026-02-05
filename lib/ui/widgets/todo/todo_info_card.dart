@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_flutter_training/common/app_colors.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/todo/todo_icon_widget.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
 class TodoInfoCard extends StatelessWidget {
   final double? borderRadius;
@@ -33,10 +33,10 @@ class TodoInfoCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.textWhite,
+          color: context.colors.onPrimary,
           borderRadius: BorderRadius.circular(borderRadius ?? 0),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        padding: const EdgeInsets.all(20),
         child: Row(
           children: [
             Expanded(
@@ -53,7 +53,8 @@ class TodoInfoCard extends StatelessWidget {
                           children: [
                             BaseTextLabel(
                               title,
-                              style: AppTextStyleExtension.taskTitle(
+                              style: AppTextStyleExt.taskTitle(
+                                context,
                                 isExpired: isExpired,
                                 isCompleted: isCompleted,
                               ),
@@ -62,7 +63,8 @@ class TodoInfoCard extends StatelessWidget {
                             const SizedBox(height: 4),
                             BaseTextLabel(
                               time,
-                              style: AppTextStyleExtension.taskTime(
+                              style: AppTextStyleExt.taskTime(
+                                context,
                                 isExpired: isExpired,
                                 isCompleted: isCompleted,
                               ),
@@ -73,14 +75,6 @@ class TodoInfoCard extends StatelessWidget {
                       ),
                     ],
                   ),
-
-                  /// White Layer on Completed Todos
-                  if (isCompleted)
-                    Positioned.fill(
-                      child: Container(
-                        color: Colors.white.withValues(alpha: 0.7),
-                      ),
-                    ),
                 ],
               ),
             ),

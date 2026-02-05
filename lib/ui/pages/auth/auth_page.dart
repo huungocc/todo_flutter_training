@@ -13,10 +13,7 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthCubit(),
-      child: const _AuthBody(),
-    );
+    return BlocProvider(create: (_) => AuthCubit(), child: const _AuthBody());
   }
 }
 
@@ -35,8 +32,7 @@ class _AuthBodyState extends State<_AuthBody> {
       colorAppBar: Colors.transparent,
       customBackground: const CustomAuthBackground(),
       body: BlocBuilder<AuthCubit, AuthState>(
-        buildWhen: (prev, curr) =>
-            prev.authType != curr.authType,
+        buildWhen: (prev, curr) => prev.authType != curr.authType,
         builder: (context, state) {
           if (state.authType == AuthType.login) {
             return LoginPage();
