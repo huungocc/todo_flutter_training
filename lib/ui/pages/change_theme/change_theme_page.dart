@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/global_blocs/setting/app_setting_cubit.dart';
 import 'package:todo_flutter_training/models/enums/app_theme_mode.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
 import 'package:todo_flutter_training/utils/extension/context_extension.dart';
@@ -56,9 +58,16 @@ class _ChangeThemeBodyState extends State<_ChangeThemeBody> {
                         ? context.colors.primary
                         : context.colors.surface,
                     onTap: () {
-                      context.read<AppSettingCubit>().changeThemeMode(themeMode);
+                      context.read<AppSettingCubit>().changeThemeMode(
+                        themeMode,
+                      );
                     },
                     title: themeMode.getTitle(context),
+                    titleStyle: themeMode == state.themeMode
+                        ? context.appTextStyle.onPrimary.s16.w500.copyWith(
+                            color: AppColors.lightSurface,
+                          )
+                        : context.appTextStyle.onSurface.s16.w500,
                   );
                 }).toList(),
               ),

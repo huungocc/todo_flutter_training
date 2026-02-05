@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/auth_type.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/pages/auth/auth_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/auth/register/register_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/auth/register/register_state.dart';
@@ -14,6 +14,7 @@ import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_input.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 import 'package:todo_flutter_training/utils/injection.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -55,13 +56,13 @@ class _RegisterBodyState extends State<_RegisterBody> {
               BaseTextLabel(
                 S.of(context).create_account,
                 textAlign: TextAlign.center,
-                style: AppTextStyle.purpleS32Bold,
+                style: context.appTextStyle.primary.s32.bold,
               ),
               const SizedBox(height: 20),
               BaseTextLabel(
                 S.of(context).create_account_explore,
                 textAlign: TextAlign.center,
-                style: AppTextStyle.blackS24Bold,
+                style: context.appTextStyle.onSurface.s18.bold,
                 maxLines: 2,
               ),
               const SizedBox(height: 40),
@@ -139,7 +140,9 @@ class _RegisterBodyState extends State<_RegisterBody> {
           )
               : BaseTextLabel(
             S.of(context).sign_up,
-            style: AppTextStyle.whiteS16W500,
+            style: context.appTextStyle.onPrimary.s16.w500.copyWith(
+              color: AppColors.lightSurface,
+            ),
             textAlign: TextAlign.center,
           ),
         );

@@ -49,7 +49,7 @@ class TodoIconWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppDimens.iconBorderRadius),
           border: Border.all(
             width: 3,
-            color: isSelected ? AppColors.primary: Colors.transparent,
+            color: isSelected ? AppColors.accent : Colors.transparent,
           ),
         ),
         child: icon,

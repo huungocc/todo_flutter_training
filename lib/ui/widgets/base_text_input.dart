@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
@@ -135,11 +135,13 @@ class _BaseTextInputState extends State<BaseTextInput> {
         ),
       ),
       hintStyle: widget.hintStyle ??
-          AppTextStyle.blackS16.copyWith(
-            color: !widget.enabled
-                ? AppColors.textPrimary
-                : AppColors.textPrimary,
-            fontWeight: FontWeight.w400,
+          context.appTextStyle.onSurface
+              .s16
+              .w400
+              .copyWith(
+            color: widget.enabled
+                ? context.colors.onSurface.withValues(alpha: 0.5)
+                : context.colors.onSurface.withValues(alpha: 0.3),
           ),
       hintText: widget.hintText,
     );
@@ -154,7 +156,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
           BaseTextLabel(
             widget.title,
             isRequired: widget.isRequired,
-            style: AppTextStyle.blackS16W400,
+            style: context.appTextStyle.onSurface.s16.w400,
           ),
         Container(
           width: double.infinity,
@@ -176,7 +178,7 @@ class _BaseTextInputState extends State<BaseTextInput> {
             textAlignVertical: TextAlignVertical.center,
             onChanged: widget.onChanged,
             onTap: widget.onTap,
-            style: widget.textStyle ?? AppTextStyle.blackS16,
+            style: widget.textStyle ?? context.appTextStyle.onSurface.s16,
             maxLines: widget.isPasswordTF ? 1 : widget.maxLines,
             minLines: widget.minLines,
             cursorColor: context.colors.primary,

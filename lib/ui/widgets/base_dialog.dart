@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/configs/app_configs.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/utils/extension/context_extension.dart';
@@ -36,7 +36,7 @@ class BaseDialog {
                   ),
                   BaseTextLabel(
                     message,
-                    style: AppTextStyle.blackS18Bold,
+                    style: context.appTextStyle.onSurface.s18.bold,
                     textAlign: TextAlign.center,
                     maxLines: 2,
                   ),
@@ -55,7 +55,7 @@ class BaseDialog {
                       Expanded(
                         child: BaseButton(
                           title: S.current.cancel,
-                          titleStyle: AppTextStyle.blackS16W500,
+                          titleStyle: context.appTextStyle.onSurface.s16.w500,
                           backgroundColor: Colors.transparent,
                           onTap: () => Navigator.pop(context),
                         ),

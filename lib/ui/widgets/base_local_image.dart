@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
 import 'package:todo_flutter_training/utils/extension/context_extension.dart';
@@ -74,11 +75,11 @@ class BaseLocalImage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: context.colors.primary,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(width: 3, color: context.colors.onPrimary),
+                  border: Border.all(width: 3, color: context.colors.surface),
                 ),
                 child: Icon(
                   Icons.edit,
-                  color: context.colors.onPrimary,
+                  color: AppColors.lightSurface,
                   size: AppDimens.iconSizeSmall,
                 ),
               ),

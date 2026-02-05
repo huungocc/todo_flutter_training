@@ -47,7 +47,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return BaseScreen(
       hideAppBar: true,
-      body: Center(child: Assets.images.iconApp.image(scale: 5)),
+      body: Center(child: Assets.images.iconApp.image(scale: 3)),
     );
   }
 }

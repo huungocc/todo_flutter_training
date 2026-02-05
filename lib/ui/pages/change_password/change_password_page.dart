@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/repository/auth_repository.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/pages/change_password/change_password_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/change_password/change_password_state.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
@@ -13,6 +13,7 @@ import 'package:todo_flutter_training/ui/widgets/base_screen.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_input.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/ui/widgets/loading/base_loading.dart';
+import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 import 'package:todo_flutter_training/utils/injection.dart';
 
 class ChangePasswordPage extends StatelessWidget {
@@ -103,7 +104,9 @@ class _ChangePasswordBodyState extends State<_ChangePasswordBody> {
           )
               : BaseTextLabel(
             S.of(context).confirm,
-            style: AppTextStyle.whiteS16W500,
+            style: context.appTextStyle.onPrimary.s16.w500.copyWith(
+              color: AppColors.lightSurface,
+            ),
             textAlign: TextAlign.center,
           ),
         );

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
 import 'package:todo_flutter_training/generated/l10n.dart';
 import 'package:todo_flutter_training/models/enums/load_status.dart';
 import 'package:todo_flutter_training/models/enums/operation_status.dart';
 import 'package:todo_flutter_training/models/enums/todo_type.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_cubit.dart';
 import 'package:todo_flutter_training/ui/pages/todo/add/add_todo_state.dart';
 import 'package:todo_flutter_training/ui/widgets/base_button.dart';
@@ -86,7 +86,7 @@ class _AddTodoInputState extends State<AddTodoInput> {
                   children: [
                     BaseTextLabel(
                       S.of(context).category,
-                      style: AppTextStyle.blackS16W500,
+                      style: context.appTextStyle.onSurface.s16.w500,
                     ),
                     BlocBuilder<AddTodoCubit, AddTodoState>(
                       buildWhen: (prev, curr) =>
@@ -184,7 +184,9 @@ class _AddTodoInputState extends State<AddTodoInput> {
                 )
               : BaseTextLabel(
                   S.of(context).save,
-                  style: AppTextStyle.whiteS16W500,
+                  style: context.appTextStyle.onPrimary.s16.w500.copyWith(
+                    color: AppColors.lightSurface,
+                  ),
                   textAlign: TextAlign.center,
                 ),
         );

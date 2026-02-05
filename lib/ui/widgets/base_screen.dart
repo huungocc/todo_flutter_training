@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todo_flutter_training/common/app_colors.dart';
 import 'package:todo_flutter_training/common/app_demens.dart';
-import 'package:todo_flutter_training/common/app_text_styles.dart';
+import 'package:todo_flutter_training/text_style/app_text_style.dart';
 import 'package:todo_flutter_training/ui/widgets/base_text_label.dart';
 import 'package:todo_flutter_training/utils/extension/context_extension.dart';
 
@@ -74,7 +74,9 @@ class BaseScreen extends StatelessWidget {
     Widget widgetTitle = BaseTextLabel(
       title?.toString(),
       maxLines: 2,
-      style: AppTextStyle.whiteS18W500,
+      style: context.appTextStyle.onPrimary.s18.w500.copyWith(
+        color: AppColors.lightSurface,
+      ),
       textAlign: TextAlign.center,
     );
     return AppBar(
